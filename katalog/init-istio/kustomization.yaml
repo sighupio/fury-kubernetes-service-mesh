@@ -1,0 +1,7 @@
+namespace: istio-system
+
+resources:
+- namespace.yml
+- configmaps.yml
+- rbac.yml
+- jobs.yml

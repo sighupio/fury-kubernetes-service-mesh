@@ -1,0 +1,13 @@
+namespace: istio-system
+
+resources:
+- config.yml
+- galley.yml
+- mixer.yml
+- pilot.yml
+- gateway.yml
+- citadel.yml
+- sidecar-injector.yml
+- rbac.yml
+# Prometheus temporarily excluded
+# - prometheus.yml
