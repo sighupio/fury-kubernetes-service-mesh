@@ -1,4 +1,4 @@
-# Istio
+# Istio
 
 Istio addresses the challenges developers and operators face as monolithic applications transition towards a
 distributed microservice architecture. To see how, it helps to take a more detailed look at Istio’s service mesh.
@@ -27,37 +27,22 @@ Source: [https://istio.io/docs](https://istio.io/docs/concepts/what-is-istio/#wh
 |                          | Installed          |
 |--------------------------|--------------------|
 | **Core components**      |                    |
-| `istio-citadel`          |                    |
-| `istio-egressgateway`    |                    |
-| `istio-galley`           |                    |
 | `istio-ingressgateway`   | :white_check_mark: |
-| `istio-nodeagent`        |                    |
 | `istio-pilot`            | :white_check_mark: |
 | `istio-policy`           | :white_check_mark: |
-| `istio-sidecar-injector` |                    |
-| `istio-telemetry`        |                    |
-| **Addons**               |                    |
-| `grafana`                |                    |
-| `istio-tracing`          |                    |
-| `kiali`                  |                    |
-| `prometheus`             |                    |
 
 
 ## Image repository and tag
 
-All istio container images are currently available at dockerhub. docker.io/istio
+All istio container images are currently available at dockerhub: [docker.io/istio](https://hub.docker.com/u/istio)
 
 * istio container images: `docker.io/istio/*`
 
 Includes:
 
-- docker.io/istio/citadel
-- docker.io/istio/kubectl
-- docker.io/istio/galley
 - docker.io/istio/proxyv2
 - docker.io/istio/mixer
 - docker.io/istio/pilot
-- docker.io/istio/sidecar_injector
 
 ## Deployment
 

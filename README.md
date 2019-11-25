@@ -38,7 +38,7 @@ single package's documentation:
 
 ## Deployment
 
-To start using Fury Kubernetes Monitoring, you need to use
+To start using Fury Kubernetes Service Mesh, you need to use
 [furyctl](https://github.com/sighup-io/furyctl/blob/master/README.md) and create a `Furyfile.yml` with the list of
 all the packages that you want to download.
 
