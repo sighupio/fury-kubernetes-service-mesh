@@ -151,7 +151,7 @@ spec:
       containers:
         - name: istio-proxy
           image: "docker.io/istio/proxyv2:1.4.0"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 15020
             - containerPort: 80
@@ -257,7 +257,7 @@ spec:
           - name: ISTIO_META_OWNER
             value: kubernetes://api/apps/v1/namespaces/istio-system/deployments/istio-ingressgateway
           - name: ISTIO_META_ROUTER_MODE
-            value: sni-dnat          
+            value: sni-dnat
           volumeMounts:
           - name: istio-certs
             mountPath: /etc/certs
@@ -281,7 +281,7 @@ spec:
         secret:
           secretName: "istio-ingressgateway-ca-certs"
           optional: true
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -313,5 +313,4 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - "s390x"      
----
+                - "s390x"

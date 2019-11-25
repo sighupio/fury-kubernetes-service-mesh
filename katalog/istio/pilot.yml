@@ -160,7 +160,7 @@ spec:
       containers:
         - name: discovery
           image: "docker.io/istio/pilot:1.4.0"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
           - "discovery"
           - --monitoringAddr=:15014
@@ -174,6 +174,7 @@ spec:
           ports:
           - containerPort: 8080
           - containerPort: 15010
+          - containerPort: 15011
           readinessProbe:
             httpGet:
               path: /ready
@@ -210,55 +211,6 @@ spec:
           - name: istio-certs
             mountPath: /etc/certs
             readOnly: true
-        - name: istio-proxy
-          image: "docker.io/istio/proxyv2:1.4.0"
-          imagePullPolicy: IfNotPresent
-          ports:
-          - containerPort: 15003
-          - containerPort: 15005
-          - containerPort: 15007
-          - containerPort: 15011
-          args:
-          - proxy
-          - --domain
-          - $(POD_NAMESPACE).svc.cluster.local
-          - --serviceCluster
-          - istio-pilot
-          - --templateFile
-          - /etc/istio/proxy/envoy_pilot.yaml.tmpl
-          - --controlPlaneAuthPolicy
-          - NONE
-          - --log_output_level=default:info
-          env:
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.name
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.namespace
-          - name: INSTANCE_IP
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: status.podIP
-          - name: SDS_ENABLED
-            value: "false"
-          resources:
-            limits:
-              cpu: 2000m
-              memory: 1024Mi
-            requests:
-              cpu: 10m
-              memory: 40Mi
-            
-          volumeMounts:
-          - name: istio-certs
-            mountPath: /etc/certs
-            readOnly: true
       volumes:
       - name: config-volume
         configMap:
@@ -267,7 +219,7 @@ spec:
         secret:
           secretName: istio.istio-pilot-service-account
           optional: true
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -300,4 +252,3 @@ spec:
                 operator: In
                 values:
                 - "s390x"
----

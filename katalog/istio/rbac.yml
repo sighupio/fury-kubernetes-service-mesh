@@ -1,4 +1,3 @@
-
 ---
 # Source: istio/templates/serviceaccount.yaml
 apiVersion: v1
