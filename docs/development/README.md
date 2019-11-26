@@ -74,7 +74,7 @@ helm template install/kubernetes/helm/istio --name istio --namespace istio-syste
 ```
 
 Once rendered, you can find the istio.yml file inside the rendered directory. This file is a very very big one, so we
-spllited it in components. You can find the final result inside the [katalog/istio](../katalog/istio) directory.
+splitted it in components. You can find the final result inside the [katalog/istio](../katalog/istio) directory.
 
 So, we have created:
 
@@ -98,7 +98,7 @@ $ git clone --branch 1.4.0 git@github.com:istio/installer.git
 $ helm template installer/istio-telemetry/prometheus-operator --name istio --namespace monitoring --values sm-values.yml > rendered/istio-service-monitors.yml
 ```
 
-Once rendered, you will be able to fin the new `istio-serve-monitors.yml` file with some `serviceMonitor` Prometheus Operator resources. This file was added to the [katalog/istio](../katalog/istio/service-monitor.yml) deployment.
+Once rendered, you will be able to find the new `istio-serve-monitors.yml` file with some `serviceMonitor` Prometheus Operator resources. This file was added to the [katalog/istio](../katalog/istio/service-monitor.yml) deployment.
 It is required by Kiali dashboard.
 
 ### Demos / Testing
@@ -184,7 +184,7 @@ Then, all but jason will go to v3 version of the review service. This means:
 - All people: Red Starts
 - Jason (jason:jason): Black starts
 
-### V3 denial
+### V3 denial
 
 Having deployed the last behavior,
 
