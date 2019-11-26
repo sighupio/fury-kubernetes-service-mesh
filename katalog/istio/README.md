@@ -20,6 +20,8 @@ Source: [https://istio.io/docs](https://istio.io/docs/concepts/what-is-istio/#wh
 - Kubernetes >= `1.14.0`
 - Kustomize = `v3.0.0`
 - [init-istio](../init-istio/)
+- [`prometheus-operator`](https://github.com/sighupio/fury-kubernetes-monitoring/tree/v1.3.0/katalog/prometheus-operator)
+- [`prometheus-operated`](https://github.com/sighupio/fury-kubernetes-monitoring/tree/v1.3.0/katalog/prometheus-operated)
 
 
 ## Included features
@@ -30,6 +32,10 @@ Source: [https://istio.io/docs](https://istio.io/docs/concepts/what-is-istio/#wh
 | `istio-ingressgateway`   | :white_check_mark: |
 | `istio-pilot`            | :white_check_mark: |
 | `istio-policy`           | :white_check_mark: |
+| `istio-telemetry`        | :white_check_mark: |
+| **Addons**               |                    |
+| `kiali`                  | :white_check_mark: |
+
 
 This components enables:
 
@@ -64,6 +70,9 @@ can configure dynamically at runtime.
   - Rate limiting to dynamically limit the traffic to a service
   - Denials, whitelists, and blacklists, to restrict access to services
   - Header rewrites and redirects
+- ***Observability:*** Istio generates detailed telemetry for all service communications within a mesh. This telemetry
+provides observability of service behavior, empowering operators to troubleshoot, maintain, and optimize their
+applications – without imposing any additional burdens on service developers.
 
 ## Image repository and tag
 
@@ -77,6 +86,10 @@ Includes:
 - docker.io/istio/mixer
 - docker.io/istio/pilot
 
+* addons container images:
+
+- Kiali: quay.io/kiali/kiali:v1.9
+
 ## Deployment
 
 You can deploy istio by running following command in the root of the project:
@@ -84,6 +97,99 @@ You can deploy istio by running following command in the root of the project:
 ```shell
 $ kustomize build | kubectl apply -f -
 ```
+
+### Configuration
+
+#### Kiali
+
+##### Admin user
+
+We provide an administrator user *(admin:admin)* to access the kiali dashboard. Please change the default password
+editing the `kiali` secret inside the `istio-system` namespace.
+
+```bash
+$ kubectl get secret kiali -o yaml -n istio-system
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kiali
+  namespace: istio-system
+  labels:
+    app: kiali
+    chart: kiali
+    heritage: Tiller
+    release: istio
+type: Opaque
+data:
+  passphrase: YWRtaW4=
+  username: YWRtaW4=
+```
+
+You can generate a new one with the following commands:
+
+```bash
+$ KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
+$ KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)
+$ cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kiali
+  namespace: istio-system
+  labels:
+    app: kiali
+    chart: kiali
+    heritage: Tiller
+    release: istio
+type: Opaque
+data:
+  username: $KIALI_USERNAME
+  passphrase: $KIALI_PASSPHRASE
+EOF
+```
+
+Then, **restart the kiali pod** to take effect.
+
+##### Prometheus URL
+
+There is a minor configuration to be made if you don't have the default
+[`prometheus-operated`](https://github.com/sighupio/fury-kubernetes-monitoring/tree/v1.3.0/katalog/prometheus-operated)
+server deployed in the `monitoring` namespace.
+
+As Kiali needs to read metrics from a prometheus server, you have to define the prometheus server url.
+
+```bash
+$ kubectl get cm kiali -o yaml -n istio-system
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: kiali
+    chart: kiali
+    heritage: Tiller
+    release: istio
+  name: kiali
+  namespace: istio-system
+data:
+  config.yaml: |
+    istio_namespace: istio-system
+    deployment:
+      accessible_namespaces: ['**']
+    auth:
+      strategy: login
+    server:
+      port: 20001
+      web_root: /kiali
+    external_services:
+      tracing:
+        url:
+      grafana:
+        url:
+      prometheus:
+        url: http://prometheus-k8s.monitoring:9090
+```
+
+Change the `external_services.prometheus.url` value with the correct prometheus server url.
 
 ## License
 
