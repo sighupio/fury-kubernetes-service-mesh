@@ -50,7 +50,7 @@ mixer:
         memory: 100Mi
 
   telemetry:
-    enabled: false
+    enabled: true
     autoscaleEnabled: false
     resources:
       requests:
@@ -68,7 +68,12 @@ tracing:
   enabled: false
 
 kiali:
-  enabled: false
+  enabled: true
+  prometheusAddr: http://prometheus-k8s.monitoring:9090
+  # Add user admin/admin to kiali.
+  createDemoSecret: true
+  security:
+    enable: false
 
 gateways:
   istio-ingressgateway:

@@ -56,11 +56,11 @@ This values makes possible the following configuration:
 | `istio-pilot`            | :white_check_mark: |
 | `istio-policy`           | :white_check_mark: |
 | `istio-sidecar-injector` |                    |
-| `istio-telemetry`        |                    |
+| `istio-telemetry`        | :white_check_mark: |
 | **Addons**               |                    |
 | `grafana`                |                    |
 | `istio-tracing`          |                    |
-| `kiali`                  |                    |
+| `kiali`                  | :white_check_mark: |
 | `prometheus`             |                    |
 
 Take care about the ingressgateway configuration. We have changed the default behaviour of having a loadbalancer to only
@@ -78,13 +78,28 @@ spllited it in components. You can find the final result inside the [katalog/ist
 
 So, we have created:
 
-- rbac.yml
+- config.yml
 - mixer.yml
 - pilot.yml
 - gateway.yml
-- config.yml
+- rbac.yml
+- kiali.yml
 
 This way is going to be easy to debug future problems. We splitted it by chart names.
+
+#### Service monitor manifests
+
+This manifests has been templated from the 
+[istio-telemetry/prometheus-operator chart](https://github.com/istio/installer/tree/1.4.0/istio-telemetry/prometheus-operator)
+With the `sm-values.yml` values file.
+
+```bash
+$ git clone --branch 1.4.0 git@github.com:istio/installer.git
+$ helm template installer/istio-telemetry/prometheus-operator --name istio --namespace monitoring --values sm-values.yml > rendered/istio-service-monitors.yml
+```
+
+Once rendered, you will be able to fin the new `istio-serve-monitors.yml` file with some `serviceMonitor` Prometheus Operator resources. This file was added to the [katalog/istio](../katalog/istio/service-monitor.yml) deployment.
+It is required by Kiali dashboard.
 
 ### Demos / Testing
 
