@@ -7,9 +7,9 @@ metadata:
   labels:
     app: kiali
 type: Opaque
-data:
-  username: YWRtaW4=   # admin
-  passphrase: YWRtaW4= # admin
+stringData:
+  username: admin
+  passphrase: admin
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -125,8 +125,6 @@ data:
 You can generate a new one with the following commands:
 
 ```bash
-$ KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
-$ KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)
 $ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
@@ -136,9 +134,9 @@ metadata:
   labels:
     app: kiali
 type: Opaque
-data:
-  username: $KIALI_USERNAME
-  passphrase: $KIALI_PASSPHRASE
+stringData:
+  username: YOUR_USERNAME
+  passphrase: YOUR_PASSWORD
 EOF
 ```
 
