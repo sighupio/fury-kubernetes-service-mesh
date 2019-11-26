@@ -40,7 +40,7 @@ So, i have splited it into some more granular files based on its content. You ca
 
 Now, we are ready to render the `istio` chart, but first, let's review the [`values.yml`](values.yml) file.
 
-This file was configured using the 
+This file was configured using the
 [official istio chart documentation](https://istio.io/docs/reference/config/installation-options/).
 
 This values makes possible the following configuration:
@@ -168,6 +168,58 @@ Then, all but jason will go to v3 version of the review service. This means:
 
 - All people: Red Starts
 - Jason (jason:jason): Black starts
+
+### V3 denial
+
+Having deployed the last behavior,
+
+apply the following manifests:
+
+```bash
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/policy/mixer-rule-deny-label.yaml -n demo
+```
+
+Then only jason will be able to see stars, other request will be denied because V3 service from reviews to rating has been denied.
+
+Source: https://istio.io/docs/tasks/policy-enforcement/denial-and-list/
+
+
+### Whitelist by attribute
+
+Remove the lastest scenario:
+
+```bash
+$ kubectl delete -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/policy/mixer-rule-deny-label.yaml -n demo
+```
+
+Then apply
+
+```bash
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/policy/mixer-rule-deny-whitelist.yaml -n demo
+```
+
+Only versions v1 and v2 are allowed, so only jason can see stars
+
+Source: https://istio.io/docs/tasks/policy-enforcement/denial-and-list/
+
+### Rate limit
+
+```bash
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/policy/mixer-rule-productpage-ratelimit.yaml -n istio-system
+$ kubectl -n istio-system get instance requestcountquota -o yaml
+$ kubectl -n istio-system get rule quota -o yaml
+$ kubectl -n istio-system get QuotaSpec request-count -o yaml
+$ kubectl -n istio-system get QuotaSpecBinding request-count -o yaml
+```
+
+Edit the QuotaSpecBinding changing the namespace from default to demo
+
+```bash
+$ kubectl -n istio-system edit QuotaSpecBinding request-count
+```
+
+Try to refresh the webpage so many times... You should see something like: `RESOURCE_EXHAUSTED:Quota is exhausted for: requestcountquota`
+
 
 ## Links
 
