@@ -116,9 +116,6 @@ metadata:
   namespace: istio-system
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 type: Opaque
 data:
   passphrase: YWRtaW4=
@@ -138,9 +135,6 @@ metadata:
   namespace: istio-system
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 type: Opaque
 data:
   username: $KIALI_USERNAME
@@ -165,9 +159,6 @@ apiVersion: v1
 metadata:
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
   name: kiali
   namespace: istio-system
 data:

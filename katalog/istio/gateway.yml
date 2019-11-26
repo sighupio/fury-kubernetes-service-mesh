@@ -1,25 +1,19 @@
 ---
-# Source: istio/charts/gateways/templates/poddisruptionbudget.yaml
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: istio-ingressgateway
   namespace: istio-system
   labels:
-    chart: gateways
-    heritage: Tiller
-    release: istio
     app: istio-ingressgateway
     istio: ingressgateway
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      release: istio
       app: istio-ingressgateway
       istio: ingressgateway
 ---
-# Source: istio/charts/gateways/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -27,11 +21,7 @@ metadata:
   namespace: istio-system
   labels:
     app: istio-ingressgateway
-    chart: gateways
-    heritage: Tiller
-    release: istio
 ---
-# Source: istio/charts/gateways/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -42,7 +32,6 @@ rules:
   resources: ["secrets"]
   verbs: ["get", "watch", "list"]
 ---
-# Source: istio/charts/gateways/templates/rolebindings.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -56,7 +45,6 @@ subjects:
 - kind: ServiceAccount
   name: istio-ingressgateway-service-account
 ---
-# Source: istio/charts/gateways/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -64,15 +52,11 @@ metadata:
   namespace: istio-system
   annotations:
   labels:
-    chart: gateways
-    heritage: Tiller
-    release: istio
     app: istio-ingressgateway
     istio: ingressgateway
 spec:
   type: NodePort
   selector:
-    release: istio
     app: istio-ingressgateway
     istio: ingressgateway
   ports:
@@ -114,7 +98,6 @@ spec:
       port: 15443
       targetPort: 15443
 ---
-# Source: istio/charts/gateways/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -122,10 +105,7 @@ metadata:
   namespace: istio-system
   labels:
     app: istio-ingressgateway
-    chart: gateways
-    heritage: Tiller
     istio: ingressgateway
-    release: istio
 spec:
   replicas: 1
   selector:
@@ -140,10 +120,7 @@ spec:
     metadata:
       labels:
         app: istio-ingressgateway
-        chart: gateways
-        heritage: Tiller
         istio: ingressgateway
-        release: istio
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
@@ -247,7 +224,7 @@ spec:
                 fieldPath: metadata.namespace
           - name: ISTIO_METAJSON_LABELS
             value: |
-              {"app":"istio-ingressgateway","chart":"gateways","heritage":"Tiller","istio":"ingressgateway","release":"istio"}
+              {"app":"istio-ingressgateway","istio":"ingressgateway"}
           - name: ISTIO_META_CLUSTER_ID
             value: "Kubernetes"
           - name: SDS_ENABLED

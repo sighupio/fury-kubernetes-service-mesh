@@ -1,5 +1,4 @@
 ---
-# Source: istio/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,9 +6,6 @@ metadata:
   namespace: istio-system
   labels:
     app: istio
-    chart: istio
-    heritage: Tiller
-    release: istio
 data:
   mesh: |-
     # Set the following variable to true to disable policy checks by Mixer.
@@ -159,7 +155,6 @@ data:
   meshNetworks: |-
     networks: {}
 ---
-# Source: istio/templates/sidecar-injector-configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -167,9 +162,6 @@ metadata:
   namespace: istio-system
   labels:
     app: istio
-    chart: istio
-    heritage: Tiller
-    release: istio
     istio: sidecar-injector
 data:
   values: |-

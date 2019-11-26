@@ -1,5 +1,4 @@
 ---
-# Source: istio/charts/kiali/templates/demosecret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -7,15 +6,11 @@ metadata:
   namespace: istio-system
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 type: Opaque
 data:
   username: YWRtaW4=   # admin
   passphrase: YWRtaW4= # admin
 ---
-# Source: istio/charts/kiali/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -23,9 +18,6 @@ metadata:
   namespace: istio-system
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 data:
   config.yaml: |
     istio_namespace: istio-system
@@ -44,7 +36,6 @@ data:
       prometheus:
         url: http://prometheus-k8s.monitoring:9090
 ---
-# Source: istio/charts/kiali/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -52,20 +43,13 @@ metadata:
   namespace: istio-system
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 ---
-# Source: istio/charts/kiali/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: kiali
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 rules:
 - apiGroups: [""]
   resources:
@@ -132,9 +116,6 @@ metadata:
   name: kiali-viewer
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 rules:
 - apiGroups: [""]
   resources:
@@ -192,16 +173,12 @@ rules:
   - get
   - list
 ---
-# Source: istio/charts/kiali/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: istio-kiali-admin-role-binding-istio-system
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -211,7 +188,6 @@ subjects:
   name: kiali-service-account
   namespace: istio-system
 ---
-# Source: istio/charts/kiali/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -219,9 +195,6 @@ metadata:
   namespace: istio-system
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 spec:
   ports:
   - name: http-kiali
@@ -230,7 +203,6 @@ spec:
   selector:
     app: kiali
 ---
-# Source: istio/charts/kiali/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -238,9 +210,6 @@ metadata:
   namespace: istio-system
   labels:
     app: kiali
-    chart: kiali
-    heritage: Tiller
-    release: istio
 spec:
   replicas: 1
   selector:
@@ -251,9 +220,6 @@ spec:
       name: kiali
       labels:
         app: kiali
-        chart: kiali
-        heritage: Tiller
-        release: istio
       annotations:
         sidecar.istio.io/inject: "false"
         scheduler.alpha.kubernetes.io/critical-pod: ""

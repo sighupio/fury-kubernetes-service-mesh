@@ -1,5 +1,4 @@
 ---
-# Source: istio/charts/pilot/templates/poddisruptionbudget.yaml
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -7,19 +6,14 @@ metadata:
   namespace: istio-system
   labels:
     app: pilot
-    chart: pilot
-    heritage: Tiller
-    release: istio
     istio: pilot
 spec:
   minAvailable: 1
   selector:
     matchLabels:
       app: pilot
-      release: istio
       istio: pilot
 ---
-# Source: istio/charts/pilot/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -27,20 +21,13 @@ metadata:
   namespace: istio-system
   labels:
     app: pilot
-    chart: pilot
-    heritage: Tiller
-    release: istio
 ---
-# Source: istio/charts/pilot/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: istio-pilot-istio-system
   labels:
     app: pilot
-    chart: pilot
-    heritage: Tiller
-    release: istio
 rules:
 - apiGroups: ["config.istio.io"]
   resources: ["*"]
@@ -79,16 +66,12 @@ rules:
     - "certificatesigningrequests/status"
   verbs: ["update", "create", "get", "delete"]
 ---
-# Source: istio/charts/pilot/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: istio-pilot-istio-system
   labels:
     app: pilot
-    chart: pilot
-    heritage: Tiller
-    release: istio
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -98,7 +81,6 @@ subjects:
     name: istio-pilot-service-account
     namespace: istio-system
 ---
-# Source: istio/charts/pilot/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -106,9 +88,6 @@ metadata:
   namespace: istio-system
   labels:
     app: pilot
-    chart: pilot
-    heritage: Tiller
-    release: istio
     istio: pilot
 spec:
   ports:
@@ -123,7 +102,6 @@ spec:
   selector:
     istio: pilot
 ---
-# Source: istio/charts/pilot/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -132,9 +110,6 @@ metadata:
   # TODO: default template doesn't have this, which one is right ?
   labels:
     app: pilot
-    chart: pilot
-    heritage: Tiller
-    release: istio
     istio: pilot
 spec:
   replicas: 1
@@ -149,9 +124,6 @@ spec:
     metadata:
       labels:
         app: pilot
-        chart: pilot
-        heritage: Tiller
-        release: istio
         istio: pilot
       annotations:
         sidecar.istio.io/inject: "false"

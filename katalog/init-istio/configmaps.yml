@@ -9,8 +9,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: mixer
@@ -91,8 +89,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-pilot
@@ -183,8 +179,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-pilot
@@ -957,8 +951,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-pilot
@@ -1258,8 +1250,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-pilot
@@ -1412,8 +1402,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-mixer
@@ -1511,8 +1499,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-mixer
@@ -1728,8 +1714,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-citadel
@@ -2465,8 +2449,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-citadel
@@ -3201,8 +3183,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-mixer
@@ -3287,8 +3267,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-mixer
@@ -3377,8 +3355,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: mixer
@@ -3471,8 +3447,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: mixer
@@ -3632,8 +3606,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-pilot
@@ -3782,8 +3754,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: mixer
@@ -3988,8 +3958,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: mixer
@@ -4105,8 +4073,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-pilot
@@ -4828,8 +4794,6 @@ data:
         chart: istio
         heritage: Tiller
         release: istio
-      annotations:
-        "helm.sh/resource-policy": keep
     spec:
       group: config.istio.io
       names:
@@ -4858,8 +4822,6 @@ data:
         chart: istio
         heritage: Tiller
         release: istio
-      annotations:
-        "helm.sh/resource-policy": keep
     spec:
       group: config.istio.io
       names:
@@ -4888,8 +4850,6 @@ data:
         chart: istio
         heritage: Tiller
         release: istio
-      annotations:
-        "helm.sh/resource-policy": keep
     spec:
       group: config.istio.io
       names:
@@ -4918,8 +4878,6 @@ data:
         chart: istio
         heritage: Tiller
         release: istio
-      annotations:
-        "helm.sh/resource-policy": keep
     spec:
       group: config.istio.io
       names:
@@ -4949,8 +4907,6 @@ data:
     apiVersion: apiextensions.k8s.io/v1beta1
     kind: CustomResourceDefinition
     metadata:
-      annotations:
-        "helm.sh/resource-policy": keep
       creationTimestamp: null
       labels:
         app: istio-pilot

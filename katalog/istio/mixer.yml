@@ -1,5 +1,4 @@
 ---
-# Source: istio/charts/mixer/templates/poddisruptionbudget.yaml
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -7,9 +6,6 @@ metadata:
   namespace: istio-system
   labels:
     app: policy
-    chart: mixer
-    heritage: Tiller
-    release: istio
     version: 1.4.0
     istio: mixer
     istio-mixer-type: policy
@@ -18,7 +14,6 @@ spec:
   selector:
     matchLabels:
       app: policy
-      release: istio
       istio: mixer
       istio-mixer-type: policy
 ---
@@ -29,9 +24,6 @@ metadata:
   namespace: istio-system
   labels:
     app: telemetry
-    chart: mixer
-    heritage: Tiller
-    release: istio
     version: 1.4.0
     istio: mixer
     istio-mixer-type: telemetry
@@ -41,11 +33,9 @@ spec:
   selector:
     matchLabels:
       app: telemetry
-      release: istio
       istio: mixer
       istio-mixer-type: telemetry
 ---
-# Source: istio/charts/mixer/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -53,20 +43,13 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 ---
-# Source: istio/charts/mixer/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: istio-mixer-istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 rules:
 - apiGroups: ["config.istio.io"] # istio CRD watcher
   resources: ["*"]
@@ -81,16 +64,12 @@ rules:
   resources: ["replicasets"]
   verbs: ["get", "list", "watch"]
 ---
-# Source: istio/charts/mixer/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: istio-mixer-admin-role-binding-istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -100,7 +79,6 @@ subjects:
     name: istio-mixer-service-account
     namespace: istio-system
 ---
-# Source: istio/charts/mixer/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -110,9 +88,6 @@ metadata:
    networking.istio.io/exportTo: "*"
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
     istio: mixer
 spec:
   ports:
@@ -135,9 +110,6 @@ metadata:
    networking.istio.io/exportTo: "*"
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
     istio: mixer
 spec:
   ports:
@@ -153,7 +125,6 @@ spec:
     istio: mixer
     istio-mixer-type: telemetry
 ---
-# Source: istio/charts/mixer/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -161,9 +132,6 @@ metadata:
   namespace: istio-system
   labels:
     app: istio-mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
     istio: mixer
 spec:
   replicas: 1
@@ -179,9 +147,6 @@ spec:
     metadata:
       labels:
         app: policy
-        chart: mixer
-        heritage: Tiller
-        release: istio
         security.istio.io/tlsMode: "istio"
         istio: mixer
         istio-mixer-type: policy
@@ -333,9 +298,6 @@ metadata:
   namespace: istio-system
   labels:
     app: istio-mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
     istio: mixer
 spec:
   replicas: 1
@@ -351,9 +313,6 @@ spec:
     metadata:
       labels:
         app: telemetry
-        chart: mixer
-        heritage: Tiller
-        release: istio
         security.istio.io/tlsMode: "istio"
         istio: mixer
         istio-mixer-type: telemetry
@@ -506,7 +465,6 @@ spec:
         - name: uds-socket
           mountPath: /sock
 ---
-# Source: istio/charts/mixer/templates/config.yaml
 apiVersion: "config.istio.io/v1alpha2"
 kind: attributemanifest
 metadata:
@@ -514,9 +472,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   attributes:
     origin.ip:
@@ -656,9 +611,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   attributes:
     source.ip:
@@ -721,9 +673,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledAdapter: stdio
   params:
@@ -736,9 +685,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: logentry
   params:
@@ -795,9 +741,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: logentry
   params:
@@ -839,9 +782,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   match: context.protocol == "http" || context.protocol == "grpc"
   actions:
@@ -856,9 +796,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   match: context.protocol == "tcp"
   actions:
@@ -873,9 +810,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: metric
   params:
@@ -910,9 +844,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: metric
   params:
@@ -947,9 +878,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: metric
   params:
@@ -984,9 +912,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: metric
   params:
@@ -1021,9 +946,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: metric
   params:
@@ -1054,9 +976,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: metric
   params:
@@ -1087,9 +1006,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: metric
   params:
@@ -1120,9 +1036,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: metric
   params:
@@ -1153,9 +1066,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledAdapter: prometheus
   params:
@@ -1359,9 +1269,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   match: (context.protocol == "http" || context.protocol == "grpc") && (match((request.useragent | "-"), "kube-probe*") == false) && (match((request.useragent | "-"), "Prometheus*") == false)
   actions:
@@ -1379,9 +1286,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   match: context.protocol == "tcp"
   actions:
@@ -1397,9 +1301,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   match: context.protocol == "tcp" && ((connection.event | "na") == "open")
   actions:
@@ -1414,9 +1315,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   match: context.protocol == "tcp" && ((connection.event | "na") == "close")
   actions:
@@ -1431,9 +1329,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledAdapter: kubernetesenv
   params:
@@ -1452,9 +1347,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   actions:
   - handler: kubernetesenv
@@ -1468,9 +1360,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   match: context.protocol == "tcp"
   actions:
@@ -1485,9 +1374,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   compiledTemplate: kubernetes
   params:
@@ -1531,9 +1417,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   host: istio-policy.istio-system.svc.cluster.local
   trafficPolicy:
@@ -1558,9 +1441,6 @@ metadata:
   namespace: istio-system
   labels:
     app: mixer
-    chart: mixer
-    heritage: Tiller
-    release: istio
 spec:
   host: istio-telemetry.istio-system.svc.cluster.local
   trafficPolicy:

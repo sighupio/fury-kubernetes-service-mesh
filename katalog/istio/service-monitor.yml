@@ -1,5 +1,4 @@
 ---
-# Source: prometheus-operator/templates/servicemonitors.yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -7,7 +6,6 @@ metadata:
   namespace: monitoring
   labels:
     monitoring: istio-mesh
-    release: istio
 spec:
   selector:
     matchExpressions:
@@ -26,7 +24,6 @@ metadata:
   namespace: monitoring
   labels:
     monitoring: istio-components
-    release: istio
 spec:
   jobLabel: istio
   selector:
@@ -47,7 +44,6 @@ metadata:
   namespace: monitoring
   labels:
     monitoring: istio-proxies
-    release: istio
 spec:
   selector:
     matchExpressions:
@@ -79,7 +75,6 @@ metadata:
   namespace: monitoring
   labels:
     monitoring: kube-pods
-    release: istio
 spec:
   selector:
     matchExpressions:
@@ -124,7 +119,6 @@ metadata:
   namespace: monitoring
   labels:
     monitoring: kube-services
-    release: istio
 spec:
   selector:
     matchExpressions:
@@ -169,7 +163,6 @@ metadata:
   namespace: monitoring
   labels:
     monitoring: kubelet-monitor
-    release: istio
 spec:
   endpoints:
   - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
