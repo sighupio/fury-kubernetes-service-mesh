@@ -1,0 +1,99 @@
+# This is used to generate istio.yaml for minimal, demo mode.
+# It is shipped with the release, used for bookinfo or quick installation of istio.
+# Includes components used in the demo, defaults to alpha3 rules.
+global:
+  controlPlaneSecurityEnabled: false
+  imagePullPolicy: Always
+  enableTracing: false
+  
+  proxy:
+    accessLogFile: "/dev/stdout"
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+
+  disablePolicyChecks: false
+  useMCP: false
+
+  mtls:
+    # Default setting for service-to-service mtls. Can be set explicitly using
+    # destination rules or service annotations.
+    enabled: false
+
+sidecarInjectorWebhook:
+  enabled: false
+  # If true, webhook or istioctl injector will rewrite PodSpec for liveness
+  # health check to redirect request to sidecar. This makes liveness check work
+  # even when mTLS is enabled.
+  rewriteAppHTTPProbe: false
+
+pilot:
+  autoscaleEnabled: false
+  traceSampling: 100.0
+  sidecar: false
+  resources:
+    requests:
+      cpu: 10m
+      memory: 100Mi
+
+prometheus:
+  enabled: false
+
+mixer:
+  policy:
+    enabled: true
+    autoscaleEnabled: false
+    resources:
+      requests:
+        cpu: 10m
+        memory: 100Mi
+
+  telemetry:
+    enabled: true
+    autoscaleEnabled: false
+    resources:
+      requests:
+        cpu: 50m
+        memory: 100Mi
+ 
+  adapters:
+    stdio:
+      enabled: true
+ 
+grafana:
+  enabled: false
+
+tracing:
+  enabled: false
+
+kiali:
+  enabled: true
+  prometheusAddr: http://prometheus-k8s.monitoring:9090
+  # Add user admin/admin to kiali.
+  createDemoSecret: true
+  security:
+    enable: false
+
+gateways:
+  istio-ingressgateway:
+    type: NodePort #change to NodePort, ClusterIP or LoadBalancer if need be
+    autoscaleEnabled: false
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+
+  istio-egressgateway:
+    enabled: false
+    autoscaleEnabled: false
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+
+security:
+  enabled: false
+
+galley:
+  enabled: false

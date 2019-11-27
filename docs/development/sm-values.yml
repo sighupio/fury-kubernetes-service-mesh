@@ -1,0 +1,16 @@
+global:
+  telemetryNamespace: istio-system
+
+prometheusOperator:
+  # Controls the default scrape interval used in the ServiceMonitors
+  scrapeInterval: 10s
+
+  # Enabling this option will generate a Prometheus resource, causing the operator
+  # to create a prometheus deployment according to the generated spec. It will also
+  # create a service definition, destination rules, cluster roles and bindings, and
+  # a service account. Only use this option if you have not already created and configured
+  # a prometheus resource and/or you desire a distinct prometheus resource for Istio.
+  createPrometheusResource: false
+  # Indicate if Citadel is enabled, i.e., whether its generated certificates are available
+  security:
+    enabled: false
