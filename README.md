@@ -11,7 +11,7 @@ Following packages are included in Fury Kubernetes Service Mesh katalog.
 
 - [istio](katalog/istio): Istio provides behavioral insights and operational control over the service mesh as a whole,
 offering a complete solution to satisfy the diverse requirements of microservice applications. It needs a two phase
-installation. First run: [init-istio](katalog/init-istio) package. Once completed, you are ready to deploy
+installation. First run: [istio/init](katalog/istio/init) package. Once completed, you are ready to deploy
 [istio](katalog/istio) package. Version: **1.4.0**.
 
 
@@ -66,7 +66,7 @@ following content:
 
 ```yaml
 bases:
-- ./vendor/katalog/service-mesh/init-istio
+- ./vendor/katalog/service-mesh/istio/init
 ```
 
 and execute
@@ -81,7 +81,7 @@ Now you can add the other packages to `kustomization.yaml`, the final file will 
 
 ```yaml
 bases:
-- ./vendor/katalog/service-mesh/init-istio
+- ./vendor/katalog/service-mesh/istio/init
 - ./vendor/katalog/service-mesh/istio
 ```
 

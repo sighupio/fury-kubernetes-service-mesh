@@ -12,7 +12,7 @@ info(){
 @test "testing init-istio package" {
   info
   test(){
-    apply katalog/init-istio
+    apply katalog/istio/init
     kubectl -n istio-system wait --for=condition=complete job --all
   }
   run test
@@ -48,10 +48,10 @@ info(){
   info
   deploy(){
     kubectl create ns demo
-    kubectl apply -f <(istioctl kube-inject -f katalog/tests/bookinfo/bookinfo.yaml) -n demo
-    kubectl apply -f katalog/tests/bookinfo/bookinfo-gateway.yaml -n demo
-    kubectl apply -f katalog/tests/bookinfo/destination-rule-all.yaml -n demo
-    kubectl apply -f katalog/tests/bookinfo/virtual-service-all-v1.yaml -n demo
+    kubectl apply -f <(istioctl kube-inject -f katalog/tests/istio/bookinfo/bookinfo.yaml) -n demo
+    kubectl apply -f katalog/tests/istio/bookinfo/bookinfo-gateway.yaml -n demo
+    kubectl apply -f katalog/tests/istio/bookinfo/destination-rule-all.yaml -n demo
+    kubectl apply -f katalog/tests/istio/bookinfo/virtual-service-all-v1.yaml -n demo
   }
   wait_for_it() {
     retry_counter=0
@@ -96,7 +96,7 @@ info(){
 @test "deploy v2 for jason and v3 for the rest in bookinfo demo application" {
   info
   test(){
-    kubectl apply -f katalog/tests/bookinfo/virtual-service-reviews-jason-v2-v3.yaml -n demo
+    kubectl apply -f katalog/tests/istio/bookinfo/virtual-service-reviews-jason-v2-v3.yaml -n demo
   }
   run test
   [ "$status" -eq 0 ]
@@ -145,7 +145,7 @@ info(){
 @test "deploy v2 for jason and deny access to v3 in bookinfo demo application" {
   info
   test(){
-    kubectl apply -f katalog/tests/bookinfo/mixer-rule-deny-label.yaml -n demo
+    kubectl apply -f katalog/tests/istio/bookinfo/mixer-rule-deny-label.yaml -n demo
   }
   run test
   [ "$status" -eq 0 ]
@@ -194,7 +194,7 @@ info(){
 @test "destroy v2 for jason and deny access to v3 in bookinfo demo application" {
   info
   test(){
-    kubectl delete -f katalog/tests/bookinfo/mixer-rule-deny-label.yaml -n demo
+    kubectl delete -f katalog/tests/istio/bookinfo/mixer-rule-deny-label.yaml -n demo
   }
   run test
   [ "$status" -eq 0 ]
@@ -223,7 +223,7 @@ info(){
 @test "deploy whitelist by attribute scenario in bookinfo demo application" {
   info
   test(){
-    kubectl apply -f katalog/tests/bookinfo/mixer-rule-deny-whitelist.yaml -n demo
+    kubectl apply -f katalog/tests/istio/bookinfo/mixer-rule-deny-whitelist.yaml -n demo
   }
   run test
   [ "$status" -eq 0 ]
@@ -272,7 +272,7 @@ info(){
 @test "deploy rate limit in bookinfo demo application" {
   info
   test(){
-    kubectl apply -f katalog/tests/bookinfo/mixer-rule-productpage-ratelimit.yaml -n istio-system
+    kubectl apply -f katalog/tests/istio/bookinfo/mixer-rule-productpage-ratelimit.yaml -n istio-system
   }
   run test
   [ "$status" -eq 0 ]
@@ -328,7 +328,7 @@ info(){
 @test "delete rate limit in bookinfo demo application" {
   info
   test(){
-    kubectl delete -f katalog/tests/bookinfo/mixer-rule-productpage-ratelimit.yaml -n istio-system
+    kubectl delete -f katalog/tests/istio/bookinfo/mixer-rule-productpage-ratelimit.yaml -n istio-system
   }
   run test
   [ "$status" -eq 0 ]

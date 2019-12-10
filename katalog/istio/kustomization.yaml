@@ -1,8 +1,8 @@
 namespace: istio-system
 
 resources:
-- config.yml
-- mixer.yml
-- pilot.yml
-- gateway.yml
-- rbac.yml
+- minimal/config.yml
+- minimal/mixer.yml
+- minimal/pilot.yml
+- minimal/gateway.yml
+- minimal/rbac.yml

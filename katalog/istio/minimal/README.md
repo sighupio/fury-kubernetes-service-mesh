@@ -1,4 +1,4 @@
-# Istio
+# Istio (Minimal)
 
 Istio addresses the challenges developers and operators face as monolithic applications transition towards a
 distributed microservice architecture. To see how, it helps to take a more detailed look at Istio’s service mesh.
@@ -32,7 +32,6 @@ Source: [https://istio.io/docs](https://istio.io/docs/concepts/what-is-istio/#wh
 | `istio-ingressgateway`   | :white_check_mark: |
 | `istio-pilot`            | :white_check_mark: |
 | `istio-policy`           | :white_check_mark: |
-| `istio-telemetry`        | :white_check_mark: |
 | **Addons**               |                    |
 | `kiali`                  | :white_check_mark: |
 
@@ -70,9 +69,6 @@ can configure dynamically at runtime.
   - Rate limiting to dynamically limit the traffic to a service
   - Denials, whitelists, and blacklists, to restrict access to services
   - Header rewrites and redirects
-- ***Observability:*** Istio generates detailed telemetry for all service communications within a mesh. This telemetry
-provides observability of service behavior, empowering operators to troubleshoot, maintain, and optimize their
-applications – without imposing any additional burdens on service developers.
 
 ## Image repository and tag
 
