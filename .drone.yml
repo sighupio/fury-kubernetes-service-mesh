@@ -41,7 +41,8 @@ steps:
       - export CLUSTER_NAME=116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-116
-      - bats katalog/tests/istio-bats.sh
+      - bats -t katalog/tests/istio/istio-minimal-install.sh
+      - bats -t katalog/tests/istio/istio-minimal.sh
     when:
       event:
       - push
