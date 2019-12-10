@@ -1,0 +1,7 @@
+namespace: istio-system
+
+resources:
+  - rbac.yml
+  - sidecar-injector-config.yml
+  - deployment.yml
+  - post-install.yml
