@@ -1,4 +1,7 @@
 namespace: istio-system
 
+bases:
+  - ../telemetry
+
 resources:
 - kiali.yml
