@@ -43,7 +43,12 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - bats -t katalog/tests/istio/istio-minimal-install.sh
       - bats -t katalog/tests/istio/istio-minimal.sh
-      - bats -t katalog/tests/istio/istio-citadel.sh
+      - bats -t katalog/tests/istio/istio-citadel-install.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-1.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-2.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-3.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-cleanup.sh
+      - bats -t katalog/tests/istio/istio-citadel-rollback.sh
     when:
       event:
       - push
@@ -117,7 +122,12 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-115
       - bats -t katalog/tests/istio/istio-minimal-install.sh
       - bats -t katalog/tests/istio/istio-minimal.sh
-      - bats -t katalog/tests/istio/istio-citadel.sh
+      - bats -t katalog/tests/istio/istio-citadel-install.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-1.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-2.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-3.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-cleanup.sh
+      - bats -t katalog/tests/istio/istio-citadel-rollback.sh
     when:
       event:
       - push
@@ -191,7 +201,12 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-114
       - bats -t katalog/tests/istio/istio-minimal-install.sh
       - bats -t katalog/tests/istio/istio-minimal.sh
-      - bats -t katalog/tests/istio/istio-citadel.sh
+      - bats -t katalog/tests/istio/istio-citadel-install.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-1.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-2.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-3.sh
+      - bats -t katalog/tests/istio/istio-citadel-authn-cleanup.sh
+      - bats -t katalog/tests/istio/istio-citadel-rollback.sh
     when:
       event:
       - push

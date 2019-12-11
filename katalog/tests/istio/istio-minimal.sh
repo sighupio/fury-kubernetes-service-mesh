@@ -13,7 +13,7 @@ load ./../helper
   }
   wait_for_it() {
     retry_counter=0
-    max_retry=30
+    max_retry=50
     while kubectl get pods -n demo | grep -ie "\(Pending\|Error\|CrashLoop\|ContainerCreating\|PodInitializing\|Init:\)" >&2
     do
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n demo >&2 && return 1 )
@@ -64,7 +64,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     ko=1
     while [[ ko -eq 1 ]]
     do
@@ -85,7 +85,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     ko=1
     while [[ ko -eq 1 ]]
     do
@@ -113,7 +113,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     ko=1
     while [[ ko -eq 1 ]]
     do
@@ -134,7 +134,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     ko=1
     while [[ ko -eq 1 ]]
     do
@@ -162,7 +162,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     ko=1
     while [[ ko -eq 1 ]]
     do
@@ -191,7 +191,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     ko=1
     while [[ ko -eq 1 ]]
     do
@@ -212,7 +212,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     ko=1
     while [[ ko -eq 1 ]]
     do
@@ -249,7 +249,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     ko=1
     while [[ ko -eq 1 ]]
     do
