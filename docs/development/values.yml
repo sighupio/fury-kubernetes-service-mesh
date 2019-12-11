@@ -93,7 +93,7 @@ gateways:
         memory: 40Mi
 
 security:
-  enabled: true
+  enabled: false
 
 galley:
   enabled: false

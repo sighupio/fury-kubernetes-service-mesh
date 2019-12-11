@@ -92,7 +92,7 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: istio-security-post-install-1.4.0
+  name: istio-security-post-install-1.4.2
   labels:
     app: security
 spec:
@@ -105,7 +105,7 @@ spec:
       serviceAccountName: istio-security-post-install-account
       containers:
         - name: kubectl
-          image: "docker.io/istio/kubectl:1.4.0"
+          image: "docker.io/istio/kubectl:1.4.2"
           imagePullPolicy: Always
           command: [ "/bin/bash", "/tmp/security/run.sh", "/tmp/security/custom-resources.yaml" ]
           volumeMounts:

@@ -127,7 +127,7 @@ spec:
       serviceAccountName: istio-ingressgateway-service-account
       containers:
         - name: istio-proxy
-          image: "docker.io/istio/proxyv2:1.4.0"
+          image: "docker.io/istio/proxyv2:1.4.2"
           imagePullPolicy: Always
           ports:
             - containerPort: 15020

@@ -10,7 +10,7 @@ maintain this document updated. So, any new/modified action has to be written he
 First add istio to your helm repositories:
 
 ```bash
-$ helm repo add istio.io https://storage.googleapis.com/istio-release/releases/1.4.0/charts/
+$ helm repo add istio.io https://storage.googleapis.com/istio-release/releases/1.4.2/charts/
 $ helm update
 ```
 
@@ -26,6 +26,7 @@ istio		istio-init
 And let's start rendering the `istio-init` helm chart:
 
 ```bash
+$ mkdir rendered
 $ helm template install/kubernetes/helm/istio-init --name istio-init --namespace istio-system > rendered/istio-init.yml
 ```
 
@@ -36,7 +37,7 @@ Now, you can find inside the rendered directory a *(big)* file named `istio-init
 - rbac
 
 So, i have splited it into some more granular files based on its content. You can find the resulting files inside the
-[katalog/init-istio directory](../katalog/init-istio).
+[katalog/init-istio directory](../katalog/istio/init).
 
 Now, we are ready to render the `istio` chart, but first, let's review the [`values.yml`](values.yml) file.
 

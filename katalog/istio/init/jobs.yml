@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: istio-init-crd-10-1.4.0
+  name: istio-init-crd-10-1.4.2
 spec:
   template:
     metadata:
@@ -13,7 +13,7 @@ spec:
       serviceAccountName: istio-init-service-account
       containers:
       - name: istio-init-crd-10
-        image: "docker.io/istio/kubectl:1.4.0"
+        image: "docker.io/istio/kubectl:1.4.2"
         imagePullPolicy: Always
         resources:
           limits:
@@ -38,7 +38,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: istio-init-crd-11-1.4.0
+  name: istio-init-crd-11-1.4.2
 spec:
   template:
     metadata:
@@ -48,7 +48,7 @@ spec:
       serviceAccountName: istio-init-service-account
       containers:
       - name: istio-init-crd-11
-        image: "docker.io/istio/kubectl:1.4.0"
+        image: "docker.io/istio/kubectl:1.4.2"
         imagePullPolicy: Always
         resources:
           limits:
@@ -73,7 +73,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: istio-init-crd-14-1.4.0
+  name: istio-init-crd-14-1.4.2
 spec:
   template:
     metadata:
@@ -83,7 +83,7 @@ spec:
       serviceAccountName: istio-init-service-account
       containers:
       - name: istio-init-crd-14
-        image: "docker.io/istio/kubectl:1.4.0"
+        image: "docker.io/istio/kubectl:1.4.2"
         imagePullPolicy: Always
         resources:
           limits:
