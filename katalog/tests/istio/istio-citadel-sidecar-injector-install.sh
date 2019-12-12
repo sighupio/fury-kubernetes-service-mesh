@@ -6,7 +6,8 @@ load ./../helper
   info
   test(){
     apply katalog/istio/citadel
-    apply katalog/istio/sidecar-injector-config/citadel
+    apply katalog/istio/sidecar-injection
+    apply katalog/istio/sidecar-injector-config/sidecar-injection
     kubectl -n istio-system wait --for=condition=complete job --all
   }
   run test

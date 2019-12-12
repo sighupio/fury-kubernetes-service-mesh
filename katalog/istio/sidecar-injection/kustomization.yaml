@@ -1,0 +1,6 @@
+namespace: istio-system
+
+resources:
+  - rbac.yaml
+  - deployment.yaml
+  - webhook.yaml

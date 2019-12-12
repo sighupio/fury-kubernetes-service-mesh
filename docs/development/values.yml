@@ -22,11 +22,11 @@ global:
     enabled: false
 
 sidecarInjectorWebhook:
-  enabled: false
+  enabled: true
   # If true, webhook or istioctl injector will rewrite PodSpec for liveness
   # health check to redirect request to sidecar. This makes liveness check work
   # even when mTLS is enabled.
-  rewriteAppHTTPProbe: false
+  rewriteAppHTTPProbe: true
 
 pilot:
   autoscaleEnabled: false
@@ -93,7 +93,7 @@ gateways:
         memory: 40Mi
 
 security:
-  enabled: false
+  enabled: true
 
 galley:
   enabled: false
