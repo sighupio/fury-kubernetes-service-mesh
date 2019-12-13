@@ -1,0 +1,8 @@
+namespace: istio-system
+
+bases:
+  - ../../katalog/istio/init
+  - ../../katalog/istio/minimal
+  - ../../katalog/istio/citadel
+  - ../../katalog/istio/sidecar-injection
+  - ../../katalog/istio/sidecar-injector-config/sidecar-injection

@@ -32,8 +32,6 @@ Source: [https://istio.io/docs](https://istio.io/docs/concepts/what-is-istio/#wh
 | `istio-ingressgateway`   | :white_check_mark: |
 | `istio-pilot`            | :white_check_mark: |
 | `istio-policy`           | :white_check_mark: |
-| **Addons**               |                    |
-| `kiali`                  | :white_check_mark: |
 
 
 This components enables:
