@@ -25,17 +25,8 @@ load ./../helper
       done
     done
   }
-  retry_counter=0
-  max_retry=30
-  ko=1
-  while [[ ko -eq 1 ]]
-  do
-    if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; exit 1; fi
-    sleep 2 && echo "# waiting..." $retry_counter >&3
-    run test
-    ko=${status}
-    retry_counter=$((retry_counter + 1))
-  done
+  loop_it test 30 2
+  status=${loop_it_result}
   [ "$status" -eq 0 ]
 }
 
@@ -52,17 +43,8 @@ load ./../helper
       done
     done
   }
-  retry_counter=0
-  max_retry=30
-  ko=1
-  while [[ ko -eq 1 ]]
-  do
-    if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; exit 1; fi
-    sleep 2 && echo "# waiting..." $retry_counter >&3
-    run test
-    ko=${status}
-    retry_counter=$((retry_counter + 1))
-  done
+  loop_it test 30 2
+  status=${loop_it_result}
   [ "$status" -eq 0 ]
 }
 
@@ -89,17 +71,8 @@ load ./../helper
       done
     done
   }
-  retry_counter=0
-  max_retry=30
-  ko=1
-  while [[ ko -eq 1 ]]
-  do
-    if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; exit 1; fi
-    sleep 2 && echo "# waiting..." $retry_counter >&3
-    run test
-    ko=${status}
-    retry_counter=$((retry_counter + 1))
-  done
+  loop_it test 30 2
+  status=${loop_it_result}
   [ "$status" -eq 0 ]
 }
 
