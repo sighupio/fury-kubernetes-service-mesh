@@ -47,6 +47,23 @@ steps:
       event:
       - push
 
+  - name: e2e-egress-gateway
+    image: quay.io/sighup/e2e-testing:1.1.0_0.1.3_2.16.1_1.4.0_1.16.3_3.2.2_2.4.1
+    pull: always
+    volumes:
+    - name: shared
+      path: /shared
+    depends_on: [ init ]
+    commands:
+      - export CLUSTER_NAME=116
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-116
+      - bats -t katalog/tests/istio/istio-egress-install.sh
+      - bats -t katalog/tests/istio/istio-egress-external-services.sh
+    when:
+      event:
+      - push
+
   - name: e2e-istio-with-citadel
     image: quay.io/sighup/e2e-testing:1.1.0_0.1.3_2.16.1_1.4.0_1.16.3_3.2.2_2.4.1
     pull: always

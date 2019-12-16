@@ -85,7 +85,8 @@ gateways:
         memory: 40Mi
 
   istio-egressgateway:
-    enabled: false
+    type: ClusterIP #change to NodePort, ClusterIP or LoadBalancer if need be
+    enabled: true
     autoscaleEnabled: false
     resources:
       requests:
