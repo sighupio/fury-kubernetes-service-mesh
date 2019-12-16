@@ -134,7 +134,11 @@ load ./../helper
   test(){
     kubectl apply -f katalog/tests/istio/egress/httpbin-externalName.yaml -n egress-tests
     pod_name=$(kubectl get pod -l app=sleep-no-mesh -o jsonpath={.items..metadata.name} -n egress-tests)
-    istio_header=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s |jq '.headers["X-Istio-Attributes"]' -rc) 
+    istio_header=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s |jq '.headers["X-Istio-Attributes"]' -rc)
+    headers=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s)
+    echo ${pod_name} >&3
+    echo ${headers} >&3
+    echo ${istio_header} >&3
     if [ -z "${istio_header}" ] || [ "${istio_header}" != "null" ]; then return 1; fi
   }
   loop_it test 50 2
@@ -147,7 +151,11 @@ load ./../helper
   test(){
     kubectl apply -f katalog/tests/istio/egress/httpbin-externalName-destination-rule.yaml -n egress-tests
     pod_name=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name} -n egress-tests)
-    istio_header=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s |jq '.headers["X-Istio-Attributes"]' -rc) 
+    istio_header=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s |jq '.headers["X-Istio-Attributes"]' -rc)
+    headers=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s)
+    echo ${pod_name} >&3
+    echo ${headers} >&3
+    echo ${istio_header} >&3
     if [ -z "${istio_header}" ] || [ "${istio_header}" == "null" ]; then return 1; fi
   }
   loop_it test 50 2
