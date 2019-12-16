@@ -53,7 +53,7 @@ steps:
     volumes:
     - name: shared
       path: /shared
-    depends_on: [ init ]
+    depends_on: [ e2e-basic-istio ]
     commands:
       - export CLUSTER_NAME=116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -70,7 +70,7 @@ steps:
     volumes:
     - name: shared
       path: /shared
-    depends_on: [ e2e-basic-istio ]
+    depends_on: [ e2e-egress-gateway ]
     commands:
       - export CLUSTER_NAME=116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
