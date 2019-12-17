@@ -1,5 +1,4 @@
 namespace: istio-system
 
 resources:
-- telemetry.yml
-- service-monitor.yml
+  - base

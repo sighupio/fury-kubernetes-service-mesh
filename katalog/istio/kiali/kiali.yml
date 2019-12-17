@@ -1,46 +1,8 @@
 ---
 apiVersion: v1
-kind: Secret
-metadata:
-  name: kiali
-  namespace: istio-system
-  labels:
-    app: kiali
-type: Opaque
-stringData:
-  username: admin
-  passphrase: admin
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kiali
-  namespace: istio-system
-  labels:
-    app: kiali
-data:
-  config.yaml: |
-    istio_namespace: istio-system
-    deployment:
-      accessible_namespaces: ['**']
-    auth:
-      strategy: login
-    server:
-      port: 20001
-      web_root: /kiali
-    external_services:
-      tracing:
-        url:
-      grafana:
-        url:
-      prometheus:
-        url: http://prometheus-k8s.monitoring:9090
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kiali-service-account
-  namespace: istio-system
   labels:
     app: kiali
 ---
@@ -186,13 +148,11 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kiali-service-account
-  namespace: istio-system
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: kiali
-  namespace: istio-system
   labels:
     app: kiali
 spec:
@@ -207,7 +167,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kiali
-  namespace: istio-system
   labels:
     app: kiali
 spec:

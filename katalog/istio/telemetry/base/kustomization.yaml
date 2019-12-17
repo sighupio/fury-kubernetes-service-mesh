@@ -1,5 +1,5 @@
 namespace: istio-system
 
 resources:
-  - kiali.yml
-  - configuration/
+  - telemetry.yml
+  

@@ -5,4 +5,4 @@ bases:
   - ../../../katalog/istio/minimal
   - ../../../katalog/istio/citadel
   - ../../../katalog/istio/sidecar-injection
-  - ../../../katalog/istio/sidecar-injector-config/sidecar-injection
+  - ../../../katalog/istio/sidecar-injection/configuration/sidecar-injection

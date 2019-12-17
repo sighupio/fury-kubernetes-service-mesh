@@ -6,7 +6,7 @@ load ./../helper
   info
   test(){
     apply katalog/istio/egress-gateway
-    apply katalog/istio/sidecar-injector-config/minimal-and-egress
+    apply katalog/istio/sidecar-injection/configuration/minimal-and-egress
   }
   run test
   [ "$status" -eq 0 ]

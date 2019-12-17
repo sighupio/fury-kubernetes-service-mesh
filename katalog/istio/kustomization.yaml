@@ -2,3 +2,4 @@ namespace: istio-system
 
 resources:
   - minimal/
+  - sidecar-injection/configuration/minimal

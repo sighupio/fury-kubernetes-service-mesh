@@ -48,7 +48,7 @@ bases:
     version: v0.1.0
   - name: service-mesh/istio
     version: v0.1.0
-  - name: service-mesh/istio/sidecar-injector-config/minimal
+  - name: service-mesh/istio/sidecar-injection/configuration/minimal
     version: v0.1.0
 ```
 
@@ -85,7 +85,7 @@ Now you can add the other packages to `kustomization.yaml`, the final file will 
 bases:
 - ./vendor/katalog/service-mesh/istio/init
 - ./vendor/katalog/service-mesh/istio
-- ./vendor/katalog/service-mesh/istio/sidecar-injector-config/minimal
+- ./vendor/katalog/service-mesh/istio/sidecar-injection/configuration/minimal
 ```
 
 See `kustomize` [documentation](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/README.md) for details

@@ -16,7 +16,7 @@ load ./../helper
   info
   test(){
     apply katalog/istio
-    apply katalog/istio/sidecar-injector-config/minimal
+    apply katalog/istio/sidecar-injection/configuration/minimal
   }
   run test
   [ "$status" -eq 0 ]

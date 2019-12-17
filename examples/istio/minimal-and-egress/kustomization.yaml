@@ -4,5 +4,5 @@ bases:
   - ../../../katalog/istio/init
   - ../../../katalog/istio/minimal
   - ../../../katalog/istio/egress-gateway
-  - ../../../katalog/istio/sidecar-injector-config/minimal-and-egress
+  - ../../../katalog/istio/sidecar-injection/configuration/minimal-and-egress
   

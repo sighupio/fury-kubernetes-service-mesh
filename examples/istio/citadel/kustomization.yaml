@@ -4,4 +4,4 @@ bases:
   - ../../../katalog/istio/init
   - ../../../katalog/istio/minimal
   - ../../../katalog/istio/citadel
-  - ../../../katalog/istio/sidecar-injector-config/citadel
+  - ../../../katalog/istio/sidecar-injection/configuration/citadel
