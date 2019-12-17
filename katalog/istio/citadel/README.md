@@ -16,7 +16,7 @@ Source: [https://istio.io/docs](https://istio.io/docs/concepts/security/)
 - Kustomize = `v3.0.0`
 - [init istio](../init/)
 - [minimal istio](../minimal/)
-- [citadel istio sidecar injector configuration](../sidecar-injector-config/citadel)
+- [citadel istio sidecar injector configuration](../sidecar-injection/configuration/citadel)
 
 
 ## Included features
@@ -60,18 +60,18 @@ You can deploy citadel by running following command in the root of this project:
 
 ```shell
 $ kustomize build | kubectl apply -f -
-$ kustomize build ../sidecar-injector-config/citadel | kubectl apply -f -
+$ kustomize build ../sidecar-injection/configuration/citadel | kubectl apply -f -
 ```
 
 ### Configuration
 
 As this is a core part of any istio deployment, the istio configuration has to be modified. You can find the new
-configuration values in the [sidecar configuration patch](../sidecar-injector-config/citadel/patch.yaml).
+configuration values in the [sidecar configuration patch](../sidecar-injection/configuration/citadel/patch.yaml).
 
 You have to apply it using:
 
 ```shell
-$ kustomize build ../sidecar-injector-config/citadel | kubectl apply -f -
+$ kustomize build ../sidecar-injection/configuration/citadel | kubectl apply -f -
 ```
 
 
