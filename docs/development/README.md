@@ -49,14 +49,14 @@ This values makes possible the following configuration:
 |                          | Installed          |
 |--------------------------|--------------------|
 | **Core components**      |                    |
-| `istio-citadel`          |                    |
-| `istio-egressgateway`    |                    |
+| `istio-citadel`          | :white_check_mark: |
+| `istio-egressgateway`    | :white_check_mark: |
 | `istio-galley`           |                    |
 | `istio-ingressgateway`   | :white_check_mark: |
 | `istio-nodeagent`        |                    |
 | `istio-pilot`            | :white_check_mark: |
 | `istio-policy`           | :white_check_mark: |
-| `istio-sidecar-injector` |                    |
+| `istio-sidecar-injector` | :white_check_mark: |
 | `istio-telemetry`        | :white_check_mark: |
 | **Addons**               |                    |
 | `grafana`                |                    |
@@ -103,6 +103,8 @@ Once rendered, you will be able to find the new `istio-serve-monitors.yml` file 
 It is required by Kiali dashboard.
 
 ### Demos / Testing
+
+All of the following examples are tested in the pipeline
 
 ### Simplest demo (Requires sidecar-injector)
 

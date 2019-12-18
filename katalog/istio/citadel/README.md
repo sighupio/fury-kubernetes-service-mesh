@@ -59,8 +59,8 @@ Includes:
 You can deploy citadel by running following command in the root of this project:
 
 ```shell
-$ kustomize build | kubectl apply -f -
-$ kustomize build ../sidecar-injection/configuration/citadel | kubectl apply -f -
+$ kustomize build katalog/istio/citadel | kubectl apply -f -
+$ kustomize build katalog/istio/sidecar-injection/configuration/citadel-and-egress | kubectl apply -f -
 ```
 
 ### Configuration
@@ -73,6 +73,13 @@ You have to apply it using:
 ```shell
 $ kustomize build ../sidecar-injection/configuration/citadel | kubectl apply -f -
 ```
+
+Be sure to choose the correct sidecar-injection configuration.
+
+
+## Additional Citadel configuration
+
+- [Plugging in External CA Key and Certificate](https://istio.io/docs/tasks/security/citadel-config/plugin-ca-cert/)
 
 
 ## License

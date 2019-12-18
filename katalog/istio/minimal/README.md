@@ -1,27 +1,16 @@
 # Istio (Minimal)
 
-Istio addresses the challenges developers and operators face as monolithic applications transition towards a
-distributed microservice architecture. To see how, it helps to take a more detailed look at Istio’s service mesh.
-
-The term service mesh is used to describe the network of microservices that make up such applications and the
-interactions between them. As a service mesh grows in size and complexity, it can become harder to understand and
-manage. Its requirements can include discovery, load balancing, failure recovery, metrics, and monitoring. A
-service mesh also often has more complex operational requirements, like A/B testing, canary rollouts, rate limiting,
-access control, and end-to-end authentication.
-
-Istio provides behavioral insights and operational control over the service mesh as a whole, offering a complete
-solution to satisfy the diverse requirements of microservice applications.
-
-Source: [https://istio.io/docs](https://istio.io/docs/concepts/what-is-istio/#what-is-a-service-mesh)
+As described [before](../../istio/README.md#modular), this [Istio](../../istio) package has been designed to make it
+easy the Istio adoption.
+This package is a good starting point to understand what Istio provides with a limited amount of features.
+Once installed, the cluster will have a working Istio distribution.
 
 
 ## Requirements
 
 - Kubernetes >= `1.14.0`
 - Kustomize = `v3.0.0`
-- [init-istio](../init-istio/)
-- [`prometheus-operator`](https://github.com/sighupio/fury-kubernetes-monitoring/tree/v1.3.0/katalog/prometheus-operator)
-- [`prometheus-operated`](https://github.com/sighupio/fury-kubernetes-monitoring/tree/v1.3.0/katalog/prometheus-operated)
+- [istio/init](../init)
 
 
 ## Included features
@@ -46,7 +35,7 @@ between services:
   use destination rules to configure what happens to traffic for that destination.
   - **Gateways:** You use a gateway to manage inbound and outbound traffic for your mesh, letting you specify which
   traffic you want to enter or leave the mesh.
-  **IMPORTANT NOTE** *(Only ingresss gateway is deployed with the current version)*
+  **IMPORTANT NOTE** *(Only ingresss gateway is deployed with the minimal package)*
   - **Service entries:** You use a service entry to add an entry to the service registry that Istio maintains
   internally
   - **Sidecars:** You can use a sidecar configuration to do the following:
@@ -68,6 +57,7 @@ can configure dynamically at runtime.
   - Denials, whitelists, and blacklists, to restrict access to services
   - Header rewrites and redirects
 
+
 ## Image repository and tag
 
 All istio container images are currently available at dockerhub: [docker.io/istio](https://hub.docker.com/u/istio)
@@ -80,18 +70,27 @@ Includes:
 - docker.io/istio/mixer
 - docker.io/istio/pilot
 
-* addons container images:
-
-- Kiali: quay.io/kiali/kiali:v1.9
 
 ## Deployment
 
 You can deploy istio by running following command in the root of the project:
 
 ```shell
-$ kustomize build | kubectl apply -f -
+$ kustomize build katalog/istio | kubectl apply -f -
 ```
+
+or
+
+```shell
+$ kustomize build katalog/istio/minimal | kubectl apply -f -
+$ kustomize build katalog/istio/sidecar-injection/configuration/minimal | kubectl apply -f -
+```
+
+## Additional configuration
+
+- [Configure a TLS ingress gateway with a file mount-based approach](https://istio.io/docs/tasks/traffic-management/ingress/secure-ingress-mount/#configure-a-tls-ingress-gateway-with-a-file-mount-based-approach)
+
 
 ## License
 
-For license details please see [LICENSE](../../LICENSE)
+For license details please see [LICENSE](../../../LICENSE)

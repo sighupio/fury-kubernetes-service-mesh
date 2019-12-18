@@ -3,7 +3,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: istio-mesh-monitor
-  namespace: monitoring
   labels:
     monitoring: istio-mesh
 spec:
@@ -21,7 +20,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: istio-component-monitor
-  namespace: monitoring
   labels:
     monitoring: istio-components
 spec:
@@ -41,7 +39,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: envoy-stats-monitor
-  namespace: monitoring
   labels:
     monitoring: istio-proxies
 spec:
@@ -72,7 +69,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: kubernetes-pods-monitor
-  namespace: monitoring
   labels:
     monitoring: kube-pods
 spec:
@@ -116,7 +112,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: kubernetes-services-monitor
-  namespace: monitoring
   labels:
     monitoring: kube-services
 spec:
@@ -160,7 +155,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: kubelet
-  namespace: monitoring
   labels:
     monitoring: kubelet-monitor
 spec:

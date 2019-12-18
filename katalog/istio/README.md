@@ -15,6 +15,8 @@
     - [Kiali](#kiali)
       - [Configuration](#configuration)
 
+___
+
 Istio addresses the challenges developers and operators face as monolithic applications transition towards a
 distributed microservice architecture. To see how, it helps to take a more detailed look at Istio’s service mesh.
 
@@ -87,8 +89,7 @@ bases:
 
 #### Service Monitors
 
-As telemetry exposes metrics in prometheus format, this package provides the service-monitor definition for the
-prometheus operator.
+As telemetry exposes metrics in prometheus format, this package provides [service-monitor](telemetry/service-monitor) definition for prometheus operator.
 
 Example kustomize installation file:
 
@@ -128,7 +129,7 @@ bases:
 
 ### Citadel
 
-Citadel is the Istio component in charge of provide security features *(key and certificate management)*.
+[Citadel](citadel/README.md) is the Istio component in charge of provide security features *(key and certificate management)*.
 If you are looking for mTLS, this is the component you should install.
 
 As the other components, this one should be installed on top of the minimal istio deployment.
@@ -156,13 +157,12 @@ configuration is the one with [citadel + egress](sidecar-injection/configuration
 
 ### Sidecar injector
 
-Sidecar injector is the component responsible of injecting the envoy proxy on every required pod. This is the
-alternative of executing `istioctl inject` comamnds.
+[Sidecar injector](sidecar-injection/README.md) is the component responsible of injecting the envoy proxy on every
+required pod. This is the alternative of executing `istioctl inject` comamnds.
 
 Sidecar injector package requires [citadel](citadel/README.md) installed.
 
 Example kustomize installation file:
-
 
 ```yaml
 namespace: istio-system
@@ -185,7 +185,7 @@ configuration is the one with [sidecar-injector + egress](sidecar-injection/conf
 
 ### Kiali
 
-Kiali is a project used to visualize the service mesh in a graphical way. It needs metrics stored in a prometheus
+[Kiali](kiali/) is a project used to visualize the service mesh in a graphical way. It needs metrics stored in a prometheus
 server. So it requires to have installed telemetry package + optionally the service-monitor subpackage.
 
 Example kustomize installation file:
@@ -205,6 +205,4 @@ bases:
 
 #### Configuration
 
-Kiali is configured with some default (unsecure) configuration. Please go to the Kiali package documentation to know
-to change it.
-
+Kiali is configured with some default *(unsecure)* configuration. Please go to the [Kiali package documentation](kiali/README.md#configuration) to know how to change it.
