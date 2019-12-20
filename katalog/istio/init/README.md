@@ -1,6 +1,6 @@
 # Init Istio package
 
-Package containing Istio CRDs. Needed to install istio on top of it.
+Package containing Istio CRDs. This is required to run istio in your cluster.
 
 
 ## Requirements

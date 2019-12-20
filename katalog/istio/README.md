@@ -2,7 +2,7 @@
 
 - [Istio](#istio)
   - [Requirements](#requirements)
-  - [Modular](#modular)
+  - [Modular design](#modular-design)
     - [Minimal installation](#minimal-installation)
     - [Telemetry](#telemetry)
       - [Service Monitors](#service-monitors)
@@ -18,7 +18,8 @@
 ___
 
 Istio addresses the challenges developers and operators face as monolithic applications transition towards a
-distributed microservice architecture. To see how, it helps to take a more detailed look at Istio’s service mesh.
+distributed microservice architecture, in the following sections we got deeper into Istio service mesh's details to
+see how this is achieved.
 
 The term service mesh is used to describe the network of microservices that make up such applications and the
 interactions between them. As a service mesh grows in size and complexity, it can become harder to understand and
@@ -48,7 +49,7 @@ job.batch/istio-init-crd-14-1.4.2 condition met
 Once installed, the cluster will be ready to install the [minimal](#minimal-installation) Istio deployment.
 
 
-## Modular
+## Modular design
 
 Istio has a lot of features powered by a high number of pieces. This package has been designed to be installed from the
 minimal installation providing basic features like traffic routing to a more complex deployment including
@@ -57,8 +58,8 @@ more features.
 
 ### Minimal installation
 
-The [minimal](minimal/README.md) deployment is a perfect starting point to play with Istio. It deploys the basic
-components that empowers features like traffic management, network resilience and testing and policies.
+The [minimal](minimal/README.md) deployment is a perfect starting point to to get familiar with Istio. It deploys the
+basic components that empowers features like traffic management, network resilience and testing and policies.
 
 This package is the base where different components will be plugged.
 
@@ -147,11 +148,12 @@ bases:
   - katalog/istio/sidecar-injection/configuration/citadel-and-egress
 ```
 
-In this example you can see istio + citadel + egress gateway installed.
+With the previous example snippet you will get `istio` with `citadel`, `egress gateway` and `sidecar injector`
+packages installed.
 
 ##### Note
 
-Be sure to deploy the correct `sidecar-injection/configuration` kustomize project. In this example the correct
+Make sure to deploy the correct `sidecar-injection/configuration` kustomize project. In this example the correct
 configuration is the one with [citadel + egress](sidecar-injection/configuration/citadel-and-egress).
 
 
@@ -176,17 +178,21 @@ bases:
   - katalog/istio/sidecar-injection/configuration/sidecar-injection-and-egress
 ```
 
-In this example you can see istio + citadel + egress gateway and the sidecar injector installed.
+With the previous example snippet you will get istio with citadel, egress gateway, sidecar injector packages installed.
 
 ##### Note
 
-Be sure to deploy the correct `sidecar-injection/configuration` kustomize project. In this example the correct
+Make sure to deploy the correct `sidecar-injection/configuration` kustomize project. In this example the correct
 configuration is the one with [sidecar-injector + egress](sidecar-injection/configuration/sidecar-injection-and-egress).
 
 ### Kiali
 
-[Kiali](kiali/) is a project used to visualize the service mesh in a graphical way. It needs metrics stored in a prometheus
-server. So it requires to have installed telemetry package + optionally the service-monitor subpackage.
+[Kiali](kiali/README) is a project that implements an observability console for Istio. It helps you to understand the
+structure of your service mesh by inferring the topology, the health of your mesh and see detailed metrics. Distributed
+tracing is provided by integrating Jaeger.
+
+In order to run Kiali the telemetry package must be installed previously and optionally the service-monitor subpackage
+to enable.
 
 Example kustomize installation file:
 
