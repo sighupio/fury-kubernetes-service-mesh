@@ -1,0 +1,105 @@
+---
+# Source: istio-init/templates/job-crd-10.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: istio-init-crd-10-1.4.2
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: istio-init-service-account
+      containers:
+      - name: istio-init-crd-10
+        image: "docker.io/istio/kubectl:1.4.2"
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+          
+        volumeMounts:
+        - name: crd-10
+          mountPath: /etc/istio/crd-10
+          readOnly: true
+        command: ["kubectl",  "apply", "-f", "/etc/istio/crd-10/crd-10.yaml"]
+      volumes:
+      - name: crd-10
+        configMap:
+          name: istio-crd-10
+      restartPolicy: OnFailure
+---
+# Source: istio-init/templates/job-crd-11.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: istio-init-crd-11-1.4.2
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: istio-init-service-account
+      containers:
+      - name: istio-init-crd-11
+        image: "docker.io/istio/kubectl:1.4.2"
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+          
+        volumeMounts:
+        - name: crd-11
+          mountPath: /etc/istio/crd-11
+          readOnly: true
+        command: ["kubectl",  "apply", "-f", "/etc/istio/crd-11/crd-11.yaml"]
+      volumes:
+      - name: crd-11
+        configMap:
+          name: istio-crd-11
+      restartPolicy: OnFailure
+---
+# Source: istio-init/templates/job-crd-14.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: istio-init-crd-14-1.4.2
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: istio-init-service-account
+      containers:
+      - name: istio-init-crd-14
+        image: "docker.io/istio/kubectl:1.4.2"
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+          
+        volumeMounts:
+          - name: crd-14
+            mountPath: /etc/istio/crd-14
+            readOnly: true
+        command: ["kubectl",  "apply", "-f", "/etc/istio/crd-14/crd-14.yaml"]
+      volumes:
+        - name: crd-14
+          configMap:
+            name: istio-crd-14
+      restartPolicy: OnFailure

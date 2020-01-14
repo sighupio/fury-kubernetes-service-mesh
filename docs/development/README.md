@@ -10,7 +10,7 @@ maintain this document updated. So, any new/modified action has to be written he
 First add istio to your helm repositories:
 
 ```bash
-$ helm repo add istio.io https://storage.googleapis.com/istio-release/releases/1.4.0/charts/
+$ helm repo add istio.io https://storage.googleapis.com/istio-release/releases/1.4.2/charts/
 $ helm update
 ```
 
@@ -26,6 +26,7 @@ istio		istio-init
 And let's start rendering the `istio-init` helm chart:
 
 ```bash
+$ mkdir rendered
 $ helm template install/kubernetes/helm/istio-init --name istio-init --namespace istio-system > rendered/istio-init.yml
 ```
 
@@ -36,7 +37,7 @@ Now, you can find inside the rendered directory a *(big)* file named `istio-init
 - rbac
 
 So, i have splited it into some more granular files based on its content. You can find the resulting files inside the
-[katalog/init-istio directory](../katalog/init-istio).
+[katalog/init-istio directory](../katalog/istio/init).
 
 Now, we are ready to render the `istio` chart, but first, let's review the [`values.yml`](values.yml) file.
 
@@ -48,14 +49,14 @@ This values makes possible the following configuration:
 |                          | Installed          |
 |--------------------------|--------------------|
 | **Core components**      |                    |
-| `istio-citadel`          |                    |
-| `istio-egressgateway`    |                    |
+| `istio-citadel`          | :white_check_mark: |
+| `istio-egressgateway`    | :white_check_mark: |
 | `istio-galley`           |                    |
 | `istio-ingressgateway`   | :white_check_mark: |
 | `istio-nodeagent`        |                    |
 | `istio-pilot`            | :white_check_mark: |
 | `istio-policy`           | :white_check_mark: |
-| `istio-sidecar-injector` |                    |
+| `istio-sidecar-injector` | :white_check_mark: |
 | `istio-telemetry`        | :white_check_mark: |
 | **Addons**               |                    |
 | `grafana`                |                    |
@@ -90,11 +91,11 @@ This way is going to be easy to debug future problems. We splitted it by chart n
 #### Service monitor manifests
 
 This manifests has been templated from the 
-[istio-telemetry/prometheus-operator chart](https://github.com/istio/installer/tree/1.4.0/istio-telemetry/prometheus-operator)
+[istio-telemetry/prometheus-operator chart](https://github.com/istio/installer/tree/1.4.2/istio-telemetry/prometheus-operator)
 With the `sm-values.yml` values file.
 
 ```bash
-$ git clone --branch 1.4.0 git@github.com:istio/installer.git
+$ git clone --branch 1.4.2 git@github.com:istio/installer.git
 $ helm template installer/istio-telemetry/prometheus-operator --name istio --namespace monitoring --values sm-values.yml > rendered/istio-service-monitors.yml
 ```
 
@@ -103,13 +104,15 @@ It is required by Kiali dashboard.
 
 ### Demos / Testing
 
+All of the following examples are tested in the pipeline
+
 ### Simplest demo (Requires sidecar-injector)
 
 ```bash
 $ kubectl create ns demo
 $ kubectl label namespace demo istio-injection=enabled
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/httpbin/httpbin.yaml -n demo
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/httpbin/httpbin-gateway.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/httpbin/httpbin.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/httpbin/httpbin-gateway.yaml -n demo
 $ kubectl get pods -n demo
 NAME                       READY   STATUS    RESTARTS   AGE
 httpbin-64776bf78d-qfww6   2/2     Running   0          4m58s
@@ -134,8 +137,8 @@ With sidecar auto-inject
 ```bash
 $ kubectl create ns demo
 $ kubectl label namespace demo istio-injection=enabled
-$ kubectl apply -f  https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/platform/kube/bookinfo.yaml -n demo
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/networking/bookinfo-gateway.yaml -n demo
+$ kubectl apply -f  https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/platform/kube/bookinfo.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/networking/bookinfo-gateway.yaml -n demo
 ```
 
 
@@ -143,9 +146,9 @@ Without it
 
 ```bash
 $ kubectl create ns demo
-$ curl -LOs https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/platform/kube/bookinfo.yaml
+$ curl -LOs https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/platform/kube/bookinfo.yaml
 $ kubectl apply -f <(istioctl kube-inject -f bookinfo.yaml) -n demo
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/networking/bookinfo-gateway.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/networking/bookinfo-gateway.yaml -n demo
 ```
 
 Check the app is accesible: `/productpage`.
@@ -160,7 +163,7 @@ You should see 3 diferent versions running:
 Define the destination rules
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/networking/destination-rule-all.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/networking/destination-rule-all.yaml -n demo
 ```
 
 #### Set V1 destination rules for every virtual service
@@ -168,7 +171,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/b
 Test only the V1 of every component:
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/networking/virtual-service-all-v1.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/networking/virtual-service-all-v1.yaml -n demo
 ```
 
 You should see no ratings in the web page `/productpage`
@@ -176,7 +179,7 @@ You should see no ratings in the web page `/productpage`
 #### V3 and V2.
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/networking/virtual-service-reviews-jason-v2-v3.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/networking/virtual-service-reviews-jason-v2-v3.yaml -n demo
 ```
 
 Then, all but jason will go to v3 version of the review service. This means:
@@ -191,7 +194,7 @@ Having deployed the last behavior,
 apply the following manifests:
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/policy/mixer-rule-deny-label.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/policy/mixer-rule-deny-label.yaml -n demo
 ```
 
 Then only jason will be able to see stars, other request will be denied because V3 service from reviews to rating has been denied.
@@ -204,13 +207,13 @@ Source: https://istio.io/docs/tasks/policy-enforcement/denial-and-list/
 Remove the lastest scenario:
 
 ```bash
-$ kubectl delete -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/policy/mixer-rule-deny-label.yaml -n demo
+$ kubectl delete -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/policy/mixer-rule-deny-label.yaml -n demo
 ```
 
 Then apply
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/policy/mixer-rule-deny-whitelist.yaml -n demo
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/policy/mixer-rule-deny-whitelist.yaml -n demo
 ```
 
 Only versions v1 and v2 are allowed, so only jason can see stars
@@ -220,7 +223,7 @@ Source: https://istio.io/docs/tasks/policy-enforcement/denial-and-list/
 ### Rate limit
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.0/samples/bookinfo/policy/mixer-rule-productpage-ratelimit.yaml -n istio-system
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/1.4.2/samples/bookinfo/policy/mixer-rule-productpage-ratelimit.yaml -n istio-system
 $ kubectl -n istio-system get instance requestcountquota -o yaml
 $ kubectl -n istio-system get rule quota -o yaml
 $ kubectl -n istio-system get QuotaSpec request-count -o yaml

@@ -11,8 +11,8 @@ Following packages are included in Fury Kubernetes Service Mesh katalog.
 
 - [istio](katalog/istio): Istio provides behavioral insights and operational control over the service mesh as a whole,
 offering a complete solution to satisfy the diverse requirements of microservice applications. It needs a two phase
-installation. First run: [init-istio](katalog/init-istio) package. Once completed, you are ready to deploy
-[istio](katalog/istio) package. Version: **1.4.0**.
+installation. First run: [istio/init](katalog/istio/init) package. Once completed, you are ready to deploy
+[istio](katalog/istio) package. Version: **1.4.2**.
 
 
 ## Requirements
@@ -30,13 +30,14 @@ single package's documentation:
 | Module Version / Kubernetes Version | 1.14.X             | 1.15.X             | 1.16.X             |
 |-------------------------------------|:------------------:|:------------------:|:------------------:|
 | v0.1.0                              |                    |                    |                    |
+| v0.2.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 - :white_check_mark: Compatible
 - :warning: Has issues
 - :x: Incompatible
 
 
-## Deployment
+## Deployment (Istio getting started)
 
 To start using Fury Kubernetes Service Mesh, you need to use
 [furyctl](https://github.com/sighup-io/furyctl/blob/master/README.md) and create a `Furyfile.yml` with the list of
@@ -44,10 +45,8 @@ all the packages that you want to download.
 
 ```yaml
 bases:
-  - name: service-mesh/init-istio
-    version: v0.1.0
   - name: service-mesh/istio
-    version: v0.1.0
+    version: v0.2.0
 ```
 
 and execute
@@ -66,7 +65,7 @@ following content:
 
 ```yaml
 bases:
-- ./vendor/katalog/service-mesh/init-istio
+  - ./vendor/katalog/service-mesh/istio/init
 ```
 
 and execute
@@ -81,7 +80,7 @@ Now you can add the other packages to `kustomization.yaml`, the final file will 
 
 ```yaml
 bases:
-- ./vendor/katalog/service-mesh/init-istio
+- ./vendor/katalog/service-mesh/istio/init
 - ./vendor/katalog/service-mesh/istio
 ```
 

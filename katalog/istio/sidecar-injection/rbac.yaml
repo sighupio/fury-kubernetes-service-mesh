@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-sidecar-injector-service-account
+  labels:
+    app: sidecarInjectorWebhook
+    istio: sidecar-injector
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: istio-sidecar-injector-istio-system
+  labels:
+    app: sidecarInjectorWebhook
+    istio: sidecar-injector
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources: ["mutatingwebhookconfigurations"]
+  verbs: ["get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: istio-sidecar-injector-admin-role-binding-istio-system
+  labels:
+    app: sidecarInjectorWebhook
+    istio: sidecar-injector
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: istio-sidecar-injector-istio-system
+subjects:
+  - kind: ServiceAccount
+    name: istio-sidecar-injector-service-account

@@ -1,0 +1,5 @@
+namespace: istio-system
+
+bases:
+  - ../../../katalog/istio/init
+  - ../../../katalog/istio

@@ -1,0 +1,7 @@
+namespace: istio-system
+
+bases:
+  - ../base
+
+resources:
+  - service-monitor.yml

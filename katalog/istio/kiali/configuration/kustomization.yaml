@@ -1,0 +1,15 @@
+namespace: istio-system
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+  - name: kiali
+    type: Opaque
+    envs: 
+      - kiali-auth.config
+
+configMapGenerator:
+  - name: kiali
+    files:
+      - config.yaml

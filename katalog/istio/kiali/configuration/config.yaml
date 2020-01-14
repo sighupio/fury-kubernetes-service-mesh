@@ -1,0 +1,15 @@
+istio_namespace: istio-system
+deployment:
+  accessible_namespaces: ['**']
+auth:
+  strategy: login
+server:
+  port: 20001
+  web_root: /kiali
+external_services:
+  tracing:
+    url:
+  grafana:
+    url:
+  prometheus:
+    url: http://prometheus-k8s.monitoring:9090

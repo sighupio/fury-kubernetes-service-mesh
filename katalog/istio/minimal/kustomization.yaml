@@ -1,0 +1,8 @@
+namespace: istio-system
+
+resources:
+- config.yml
+- mixer.yml
+- pilot.yml
+- gateway.yml
+- rbac.yml

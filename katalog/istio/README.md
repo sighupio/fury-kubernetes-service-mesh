@@ -1,7 +1,25 @@
 # Istio
 
+- [Istio](#istio)
+  - [Requirements](#requirements)
+  - [Modular design](#modular-design)
+    - [Minimal installation](#minimal-installation)
+    - [Telemetry](#telemetry)
+      - [Service Monitors](#service-monitors)
+        - [Note](#note)
+    - [Egress Gateway](#egress-gateway)
+    - [Citadel](#citadel)
+        - [Note](#note-1)
+    - [Sidecar injector](#sidecar-injector)
+        - [Note](#note-2)
+    - [Kiali](#kiali)
+      - [Configuration](#configuration)
+
+___
+
 Istio addresses the challenges developers and operators face as monolithic applications transition towards a
-distributed microservice architecture. To see how, it helps to take a more detailed look at Istio’s service mesh.
+distributed microservice architecture, in the following sections we got deeper into Istio service mesh's details to
+see how this is achieved.
 
 The term service mesh is used to describe the network of microservices that make up such applications and the
 interactions between them. As a service mesh grows in size and complexity, it can become harder to understand and
@@ -17,169 +35,180 @@ Source: [https://istio.io/docs](https://istio.io/docs/concepts/what-is-istio/#wh
 
 ## Requirements
 
-- Kubernetes >= `1.14.0`
-- Kustomize = `v3.0.0`
-- [init-istio](../init-istio/)
-- [`prometheus-operator`](https://github.com/sighupio/fury-kubernetes-monitoring/tree/v1.3.0/katalog/prometheus-operator)
-- [`prometheus-operated`](https://github.com/sighupio/fury-kubernetes-monitoring/tree/v1.3.0/katalog/prometheus-operated)
-
-
-## Included features
-
-|                          | Installed          |
-|--------------------------|--------------------|
-| **Core components**      |                    |
-| `istio-ingressgateway`   | :white_check_mark: |
-| `istio-pilot`            | :white_check_mark: |
-| `istio-policy`           | :white_check_mark: |
-| `istio-telemetry`        | :white_check_mark: |
-| **Addons**               |                    |
-| `kiali`                  | :white_check_mark: |
-
-
-This components enables:
-
-- ***Traffic Management:*** Istio’s traffic routing rules let you easily control the flow of traffic and API calls
-between services:
-  - **Virtual services:** Virtual services, along with destination rules, are the key building blocks of Istio’s
-  traffic routing functionality. A virtual service lets you configure how requests are routed to a service within an
-  Istio service mesh, building on the basic connectivity and discovery provided by Istio and your platform.
-  - **Destination rules:** Along with virtual services, destination rules are a key part of Istio’s traffic routing
-  functionality. You can think of virtual services as how you route your traffic to a given destination, and then you
-  use destination rules to configure what happens to traffic for that destination.
-  - **Gateways:** You use a gateway to manage inbound and outbound traffic for your mesh, letting you specify which
-  traffic you want to enter or leave the mesh.
-  **IMPORTANT NOTE** *(Only ingresss gateway is deployed with the current version)*
-  - **Service entries:** You use a service entry to add an entry to the service registry that Istio maintains
-  internally
-  - **Sidecars:** You can use a sidecar configuration to do the following:
-    - Fine-tune the set of ports and protocols that an Envoy proxy accepts.
-    - Limit the set of services that the Envoy proxy can reach.
-- ***Network resilience and testing:*** Istio provides opt-in failure recovery and fault injection features that you
-can configure dynamically at runtime.
-  - **Timeouts:** A timeout is the amount of time that an Envoy proxy should wait for replies from a given service,
-  ensuring that services don’t hang around waiting for replies indefinitely and that calls succeed or fail within a
-  predictable timeframe.
-  - **Retries:** A retry setting specifies the maximum number of times an Envoy proxy attempts to connect to a service
-  if the initial call fails.
-  - **Circuit breakers:** In a circuit breaker, you set limits for calls to individual hosts within a service, such
-  as the number of concurrent connections or how many times calls to this host have failed.
-  - **Fault injection:** Fault injection is a testing method that introduces errors into a system to ensure that it
-  can withstand and recover from error conditions.
-- ***Policies:*** Istio lets you configure custom policies for your application to enforce rules at runtime such as:
-  - Rate limiting to dynamically limit the traffic to a service
-  - Denials, whitelists, and blacklists, to restrict access to services
-  - Header rewrites and redirects
-- ***Observability:*** Istio generates detailed telemetry for all service communications within a mesh. This telemetry
-provides observability of service behavior, empowering operators to troubleshoot, maintain, and optimize their
-applications – without imposing any additional burdens on service developers.
-
-## Image repository and tag
-
-All istio container images are currently available at dockerhub: [docker.io/istio](https://hub.docker.com/u/istio)
-
-* istio container images: `docker.io/istio/*`
-
-Includes:
-
-- docker.io/istio/proxyv2
-- docker.io/istio/mixer
-- docker.io/istio/pilot
-
-* addons container images:
-
-- Kiali: quay.io/kiali/kiali:v1.9
-
-## Deployment
-
-You can deploy istio by running following command in the root of the project:
-
-```shell
-$ kustomize build | kubectl apply -f -
-```
-
-### Configuration
-
-#### Kiali
-
-##### Admin user
-
-We provide an administrator user *(admin:admin)* to access the kiali dashboard. Please change the default password
-editing the `kiali` secret inside the `istio-system` namespace.
+In order to install the Istio package, it's required to have installed the [init](./init/README.md) package.
+This is the one involved in the Istio CRDs creation.
 
 ```bash
-$ kubectl get secret kiali -o yaml -n istio-system
-apiVersion: v1
-kind: Secret
-metadata:
-  name: kiali
-  namespace: istio-system
-  labels:
-    app: kiali
-type: Opaque
-data:
-  passphrase: YWRtaW4=
-  username: YWRtaW4=
+$ kustomize build katalog/istio/init | kubectl apply -f -
+$ kubectl -n istio-system wait --for=condition=complete job --all
+job.batch/istio-init-crd-10-1.4.2 condition met
+job.batch/istio-init-crd-11-1.4.2 condition met
+job.batch/istio-init-crd-14-1.4.2 condition met
 ```
 
-You can generate a new one with the following commands:
+Once installed, the cluster will be ready to install the [minimal](#minimal-installation) Istio deployment.
 
-```bash
-$ cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Secret
-metadata:
-  name: kiali
-  namespace: istio-system
-  labels:
-    app: kiali
-type: Opaque
-stringData:
-  username: YOUR_USERNAME
-  passphrase: YOUR_PASSWORD
-EOF
+
+## Modular design
+
+Istio has a lot of features powered by a high number of pieces. This package has been designed to be installed from the
+minimal installation providing basic features like traffic routing to a more complex deployment including
+more features.
+
+
+### Minimal installation
+
+The [minimal](minimal/README.md) deployment is a perfect starting point to to get familiar with Istio. It deploys the
+basic components that empowers features like traffic management, network resilience and testing and policies.
+
+This package is the base where different components will be plugged.
+
+[Example kustomize installation file](../../examples/istio/minimal/kustomization.yaml):
+
+```yaml
+namespace: istio-system
+
+bases:
+  - katalog/istio/init
+  - katalog/istio
 ```
 
-Then, **restart the kiali pod** to take effect.
+### Telemetry
 
-##### Prometheus URL
+[Telemetry](telemetry/README.md) is the istio component involved in the process of metric recollection.
 
-There is a minor configuration to be made if you don't have the default
-[`prometheus-operated`](https://github.com/sighupio/fury-kubernetes-monitoring/tree/v1.3.0/katalog/prometheus-operated)
-server deployed in the `monitoring` namespace.
+Example kustomize installation file:
 
-As Kiali needs to read metrics from a prometheus server, you have to define the prometheus server url.
+```yaml
+namespace: istio-system
 
-```bash
-$ kubectl get cm kiali -o yaml -n istio-system
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  labels:
-    app: kiali
-  name: kiali
-  namespace: istio-system
-data:
-  config.yaml: |
-    istio_namespace: istio-system
-    deployment:
-      accessible_namespaces: ['**']
-    auth:
-      strategy: login
-    server:
-      port: 20001
-      web_root: /kiali
-    external_services:
-      tracing:
-        url:
-      grafana:
-        url:
-      prometheus:
-        url: http://prometheus-k8s.monitoring:9090
+bases:
+  - katalog/istio/init
+  - katalog/istio
+  - katalog/istio/telemetry
 ```
 
-Change the `external_services.prometheus.url` value with the correct prometheus server url.
+#### Service Monitors
 
-## License
+As telemetry exposes metrics in prometheus format, this package provides [service-monitor](telemetry/service-monitor) definition for prometheus operator.
 
-For license details please see [LICENSE](../../LICENSE)
+Example kustomize installation file:
+
+```yaml
+namespace: istio-system
+
+bases:
+  - katalog/istio/init
+  - katalog/istio
+  - katalog/istio/telemetry/service-monitor
+```
+
+##### Note
+
+This package will deploy telemetry + service monitors. If telemetry it's already deployed, replace the telemetry base
+with the `katalog/istio/telemetry/service-monitor` base.
+
+
+### Egress Gateway
+
+This package deploys on top of the [minimal installation](#minimal-installation),
+[the egress gateway component](egress-gateway/README.md).
+
+Once deployed this package, don't forget to deploy the new Istio configuration based on the components installed:
+
+[Example kustomize installation file](../../examples/istio/minimal-and-egress/kustomization.yaml):
+
+```yaml
+namespace: istio-system
+
+bases:
+  - katalog/istio/init
+  - katalog/istio/minimal
+  - katalog/istio/egress-gateway
+  - katalog/istio/sidecar-injection/configuration/minimal-and-egress
+```
+
+### Citadel
+
+[Citadel](citadel/README.md) is the Istio component in charge of provide security features *(key and certificate management)*.
+If you are looking for mTLS, this is the component you should install.
+
+As the other components, this one should be installed on top of the minimal istio deployment.
+
+Example kustomize installation file:
+
+```yaml
+namespace: istio-system
+
+bases:
+  - katalog/istio/init
+  - katalog/istio/minimal
+  - katalog/istio/citadel
+  - katalog/istio/egress-gateway
+  - katalog/istio/sidecar-injection/configuration/citadel-and-egress
+```
+
+With the previous example snippet you will get `istio` with `citadel`, `egress gateway` and `sidecar injector`
+packages installed.
+
+##### Note
+
+Make sure to deploy the correct `sidecar-injection/configuration` kustomize project. In this example the correct
+configuration is the one with [citadel + egress](sidecar-injection/configuration/citadel-and-egress).
+
+
+### Sidecar injector
+
+[Sidecar injector](sidecar-injection/README.md) is the component responsible of injecting the envoy proxy on every
+required pod. This is the alternative of executing `istioctl inject` comamnds.
+
+Sidecar injector package requires [citadel](citadel/README.md) installed.
+
+Example kustomize installation file:
+
+```yaml
+namespace: istio-system
+
+bases:
+  - katalog/istio/init
+  - katalog/istio/minimal
+  - katalog/istio/citadel
+  - katalog/istio/egress-gateway
+  - katalog/istio/sidecar-injection
+  - katalog/istio/sidecar-injection/configuration/sidecar-injection-and-egress
+```
+
+With the previous example snippet you will get istio with citadel, egress gateway, sidecar injector packages installed.
+
+##### Note
+
+Make sure to deploy the correct `sidecar-injection/configuration` kustomize project. In this example the correct
+configuration is the one with [sidecar-injector + egress](sidecar-injection/configuration/sidecar-injection-and-egress).
+
+### Kiali
+
+[Kiali](kiali/README) is a project that implements an observability console for Istio. It helps you to understand the
+structure of your service mesh by inferring the topology, the health of your mesh and see detailed metrics. Distributed
+tracing is provided by integrating Jaeger.
+
+In order to run Kiali the telemetry package must be installed previously and optionally the service-monitor subpackage
+to enable.
+
+Example kustomize installation file:
+
+```yaml
+namespace: istio-system
+
+bases:
+  - katalog/istio/init
+  - katalog/istio/minimal
+  # - katalog/istio/telemetry
+  # Will help if you have prometheus-operator deployed
+  - katalog/istio/telemetry/service-monitor
+  - katalog/istio/kiali
+  - katalog/istio/sidecar-injection/configuration/minimal
+```
+
+#### Configuration
+
+Kiali is configured with some default *(unsecure)* configuration. Please go to the [Kiali package documentation](kiali/README.md#configuration) to know how to change it.
