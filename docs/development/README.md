@@ -5,6 +5,11 @@
 Here is explained how we develop the Istio package inside the service-mesh SIGHUP module. It's very important to
 maintain this document updated. So, any new/modified action has to be written here.
 
+## Runbooks
+
+- [`custom-ca-citadel`](custom-ca-citadel/): If you need to configure citadel to run with a specific CA
+  instead of the self-signed one.
+
 ### How we've got the manifests
 
 First add istio to your helm repositories:
@@ -90,7 +95,7 @@ This way is going to be easy to debug future problems. We splitted it by chart n
 
 #### Service monitor manifests
 
-This manifests has been templated from the 
+This manifests has been templated from the
 [istio-telemetry/prometheus-operator chart](https://github.com/istio/installer/tree/1.4.2/istio-telemetry/prometheus-operator)
 With the `sm-values.yml` values file.
 
