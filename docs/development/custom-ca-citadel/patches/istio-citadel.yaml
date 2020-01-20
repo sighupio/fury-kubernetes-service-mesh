@@ -1,0 +1,30 @@
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: "--self-signed-ca=false"
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: "--signing-cert=/etc/cacerts/ca-cert.pem"
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: "--signing-key=/etc/cacerts/ca-key.pem"
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: "--root-cert=/etc/cacerts/root-cert.pem"
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: "--cert-chain=/etc/cacerts/cert-chain.pem"
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts
+  value: [{
+    "name": "custom-ca",
+    "mountPath": "/etc/cacerts",
+    "readOnly": true
+  }]
+- op: add
+  path: /spec/template/spec/volumes
+  value: [{
+    "name": "custom-ca",
+    "secret": {
+      "secretName": "cacerts"
+    }
+  }]
