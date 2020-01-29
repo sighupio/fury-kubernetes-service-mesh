@@ -81,13 +81,7 @@ Now you can add the other packages to `kustomization.yaml`, the final file will 
 ```yaml
 bases:
 - ./vendor/katalog/service-mesh/istio/init
-- ./vendor/katalog/service-mesh/istio/minimal
-- ./vendor/katalog/service-mesh/istio/egress-gateway
-- ./vendor/katalog/service-mesh/istio/citadel
-- ./vendor/katalog/service-mesh/istio/sidecar-injection
-- ./vendor/katalog/service-mesh/istio/telemetry/service-monitor
-- ./vendor/katalog/service-mesh/istio/kiali
-- ./vendor/katalog/service-mesh/istio/sidecar-injection/configuration/sidecar-injection-and-egress
+- ./vendor/katalog/service-mesh/istio
 ```
 
 See `kustomize` [documentation](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/README.md) for details

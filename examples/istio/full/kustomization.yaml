@@ -1,0 +1,11 @@
+namespace: istio-system
+
+bases:
+  - ../../../katalog/istio/init
+  - ../../../katalog/istio/minimal
+  - ../../../katalog/istio/egress-gateway
+  - ../../../katalog/istio/citadel
+  - ../../../katalog/istio/sidecar-injection
+  - ../../../katalog/istio/telemetry/service-monitor
+  - ../../../katalog/istio/kiali
+  - ../../../katalog/istio/sidecar-injection/configuration/sidecar-injection-and-egress
