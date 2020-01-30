@@ -2,7 +2,7 @@ istio_namespace: istio-system
 deployment:
   accessible_namespaces: ['**']
 auth:
-  strategy: login
+  strategy: anonymous
 server:
   port: 20001
   web_root: /kiali
