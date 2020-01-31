@@ -99,6 +99,35 @@ To learn how to create you customization layer with it please see the `kustomize
 
 For further details please refer to the single package directories in this repository.
 
+## Examples
+
+In this repository are present some examples:
+
+- [minimal](./examples/minimal/kustomization.yaml)
+   - minimal
+   - sidecar-injection
+- [minimal-and-egress](./examples/minimal-and-egress/kustomization.yaml)
+   - minimal
+   - sidecar-injection/configuration/minimal-and-egress
+   - egress-gateway
+- [citadel](./examples/citadel/kustomization.yaml)
+   - minimal
+   - sidecar-injection/configuration/citadel
+   - citadel
+- [sidecar-injection](./examples/sidecar-injection/kustomization.yaml)
+   - minimal
+   - sidecar-injection
+   - sidecar-injection/configuration/sidecar-injection
+   - citadel
+- [full](./examples/full/kustomization.yaml)
+   - minimal
+   - egress-gateway
+   - citadel
+   - sidecar-injection
+   - telemetry/service-monitor
+   - kiali
+   - sidecar-injection/configuration/sidecar-injection-and-egress
+ 
 
 ## License
 
