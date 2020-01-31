@@ -103,23 +103,23 @@ For further details please refer to the single package directories in this repos
 
 In this repository are present some examples:
 
-- [minimal](./examples/minimal/kustomization.yaml)
+- [minimal](./examples/istio/minimal/kustomization.yaml)
    - minimal
    - sidecar-injection
-- [minimal-and-egress](./examples/minimal-and-egress/kustomization.yaml)
+- [minimal-and-egress](./examples/istio/minimal-and-egress/kustomization.yaml)
    - minimal
    - sidecar-injection/configuration/minimal-and-egress
    - egress-gateway
-- [citadel](./examples/citadel/kustomization.yaml)
+- [citadel](./examples/istio/citadel/kustomization.yaml)
    - minimal
    - sidecar-injection/configuration/citadel
    - citadel
-- [sidecar-injection](./examples/sidecar-injection/kustomization.yaml)
+- [sidecar-injection](./examples/istio/sidecar-injection/kustomization.yaml)
    - minimal
    - sidecar-injection
    - sidecar-injection/configuration/sidecar-injection
    - citadel
-- [full](./examples/full/kustomization.yaml)
+- [full](./examples/istio/full/kustomization.yaml)
    - minimal
    - egress-gateway
    - citadel
