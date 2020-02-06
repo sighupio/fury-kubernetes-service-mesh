@@ -1,5 +1,7 @@
 namespace: istio-system
 
+bases:
+  - configuration/
+
 resources:
   - kiali.yml
-  - configuration/
