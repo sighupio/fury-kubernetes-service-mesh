@@ -1,6 +1,6 @@
 namespace: istio-system
 
-resources:
+bases:
   - ../base
 
 patchesStrategicMerge:
