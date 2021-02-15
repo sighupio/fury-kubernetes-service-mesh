@@ -24,7 +24,7 @@ load ./../helper
     # Wait for productpage review endpoint
     retry_counter=0
     max_retry=10
-    while curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep "Error fetching product reviews!"  >&2
+    while curl -s ${INSTANCE_IP}:31380/productpage |grep "Error fetching product reviews!"  >&2
     do
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n demo >&2 && return 1 )
       sleep 2 && echo "# waiting..." $retry_counter >&3
@@ -40,12 +40,12 @@ load ./../helper
 @test "test v1 bookinfo demo application" {
   info
   test_back_stars(){
-    curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'color="black"'
+    curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
   }
   run test_back_stars
   back_stars_result=$status
   test_red_stars(){
-    curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'color="red"'
+    curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'color="red"'
   }
   run test_red_stars
   red_stars_result=$status
@@ -69,10 +69,10 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
         rm -rf ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt
-        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:${CLUSTER_NAME}81/login
-        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'color="black"'
+        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:31380/login
+        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
@@ -90,8 +90,8 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
-        curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'color="red"'
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'color="red"'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
@@ -118,10 +118,10 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
         rm -rf ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt
-        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:${CLUSTER_NAME}81/login
-        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'color="black"'
+        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:31380/login
+        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
@@ -139,8 +139,8 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
-        curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'Ratings service is currently unavailable'
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'Ratings service is currently unavailable'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
@@ -167,8 +167,8 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
-        curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'color="red"'
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'color="red"'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
@@ -196,10 +196,10 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
         rm -rf ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt
-        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:${CLUSTER_NAME}81/login
-        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'color="black"'
+        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:31380/login
+        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
@@ -217,8 +217,8 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
-        curl -s ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q 'Ratings service is currently unavailable'
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'Ratings service is currently unavailable'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
@@ -254,8 +254,8 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -I ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
-        curl -sI ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q "429 Too Many Requests"
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -I ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        curl -sI ${INSTANCE_IP}:31380/productpage |grep -q "429 Too Many Requests"
         ko=$?
         sleep 1 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
@@ -273,8 +273,8 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -I ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage >&2; return 1; fi
-        curl -sI ${INSTANCE_IP}:${CLUSTER_NAME}81/productpage |grep -q "200 OK"
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -I ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        curl -sI ${INSTANCE_IP}:31380/productpage |grep -q "200 OK"
         ko=$?
         sleep 30 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
