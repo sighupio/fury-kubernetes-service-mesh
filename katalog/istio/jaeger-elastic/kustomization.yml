@@ -1,0 +1,5 @@
+bases:
+  - ../jaeger
+
+patchesStrategicMerge:
+  - jaeger-elastic.yml
