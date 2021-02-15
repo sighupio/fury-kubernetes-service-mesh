@@ -4,7 +4,7 @@
 global:
   controlPlaneSecurityEnabled: false
   imagePullPolicy: Always
-  enableTracing: false
+  enableTracing: true
   
   proxy:
     accessLogFile: "/dev/stdout"
@@ -65,7 +65,8 @@ grafana:
   enabled: false
 
 tracing:
-  enabled: false
+  enabled: true
+
 
 kiali:
   enabled: true

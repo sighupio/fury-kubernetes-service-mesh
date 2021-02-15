@@ -8,6 +8,13 @@ server:
   web_root: /kiali
 external_services:
   tracing:
+    # If you enable the tracing/jaeger integration on Istio, you can enable also show an iframe
+    # on kiali by setting this two attributes:
+
+    # !!!Uncomment both to have it working!!! (required)
+
+    # in_cluster_url: 'http://tracing.istio-system/jaeger' # Internal dns. If you use the default setup, just uncomment this value.
+    # url: http://jaeger-query.example.com:8080/jaeger/ # External dns/url. You have to expose to the client (browser) to enable this feature. So use a internal ingress controller or (secured) external one.
     url:
   grafana:
     url:

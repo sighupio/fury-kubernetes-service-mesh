@@ -2,7 +2,7 @@
 
 ## Istio
 
-Here is explained how we develop the Istio package inside the service-mesh SIGHUP module. It's very important to
+Here is explained how we develop the Istio package inside the service-mesh SIGHUP module. It's essential to
 maintain this document updated. So, any new/modified action has to be written here.
 
 ## Runbooks
@@ -12,11 +12,11 @@ maintain this document updated. So, any new/modified action has to be written he
 
 ### How we've got the manifests
 
-First add istio to your helm repositories:
+First, add istio to your helm repositories:
 
 ```bash
 $ helm repo add istio.io https://storage.googleapis.com/istio-release/releases/1.4.2/charts/
-$ helm update
+$ helm repo update
 ```
 
 Then, download the charts:
@@ -32,7 +32,7 @@ And let's start rendering the `istio-init` helm chart:
 
 ```bash
 $ mkdir rendered
-$ helm template install/kubernetes/helm/istio-init --name istio-init --namespace istio-system > rendered/istio-init.yml
+$ helm template istio-init install/kubernetes/helm/istio-init --namespace istio-system > rendered/istio-init.yml
 ```
 
 Now, you can find inside the rendered directory a *(big)* file named `istio-init.yml`. This file contains:
@@ -41,15 +41,15 @@ Now, you can find inside the rendered directory a *(big)* file named `istio-init
 - jobs
 - rbac
 
-So, i have splited it into some more granular files based on its content. You can find the resulting files inside the
+So, I have split it into some more granular files based on its content. You can find the resulting files inside the
 [katalog/init-istio directory](../katalog/istio/init).
 
 Now, we are ready to render the `istio` chart, but first, let's review the [`values.yml`](values.yml) file.
 
 This file was configured using the
-[official istio chart documentation](https://istio.io/docs/reference/config/installation-options/).
+[official istio chart documentation](https://istio.io/v1.4/docs/reference/config/installation-options).
 
-This values makes possible the following configuration:
+This value makes possible the following configuration:
 
 |                          | Installed          |
 |--------------------------|--------------------|
@@ -65,11 +65,11 @@ This values makes possible the following configuration:
 | `istio-telemetry`        | :white_check_mark: |
 | **Addons**               |                    |
 | `grafana`                |                    |
-| `istio-tracing`          |                    |
+| `istio-tracing`          | :white_check_mark: |
 | `kiali`                  | :white_check_mark: |
 | `prometheus`             |                    |
 
-Take care about the ingressgateway configuration. We have changed the default behaviour of having a loadbalancer to only
+Take care of the ingressgateway configuration. We have changed the default behavior of having a load-balancer to only
 use nodeports.
 
 So, let's render the `istio` chart:
