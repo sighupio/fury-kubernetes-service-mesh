@@ -15,7 +15,7 @@ load ./../helper
 @test "End-user authentication - Test" {
   info
   test(){
-    http_code=$(curl ${INSTANCE_IP}:${CLUSTER_NAME}81/headers -s -o /dev/null -w "%{http_code}\n")
+    http_code=$(curl ${INSTANCE_IP}:31380/headers -s -o /dev/null -w "%{http_code}\n")
     if [ "${http_code}" -ne "200" ]; then return 1; fi
   }
   loop_it test 30 2
@@ -35,7 +35,7 @@ load ./../helper
 @test "End-user authentication - Test without token" {
   info
   test(){
-    http_code=$(curl ${INSTANCE_IP}:${CLUSTER_NAME}81/headers -s -o /dev/null -w "%{http_code}\n")
+    http_code=$(curl ${INSTANCE_IP}:31380/headers -s -o /dev/null -w "%{http_code}\n")
     if [ "${http_code}" -ne "401" ]; then return 1; fi
   }
   loop_it test 30 2
@@ -47,7 +47,7 @@ load ./../helper
   info
   test(){
     TOKEN=$(curl https://raw.githubusercontent.com/istio/istio/release-1.4/security/tools/jwt/samples/demo.jwt -s)
-    http_code=$(curl --header "Authorization: Bearer ${TOKEN}" ${INSTANCE_IP}:${CLUSTER_NAME}81/headers -s -o /dev/null -w "%{http_code}\n")
+    http_code=$(curl --header "Authorization: Bearer ${TOKEN}" ${INSTANCE_IP}:31380/headers -s -o /dev/null -w "%{http_code}\n")
     if [ "${http_code}" -ne "200" ]; then return 1; fi
   }
   loop_it test 30 2
