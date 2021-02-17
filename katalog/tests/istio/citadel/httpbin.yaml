@@ -52,7 +52,7 @@ spec:
     spec:
       serviceAccountName: httpbin
       containers:
-      - image: docker.io/kennethreitz/httpbin
+      - image: registry.sighup.io/fury/kennethreitz/httpbin
         imagePullPolicy: IfNotPresent
         name: httpbin
         ports:

@@ -1,5 +1,16 @@
 namespace: istio-system
 
+images:
+  - name: docker.io/istio/proxyv2
+    newName: registry.sighup.io/fury/istio/proxyv2
+    newTag: "1.4.2"
+  - name: docker.io/istio/pilot
+    newName: registry.sighup.io/fury/istio/pilot
+    newTag: "1.4.2"
+  - name: docker.io/istio/mixer
+    newName: registry.sighup.io/fury/istio/mixer
+    newTag: "1.4.2"
+
 resources:
 - config.yml
 - mixer.yml

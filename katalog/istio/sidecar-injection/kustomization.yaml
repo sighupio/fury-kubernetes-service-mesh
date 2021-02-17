@@ -1,5 +1,11 @@
 namespace: istio-system
 
+
+images:
+  - name: docker.io/istio/sidecar_injector
+    newName: registry.sighup.io/fury/istio/sidecar_injector
+    newTag: "1.4.2"
+
 resources:
   - rbac.yaml
   - deployment.yaml

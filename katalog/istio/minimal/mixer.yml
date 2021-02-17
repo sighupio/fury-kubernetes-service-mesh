@@ -156,7 +156,7 @@ spec:
                 - "s390x"
       containers:
       - name: mixer
-        image: "docker.io/istio/mixer:1.4.2"
+        image: docker.io/istio/mixer
         imagePullPolicy: Always
         ports:
         - containerPort: 15014
@@ -193,7 +193,7 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 5
       - name: istio-proxy
-        image: "docker.io/istio/proxyv2:1.4.2"
+        image: docker.io/istio/proxyv2
         imagePullPolicy: Always
         ports:
         - containerPort: 9091

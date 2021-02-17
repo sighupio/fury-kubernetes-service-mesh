@@ -35,7 +35,7 @@ data:
                 "disablePolicyChecks": false,
                 "enableHelmTest": false,
                 "enableTracing": false,
-                "hub": "docker.io/istio",
+                "hub": "registry.sighup.io/fury/istio",
                 "imagePullPolicy": "Always",
                 "imagePullSecrets": [],
                 "k8sIngress": {
@@ -463,7 +463,7 @@ data:
             "disablePolicyChecks": false,
             "enableHelmTest": false,
             "enableTracing": false,
-            "hub": "docker.io/istio",
+            "hub": "registry.sighup.io/fury/istio",
             "imagePullPolicy": "Always",
             "imagePullSecrets": [],
             "k8sIngress": {
@@ -667,7 +667,7 @@ data:
                 "disablePolicyChecks": false,
                 "enableHelmTest": false,
                 "enableTracing": false,
-                "hub": "docker.io/istio",
+                "hub": "registry.sighup.io/fury/istio",
                 "imagePullPolicy": "Always",
                 "imagePullSecrets": [],
                 "k8sIngress": {
@@ -879,7 +879,7 @@ data:
                 "disablePolicyChecks": false,
                 "enableHelmTest": false,
                 "enableTracing": false,
-                "hub": "docker.io/istio",
+                "hub": "registry.sighup.io/fury/istio",
                 "imagePullPolicy": "Always",
                 "imagePullSecrets": [],
                 "k8sIngress": {
@@ -1120,7 +1120,7 @@ data:
                 "disablePolicyChecks": false,
                 "enableHelmTest": false,
                 "enableTracing": false,
-                "hub": "docker.io/istio",
+                "hub": "registry.sighup.io/fury/istio",
                 "imagePullPolicy": "Always",
                 "imagePullSecrets": [],
                 "k8sIngress": {
@@ -1317,7 +1317,7 @@ data:
                 "disablePolicyChecks": false,
                 "enableHelmTest": false,
                 "enableTracing": false,
-                "hub": "docker.io/istio",
+                "hub": "registry.sighup.io/fury/istio",
                 "imagePullPolicy": "Always",
                 "imagePullSecrets": [],
                 "k8sIngress": {

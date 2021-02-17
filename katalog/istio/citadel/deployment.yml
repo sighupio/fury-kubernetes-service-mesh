@@ -63,7 +63,7 @@ spec:
       serviceAccountName: istio-citadel-service-account
       containers:
         - name: citadel
-          image: "docker.io/istio/citadel:1.4.2"
+          image: docker.io/istio/citadel
           imagePullPolicy: Always
           args:
             - --append-dns-names=true

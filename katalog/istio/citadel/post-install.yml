@@ -105,7 +105,7 @@ spec:
       serviceAccountName: istio-security-post-install-account
       containers:
         - name: kubectl
-          image: "docker.io/istio/kubectl:1.4.2"
+          image: docker.io/istio/kubectl
           imagePullPolicy: Always
           command: [ "/bin/bash", "/tmp/security/run.sh", "/tmp/security/custom-resources.yaml" ]
           volumeMounts:

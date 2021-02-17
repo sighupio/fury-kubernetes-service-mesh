@@ -13,7 +13,7 @@ spec:
       serviceAccountName: istio-init-service-account
       containers:
       - name: istio-init-crd-10
-        image: "docker.io/istio/kubectl:1.4.2"
+        image: docker.io/istio/kubectl
         imagePullPolicy: Always
         resources:
           limits:
@@ -48,7 +48,7 @@ spec:
       serviceAccountName: istio-init-service-account
       containers:
       - name: istio-init-crd-11
-        image: "docker.io/istio/kubectl:1.4.2"
+        image: docker.io/istio/kubectl
         imagePullPolicy: Always
         resources:
           limits:
@@ -83,7 +83,7 @@ spec:
       serviceAccountName: istio-init-service-account
       containers:
       - name: istio-init-crd-14
-        image: "docker.io/istio/kubectl:1.4.2"
+        image: docker.io/istio/kubectl
         imagePullPolicy: Always
         resources:
           limits:

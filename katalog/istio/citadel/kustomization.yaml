@@ -1,5 +1,13 @@
 namespace: istio-system
 
+images:
+  - name: docker.io/istio/citadel
+    newName: registry.sighup.io/fury/istio/citadel
+    newTag: "1.4.2"
+  - name: docker.io/istio/kubectl
+    newName: registry.sighup.io/fury/istio/kubectl
+    newTag: "1.4.2"
+
 resources:
   - rbac.yml
   - deployment.yml

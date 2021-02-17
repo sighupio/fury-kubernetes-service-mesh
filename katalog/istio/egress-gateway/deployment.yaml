@@ -68,7 +68,7 @@ spec:
       serviceAccountName: istio-egressgateway-service-account
       containers:
         - name: istio-proxy
-          image: "docker.io/istio/proxyv2:1.4.2"
+          image: docker.io/istio/proxyv2
           imagePullPolicy: Always
           ports:
             - containerPort: 80

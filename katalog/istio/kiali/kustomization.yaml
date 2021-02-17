@@ -3,5 +3,10 @@ namespace: istio-system
 bases:
   - configuration/
 
+images:
+  - name: quay.io/kiali/kiali
+    newName: registry.sighup.io/fury/kiali/kiali
+    newTag: "1.9"
+
 resources:
   - kiali.yml
