@@ -22,19 +22,24 @@ single package's documentation:
 
 - [Kubernetes](https://kubernetes.io) >= `v1.14.0`
 - [Furyctl](https://github.com/sighup-io/furyctl) package manager to install Fury packages
-- [Kustomize](https://github.com/kubernetes-sigs/kustomize) = `v3.0.0`
+- [Kustomize](https://github.com/kubernetes-sigs/kustomize) = `v3.9.1`
 
 
 ## Compatibility
 
-| Module Version / Kubernetes Version | 1.14.X             | 1.15.X             | 1.16.X             |
-|-------------------------------------|:------------------:|:------------------:|:------------------:|
+| Module Version / Kubernetes Version | 1.14.X             | 1.15.X             | 1.16.X             | 1.17.X             | 1.18.X             | 1.19.X             | 1.20.X             | 1.21.X             |
+|-------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
 | v0.1.0                              |                    |                    |                    |
-| v0.2.0                              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| v0.2.0                              | :exclamation: | :exclamation: | :exclamation: |
+| v1.0.0                              |  |  |  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:
 
 - :white_check_mark: Compatible
 - :warning: Has issues
 - :x: Incompatible
+- :exclamation: Deprecated
+
+###  Deprecation Note
+We had to deprecate those versions because of there was a very huge architectural change from istio 1.4 to 1.5. For every further help regarding upgrade from module version `v0.x.0` to `v.1.x.x` please contact us.
 
 
 ## Deployment (Istio getting started)
