@@ -1,0 +1,3 @@
+helm 3.5.4
+kustomize 3.9.1
+istioctl 1.9.3
