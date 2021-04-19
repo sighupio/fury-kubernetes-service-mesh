@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - https://raw.githubusercontent.com/istio/istio/1.9.3/manifests/charts/istio-operator/crds/crd-operator.yaml
+  - https://raw.githubusercontent.com/istio/istio/1.9.3/manifests/charts/istio-operator/files/gen-operator.yaml
+  - kiali
+helmChartInflationGenerator:
+  - chartRepoUrl: https://raw.githubusercontent.com/moondev/echo-chart/main
+    chartName: echo
+    valuesLocal:
+      items:
+        - apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: istio-system
+        - apiVersion: install.istio.io/v1alpha1
+          kind: IstioOperator
+          metadata:
+            namespace: istio-system
+            name: example-istiocontrolplane
+          spec:
+            profile: default
+            values:
+              global:
+                defaultNodeSelector: {}
+                defaultTolerations: []
+              gateways:
+                istio-ingressgateway:
+                  # the default is type LoadBalancer
+                  type: NodePort
