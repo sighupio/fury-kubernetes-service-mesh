@@ -1,8 +1,30 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
 namespace: istio-system
-helmChartInflationGenerator:
-  - chartRepoUrl: https://kiali.org/helm-charts
-    chartName: kiali-server
-    valuesLocal:
-      items: #....
+commonLabels:
+  app.kubernetes.io/component: kiali
+  app: kiali
+  release: istio
+  app.kubernetes.io/name: kiali
+  kustomize.component: kiali
+resources:
+  - cluster-role.yml
+  - deployment.yml
+  - service.yml
+  - sa.yml
+  - viewer-cluster-role.yml
+
+# images:
+#   - name: quay.io/kiali/kiali
+#     newName: gcr.io/vf-mc2dev-ca-lab/mirror/kiali/kiali
+#     newTag: v1.27
+#
+configMapGenerator:
+  - name: kiali
+    files:
+      - config/config.yaml
+
+secretGenerator:
+  - name: kiali
+    envs:
+      - secrets/kiali-auth.env

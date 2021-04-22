@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+namespace: istio-system
+helmChartInflationGenerator:
+  - chartRepoUrl: https://kiali.org/helm-charts
+    releaseName: kiali-operator
+    chartName: kiali-operator
+    chartVersion: v1.30.0
+    #values: https://raw.githubusercontent.com/kiali/helm-charts/master/kiali-operator/values.yaml
+    values: custom-values.yaml
+    # valuesInline:
+    #   image:
+    #     repo: quay.io/kiali/kiali-operator
+    #     tag: v1.34.0-SNAPSHOT
+
+resources:
+  - kiali.yml
