@@ -1,0 +1,22 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: example-istio
+spec:
+  meshConfig:
+    enableTracing: true
+    defaultConfig:
+      tracing:
+        sampling: 100
+        zipkin:
+          address: jaeger-collector.jaeger:9411
+  profile: default
+  values:
+    global:
+      defaultNodeSelector: {}
+      defaultTolerations: []
+    gateways:
+      istio-ingressgateway:
+        # the default is type LoadBalancer
+        type: NodePort

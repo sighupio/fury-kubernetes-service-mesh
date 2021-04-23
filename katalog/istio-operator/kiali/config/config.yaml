@@ -1,5 +1,5 @@
 istio_component_namespaces:
-  grafana: istio-system
+  grafana: monitoring
   tracing: istio-system
   prometheus: monitoring
 istio_namespace: istio-system
@@ -21,5 +21,7 @@ server:
   port: 20001
   web_root: /kiali
 external_services:
+  custom_dashboards:
+    enabled: true
   prometheus:
-    url: http://prometheus-k8s.monitoring:9090
+    url: http://prometheus-k8s.monitoring.svc.cluster.local:9090

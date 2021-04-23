@@ -1,0 +1,150 @@
+apiVersion: "monitoring.kiali.io/v1alpha1"
+kind: MonitoringDashboard
+metadata:
+  name: envoy
+spec:
+  title: Envoy Metrics
+  #  discoverOn: "envoy_server_uptime"
+  items:
+    - chart:
+        name: "Pods uptime"
+        spans: 4
+        metricName: "envoy_server_uptime"
+        dataType: "raw"
+    - chart:
+        name: "Allocated memory"
+        unit: "bytes"
+        spans: 4
+        metricName: "envoy_server_memory_allocated"
+        dataType: "raw"
+        min: 0
+    - chart:
+        name: "Heap size"
+        unit: "bytes"
+        spans: 4
+        metricName: "envoy_server_memory_heap_size"
+        dataType: "raw"
+        min: 0
+    - chart:
+        name: "Upstream active connections"
+        spans: 6
+        metricName: "envoy_cluster_upstream_cx_active"
+        dataType: "raw"
+    - chart:
+        name: "Upstream total requests"
+        spans: 6
+        metricName: "envoy_cluster_upstream_rq_total"
+        unit: "rps"
+        dataType: "rate"
+    - chart:
+        name: "Downstream active connections"
+        spans: 6
+        metricName: "envoy_listener_downstream_cx_active"
+        dataType: "raw"
+    - chart:
+        name: "Downstream HTTP requests"
+        spans: 6
+        metricName: "envoy_listener_http_downstream_rq"
+        unit: "rps"
+        dataType: "rate"
+---
+# Source: kiali-server/templates/dashboards/go.yaml
+apiVersion: "monitoring.kiali.io/v1alpha1"
+kind: MonitoringDashboard
+metadata:
+  name: go
+spec:
+  title: Go Metrics
+  runtime: Go
+  discoverOn: "go_info"
+  items:
+    - chart:
+        name: "CPU ratio"
+        spans: 6
+        metricName: "process_cpu_seconds_total"
+        dataType: "rate"
+        aggregations:
+          - label: "pod_name"
+            displayName: "Pod"
+    - chart:
+        name: "RSS Memory"
+        unit: "bytes"
+        spans: 6
+        metricName: "process_resident_memory_bytes"
+        dataType: "raw"
+        aggregations:
+          - label: "pod_name"
+            displayName: "Pod"
+    - chart:
+        name: "Goroutines"
+        spans: 6
+        metricName: "go_goroutines"
+        dataType: "raw"
+        aggregations:
+          - label: "pod_name"
+            displayName: "Pod"
+    - chart:
+        name: "Heap allocation rate"
+        unit: "bytes/s"
+        spans: 6
+        metricName: "go_memstats_alloc_bytes_total"
+        dataType: "rate"
+        aggregations:
+          - label: "pod_name"
+            displayName: "Pod"
+    - chart:
+        name: "GC rate"
+        spans: 6
+        metricName: "go_gc_duration_seconds_count"
+        dataType: "rate"
+        aggregations:
+          - label: "pod_name"
+            displayName: "Pod"
+    - chart:
+        name: "Next GC"
+        unit: "bytes"
+        spans: 6
+        metricName: "go_memstats_next_gc_bytes"
+        dataType: "raw"
+        aggregations:
+          - label: "pod_name"
+            displayName: "Pod"
+---
+# Source: kiali-server/templates/dashboards/kiali.yaml
+apiVersion: "monitoring.kiali.io/v1alpha1"
+kind: MonitoringDashboard
+metadata:
+  name: kiali
+spec:
+  title: Kiali Internal Metrics
+  items:
+    - chart:
+        name: "API processing duration"
+        unit: "seconds"
+        spans: 6
+        metricName: "kiali_api_processing_duration_seconds"
+        dataType: "histogram"
+        aggregations:
+          - label: "route"
+            displayName: "Route"
+    - chart:
+        name: "Functions processing duration"
+        unit: "seconds"
+        spans: 6
+        metricName: "kiali_go_function_processing_duration_seconds"
+        dataType: "histogram"
+        aggregations:
+          - label: "function"
+            displayName: "Function"
+          - label: "package"
+            displayName: "Package"
+    - chart:
+        name: "Failures"
+        spans: 12
+        metricName: "kiali_go_function_failures_total"
+        dataType: "raw"
+        aggregations:
+          - label: "function"
+            displayName: "Function"
+          - label: "package"
+            displayName: "Package"
