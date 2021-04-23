@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    forecastle.stakater.com/appName: Jaeger
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/icon: "https://api.nuget.org/v3-flatcontainer/jaeger/0.4.3/icon"
+    kubernetes.io/ingress.class: nginx
+    # this is the way: 1 service, 1 ingress for making Mtls working with the annotation above
+  generation: 1
+  name: jaeger
+  namespace: jaeger
+spec:
+  rules:
+    - host: jaeger.sighup-staging.localdomain
+      http:
+        paths:
+          - backend:
+              service:
+                name: jaeger-query
+                port:
+                  name: http-query
+            path: /
+            pathType: Prefix

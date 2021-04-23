@@ -1,0 +1,31 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger
+  namespace: jaeger
+spec:
+  strategy: production
+  ingress:
+    enabled: false
+  collector:
+    maxReplicas: 3
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+  ui:
+    options:
+      dependencies:
+        menuEnabled: true
+  storage:
+    type: elasticsearch
+    esIndexCleaner:
+      enabled: true
+      numberOfDays: 7
+      schedule: "55 01 * * *"
+    options:
+      es:
+        server-urls: http://elasticsearch.logging.svc:9200
+        index-prefix: "jaeger"
+        tags-as-fields:
+          all: true
