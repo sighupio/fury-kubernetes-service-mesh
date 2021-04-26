@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kiali
+spec:
+  endpoints:
+    - interval: 10s
+      port: http-metrics
+      scheme: http
+      path: /metrics
+  jobLabel: k8s-app
+  selector:
+    matchLabels:
+      app: kiali
