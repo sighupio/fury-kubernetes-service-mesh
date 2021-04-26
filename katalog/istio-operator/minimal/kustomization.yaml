@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../kiali
+  - ../istio
+  - ../operator
+
+patches:
+  - target:
+      kind: IstioOperator
+      name: istio
+    patch: |-
+      - op: remove
+        path: /spec/meshConfig
+      - op: replace
+        path: /spec/profile
+        value: minimal
