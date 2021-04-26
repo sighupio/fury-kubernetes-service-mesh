@@ -4,11 +4,25 @@ metadata:
   name: jaeger
   namespace: jaeger
 spec:
+  # affinity:
+  #   nodeAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #       nodeSelectorTerms:
+  #         - matchExpressions:
+  #             - key: node.kubernetes.io/role
+  #               operator: In
+  #               values:
+  #                 - infra
+  # tolerations:
+  #   - key: " node-role.kubernetes.io/infra"
+  #     operator: "Exists"
+  #     effect: "NoSchedule"
   strategy: production
   ingress:
     enabled: false
   collector:
-    maxReplicas: 3
+    minReplicas: 2
+    maxReplicas: 5
     resources:
       limits:
         cpu: 100m
