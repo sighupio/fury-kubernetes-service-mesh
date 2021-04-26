@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    forecastle.stakater.com/appName: Kiali
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/icon: https://design.jboss.org/kiali/logo/final/PNG/kiali_logo_lightbkg_1280px.png
+    kubernetes.io/ingress.class: nginx
+  generation: 1
+  name: kiali
+spec:
+  rules:
+    - host: kiali.sighup-staging.localdomain
+      http:
+        paths:
+          - backend:
+              service:
+                name: kiali
+                port:
+                  name: http-kiali
+            path: /
+            pathType: Prefix
