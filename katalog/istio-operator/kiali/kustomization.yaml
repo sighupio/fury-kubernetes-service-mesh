@@ -13,6 +13,7 @@ resources:
   - dashboards.yml
   - crd.yml
   - sm.yml
+  - ingress.yml
 
 configMapGenerator:
   - name: kiali
