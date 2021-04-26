@@ -12,12 +12,8 @@ resources:
   - cluster-role-binding.yml
   - dashboards.yml
   - crd.yml
+  - sm.yml
 
-# images:
-#   - name: quay.io/kiali/kiali
-#     newName: gcr.io/vf-mc2dev-ca-lab/mirror/kiali/kiali
-#     newTag: v1.27
-#
 configMapGenerator:
   - name: kiali
     files:

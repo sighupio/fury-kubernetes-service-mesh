@@ -4,3 +4,4 @@ namespace: jaeger
 resources:
   - jaeger.yml
   - ingress.yml
+  - sm.yml
