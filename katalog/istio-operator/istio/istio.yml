@@ -2,8 +2,14 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
   namespace: istio-system
-  name: example-istio
+  name: istio
 spec:
+  components:
+    pilot:
+      k8s:
+        hpaSpec:
+          maxReplicas: 10
+          minReplicas: 2
   meshConfig:
     enableTracing: true
     defaultConfig:
@@ -14,8 +20,14 @@ spec:
   profile: default
   values:
     global:
-      defaultNodeSelector: {}
-      defaultTolerations: []
+      defaultNodeSelector:
+        {}
+        # node.kubernetes.io/role: infra
+      defaultTolerations:
+        []
+        # - key: " node-role.kubernetes.io/infra"
+        #   operator: "Exists"
+        #   effect: "NoSchedule"
     gateways:
       istio-ingressgateway:
         # the default is type LoadBalancer
