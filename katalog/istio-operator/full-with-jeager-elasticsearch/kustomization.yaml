@@ -6,3 +6,21 @@ resources:
   - ../operator
   - ../jaeger-operator
   - ../jaeger
+# patches:
+#   - target:
+#       kind: Jaeger
+#       name: jaeger
+#     patch: |-
+#       - op: add
+#         path: /spec/storage/options/es/create-index-templates
+#         value: false
+# - op: add
+#   path: /spec/collector/options
+#   value:
+#     es:
+#       use-aliases: true
+# - op: add
+#   path: /spec/query/options
+#   value:
+#     es:
+#       use-aliases: true

@@ -5,3 +5,9 @@ resources:
   - jaeger.yml
   - ingress.yml
   - sm.yml
+  - job.yml
+
+configMapGenerator:
+  - name: jaeger-index-template
+    files:
+      - config/index-template.json
