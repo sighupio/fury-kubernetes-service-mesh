@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: jaeger-es-index
+spec:
+  template:
+    spec:
+      containers:
+        - name: elasdx
+          image: lgug2z/elasdx:fd4d363
+          command:
+            - "/elasdx"
+          args:
+            - "reindex"
+            - "/index/index-template.json"
+            - "--dest-index"
+            - "jaeger-template"
+          env:
+            - name: ELASDX_URL
+              value: http://elasticsearch.logging.svc:9200
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              cpu: 80m
+              memory: 80Mi
+          volumeMounts:
+            - name: index-template
+              mountPath: /index
+      restartPolicy: OnFailure
+      volumes:
+        - name: index-template
+          configMap:
+            name: jaeger-index-template
