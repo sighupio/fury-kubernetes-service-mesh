@@ -4,3 +4,4 @@ namespace: istio-system
 resources:
   - istio.yml
   - ns.yml
+  - sm.yml
