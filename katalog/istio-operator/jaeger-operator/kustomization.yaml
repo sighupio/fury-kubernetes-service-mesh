@@ -18,3 +18,12 @@ patches:
       - op: replace
         path: /subjects/0/namespace
         value: jaeger
+  - target:
+      kind: Deployment
+      name: jaeger-operator
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0
+        value:
+            name: WATCH_NAMESPACE
+            value: ""
