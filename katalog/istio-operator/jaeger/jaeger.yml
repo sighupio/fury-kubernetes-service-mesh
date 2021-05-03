@@ -4,6 +4,8 @@ metadata:
   name: jaeger
   namespace: jaeger
 spec:
+  annotations:
+    sidecar.istio.io/inject: "true"
   strategy: production
   ingress:
     enabled: false
