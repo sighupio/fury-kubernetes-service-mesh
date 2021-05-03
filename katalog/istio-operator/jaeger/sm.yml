@@ -1,17 +1,18 @@
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+apiVersion: v1
+kind: Service
 metadata:
-  name: jaeger-query
+  labels:
+    app: jaeger-collector
+  name: collector-monitoring
 spec:
-  endpoints:
-    - interval: 10s
-      port: http-query
-      scheme: http
-      path: /metrics
-  jobLabel: k8s-app
+  ports:
+    - name: admin-http
+      port: 14269
+      protocol: TCP
+      targetPort: 14269
   selector:
-    matchLabels:
-      app.kubernetes.io/name: jaeger-query
+    app.kubernetes.io/name: jaeger-collector
+  type: ClusterIP
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -19,11 +20,38 @@ metadata:
   name: jaeger-collector
 spec:
   endpoints:
-    - interval: 10s
-      port: http-c-binary-trft
-      scheme: http
-      path: /metrics
+    - interval: 30s
+      port: admin-http
   jobLabel: k8s-app
   selector:
     matchLabels:
-      app.kubernetes.io/name: jaeger-collector
+      app: jaeger-collector
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jaeger-query
+  name: query-monitoring
+spec:
+  ports:
+    - name: admin-http
+      port: 16687
+      protocol: TCP
+      targetPort: 16687
+  selector:
+    app.kubernetes.io/name: jaeger-query
+  type: ClusterIP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: jaeger-query
+spec:
+  endpoints:
+    - interval: 30s
+      port: admin-http
+  jobLabel: k8s-app
+  selector:
+    matchLabels:
+      app: jaeger-query
