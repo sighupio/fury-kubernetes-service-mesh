@@ -10,6 +10,8 @@ spec:
   ingress:
     enabled: false
   collector:
+    options:
+      collector.zipkin.host-port: ":9411"
     minReplicas: 2
     maxReplicas: 5
     resources:
