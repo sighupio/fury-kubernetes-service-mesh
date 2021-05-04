@@ -1,0 +1,29 @@
+istio_component_namespaces:
+  grafana: monitoring
+  tracing: istio-system
+  prometheus: monitoring
+istio_namespace: istio-system
+auth:
+  strategy: "anonymous"
+deployment:
+  accessible_namespaces: ["**"]
+  logger:
+    log_level: trace
+api:
+  namespaces:
+    exclude:
+      - kube-public
+      - kube-system
+      - kube-node-lease
+login_token:
+  signing_key: "eto6tUSMft"
+server:
+  metrics_enabled: true
+  metrics_port: 9090
+  port: 20001
+  web_root: /kiali
+external_services:
+  custom_dashboards:
+    enabled: true
+  prometheus:
+    url: http://prometheus-k8s.monitoring.svc.cluster.local:9090

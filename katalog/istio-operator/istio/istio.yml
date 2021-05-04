@@ -10,21 +10,19 @@ spec:
         hpaSpec:
           maxReplicas: 10
           minReplicas: 2
-  meshConfig:
-    enableTracing: true
-    defaultConfig:
-      tracing:
-        sampling: 100
-        zipkin:
-          address: jaeger-collector.jaeger.svc.cluster.local:9411
-  profile: default
+  # meshConfig:
+  #   enableTracing: true
+  #   defaultConfig:
+  #     tracing:
+  #       sampling: 100
+  #       zipkin:
+  #         address: jaeger-collector.jaeger.svc.cluster.local:9411
+  profile: minimal
   values:
     global:
-      defaultNodeSelector:
-        {}
+      defaultNodeSelector: {}
         # node.kubernetes.io/role: infra
-      defaultTolerations:
-        []
+      defaultTolerations: []
         # - key: " node-role.kubernetes.io/infra"
         #   operator: "Exists"
         #   effect: "NoSchedule"
@@ -32,3 +30,27 @@ spec:
       istio-ingressgateway:
         # the default is type LoadBalancer
         type: NodePort
+        ports:
+        - name: status-port
+          port: 15021
+          protocol: TCP
+          targetPort: 15021
+        - name: http2
+          nodePort: 31380
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+        - name: https
+          nodePort: 31390
+          port: 443
+          protocol: TCP
+          targetPort: 8443
+        - name: tcp-istiod
+          nodePort: 31400
+          port: 15012
+          protocol: TCP
+          targetPort: 15012
+        - name: tls
+          port: 15443
+          protocol: TCP
+          targetPort: 15443

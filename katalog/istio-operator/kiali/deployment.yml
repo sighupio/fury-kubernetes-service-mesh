@@ -87,7 +87,7 @@ spec:
               name: kiali-cert
             - mountPath: /kiali-secret
               name: kiali-secret
-      serviceAccountName: kiali-service-account
+      serviceAccountName: kiali
       volumes:
         - configMap:
             name: kiali
@@ -95,7 +95,7 @@ spec:
         - name: kiali-cert
           secret:
             optional: true
-            secretName: istio.kiali-service-account
+            secretName: istio.kiali
         - name: kiali-secret
           secret:
             optional: true

@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../katalog/istio
+
+patches:
+  - target:
+      kind: IstioOperator
+      name: istio
+    patch: |-
+      - op: add
+        path: /spec/components/egressGateways
+        value: 
+          - name: istio-egressgateway
+            enabled: true
