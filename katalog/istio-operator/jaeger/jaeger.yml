@@ -4,8 +4,6 @@ metadata:
   name: jaeger
   namespace: jaeger
 spec:
-  annotations:
-    sidecar.istio.io/inject: "true"
   strategy: production
   ingress:
     enabled: false
@@ -25,15 +23,3 @@ spec:
     options:
       dependencies:
         menuEnabled: true
-  storage:
-    type: elasticsearch
-    esIndexCleaner:
-      enabled: true
-      numberOfDays: 7
-      schedule: "55 01 * * *"
-    options:
-      es:
-        server-urls: http://elasticsearch.logging.svc:9200
-        index-prefix: "jaeger"
-        tags-as-fields:
-          all: true

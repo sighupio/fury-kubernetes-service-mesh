@@ -1,24 +1,21 @@
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: istio-system
 commonLabels:
   app: kiali
+
 resources:
-  - crd.yml
-  - sa.yml
-  - cluster-role.yml
-  - cluster-role-binding.yml
-  - deployment.yml
-  - service.yml
-  - dashboards.yml
-  - sm.yml
+  - ../../../katalog/istio-operator/kiali
 
 configMapGenerator:
   - name: kiali
+    behavior: replace
     files:
       - config/config.yaml
 
 secretGenerator:
   - name: kiali
+    behavior: replace
     envs:
       - secrets/kiali-auth.env
