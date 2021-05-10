@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: my-httpbin
+spec:
+  type: ExternalName
+  externalName: httpbin.org
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
