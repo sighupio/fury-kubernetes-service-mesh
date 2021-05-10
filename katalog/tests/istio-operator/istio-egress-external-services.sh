@@ -32,7 +32,7 @@ load ./../helper
     http_code=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "https://www.google.com" -s -o /dev/null -w "%{http_code}")
     if [ -z "${http_code}" ] || [ "${http_code}" -ne "200" ]; then return 1; fi
   }
-  loop_it test 30 2
+  loop_it test 60 3
   status=${loop_it_result}
   [ "$status" -eq 0 ]
 }
@@ -140,7 +140,7 @@ load ./../helper
 @test "Kubernetes Services for Egress Traffic - Access httpbin.org via the Kubernetes service’s hostname from the source pod without Istio sidecar" {
   info
   test(){
-    kubectl apply -f katalog/tests/istio-operator/egress/httpbin-externalName.yaml -n egress-tests
+    kubectl apply -f katalog/tests/istio-operator/egress/httpbin-externalName.yaml -n egress-tests-no-mesh
     pod_name=$(kubectl get pod -l app=sleep-no-mesh -o jsonpath={.items..metadata.name} -n egress-tests-no-mesh)
     istio_header=$(kubectl exec ${pod_name} -c sleep -n egress-tests-no-mesh -- curl "http://my-httpbin/headers" -s |jq '.headers["X-Istio-Attributes"]' -rc)
     headers=$(kubectl exec ${pod_name} -c sleep -n egress-tests-no-mesh -- curl "http://my-httpbin/headers" -s)
@@ -154,9 +154,10 @@ load ./../helper
 @test "Kubernetes Services for Egress Traffic - Access httpbin.org via the Kubernetes service’s hostname from the source pod with Istio sidecar." {
   info
   test(){
+    kubectl apply -f katalog/tests/istio-operator/egress/httpbin-externalName.yaml -n egress-tests
     kubectl apply -f katalog/tests/istio-operator/egress/httpbin-externalName-destination-rule.yaml -n egress-tests
     pod_name=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name} -n egress-tests)
-    istio_header=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s |jq '.headers["X-Istio-Attributes"]' -rc)
+    istio_header=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s |jq '.headers["X-Envoy-Decorator-Operation"]' -rc)
     headers=$(kubectl exec ${pod_name} -c sleep -n egress-tests -- curl "http://my-httpbin/headers" -s)
     if [ -z "${istio_header}" ] || [ "${istio_header}" == "null" ]; then return 1; fi
   }
