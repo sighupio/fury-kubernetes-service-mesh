@@ -10,6 +10,9 @@ spec:
         hpaSpec:
           maxReplicas: 10
           minReplicas: 2
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: true
   # meshConfig:
   #   enableTracing: true
   #   defaultConfig:
