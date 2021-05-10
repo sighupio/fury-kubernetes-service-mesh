@@ -1,0 +1,7 @@
+versions:
+  monitoring: v1.11.1
+  logging: v1.7.1
+
+bases:
+  - name: monitoring
+  - name: logging

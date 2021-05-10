@@ -1,0 +1,6 @@
+resources:
+  # Monitoring
+  - ./vendor/katalog/monitoring/prometheus-operator
+  - ./vendor/katalog/monitoring/prometheus-operated
+  # Logging
+  - ./vendor/katalog/logging/elasticsearch-single
