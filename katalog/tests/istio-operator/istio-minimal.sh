@@ -1,0 +1,111 @@
+#!/usr/bin/env bats
+
+load ./../helper
+
+@test "deploy bookinfo demo application" {
+  info
+  deploy(){
+    kubectl create ns demo
+    kubectl label namespace demo istio-injection=enabled
+    kubectl apply -f katalog/tests/istio-operator/bookinfo/bookinfo.yaml -n demo
+    kubectl apply -f katalog/tests/istio-operator/bookinfo/bookinfo-gateway.yaml -n demo
+    kubectl apply -f katalog/tests/istio-operator/bookinfo/destination-rule-all.yaml -n demo
+    kubectl apply -f katalog/tests/istio-operator/bookinfo/virtual-service-all-v1.yaml -n demo
+  }
+  wait_for_it() {
+    retry_counter=0
+    max_retry=50
+    while kubectl get pods -n demo | grep -ie "\(Pending\|Error\|CrashLoop\|ContainerCreating\|PodInitializing\|Init:\)" >&2
+    do
+      [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n demo >&2 && return 1 )
+      sleep 2 && echo "# waiting..." $retry_counter >&3
+      retry_counter=$[ $retry_counter + 1 ]
+    done
+    # Wait for productpage review endpoint
+    retry_counter=0
+    max_retry=10
+    while curl -s ${INSTANCE_IP}:31380/productpage |grep "Error fetching product reviews!"  >&2
+    do
+      [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n demo >&2 && return 1 )
+      sleep 2 && echo "# waiting..." $retry_counter >&3
+      retry_counter=$[ $retry_counter + 1 ]
+    done
+  }
+  run deploy
+  [ "$status" -eq 0 ]
+  run wait_for_it
+  [ "$status" -eq 0 ]
+}
+
+@test "test v1 bookinfo demo application" {
+  info
+  test_back_stars(){
+    curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
+  }
+  run test_back_stars
+  back_stars_result=$status
+  test_red_stars(){
+    curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'color="red"'
+  }
+  run test_red_stars
+  red_stars_result=$status
+  [ "$back_stars_result" -eq 1 ] && [ "$red_stars_result" -eq 1 ]
+}
+
+@test "deploy v2 for jason and v3 for the rest in bookinfo demo application" {
+  info
+  test(){
+    kubectl apply -f katalog/tests/istio-operator/bookinfo/virtual-service-reviews-jason-v2-v3.yaml -n demo
+  }
+  run test
+  [ "$status" -eq 0 ]
+}
+
+@test "test v2 for jason in bookinfo demo application" {
+  info
+  test(){
+    retry_counter=0
+    max_retry=50
+    ko=1
+    while [[ ko -eq 1 ]]
+    do
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        rm -rf ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt
+        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:31380/login
+        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
+        ko=$?
+        sleep 3 && echo "# waiting..." $retry_counter >&3
+        retry_counter=$((retry_counter + 1))
+    done
+  }
+  run test
+  [ "$status" -eq 0 ]
+}
+
+@test "test v3 for all but jason in bookinfo demo application" {
+  info
+  test(){
+    retry_counter=0
+    max_retry=50
+    ko=1
+    while [[ ko -eq 1 ]]
+    do
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        curl -s ${INSTANCE_IP}:31380/productpage |grep -q 'color="red"'
+        ko=$?
+        sleep 3 && echo "# waiting..." $retry_counter >&3
+        retry_counter=$((retry_counter + 1))
+    done
+  }
+  run test
+  [ "$status" -eq 0 ]
+}
+
+@test "delete demo app test" {
+  info
+  test(){
+    kubectl delete ns demo
+  }
+  run test
+  [ "$status" -eq 0 ]
+}
