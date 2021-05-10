@@ -1,0 +1,34 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: edition-cnn-com
+spec:
+  hosts:
+  - edition.cnn.com
+  ports:
+  - number: 80
+    name: http-port
+    protocol: HTTP
+  - number: 443
+    name: https-port
+    protocol: HTTPS
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: edition-cnn-com
+spec:
+  hosts:
+  - edition.cnn.com
+  tls:
+  - match:
+    - port: 443
+      sni_hosts:
+      - edition.cnn.com
+    route:
+    - destination:
+        host: edition.cnn.com
+        port:
+          number: 443
+      weight: 100

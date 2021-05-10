@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../../katalog/istio-operator/istio
+
+patches:
+  - target:
+      kind: IstioOperator
+      name: istio
+    patch: |-
+      - op: add
+        path: /spec
+        value:
+          meshConfig:
+            outboundTrafficPolicy:
+              mode: ALLOW_ANY
