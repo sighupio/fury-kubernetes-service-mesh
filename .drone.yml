@@ -212,6 +212,29 @@ steps:
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
+          - refs/heads/hotfix-*
+          - refs/tags/**
+
+  - name: e2e-requirements
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.17.11_3.8.7_2.4.1
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=117
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-117
+      - cd katalog/tests/istio-operator/requirements
+      - furyctl vendor -H
+      - cd ../../../../
+      - bats -t katalog/tests/istio-operator/istio-requirements.sh
+    when:
+      ref:
+        include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -226,11 +249,14 @@ steps:
       - export CLUSTER_NAME=117
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-117
+      - cat /shared/machine/private_key
+      - cat $KUBECONFIG
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -250,6 +276,7 @@ steps:
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -269,10 +296,11 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
-      - bats -t katalog/tests/istio-operator/isio-citadel-rollback.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -354,6 +382,29 @@ steps:
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
+          - refs/heads/hotfix-*
+          - refs/tags/**
+
+  - name: e2e-requirements
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.18.8_3.8.7_2.4.1
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=118
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-118
+      - cd katalog/tests/istio-operator/requirements
+      - furyctl vendor -H
+      - cd ../../../../
+      - bats -t katalog/tests/istio-operator/istio-requirements.sh
+    when:
+      ref:
+        include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -368,11 +419,14 @@ steps:
       - export CLUSTER_NAME=118
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-118
+      - cat /shared/machine/private_key
+      - cat $KUBECONFIG
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -392,6 +446,7 @@ steps:
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -411,10 +466,11 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
-      - bats -t katalog/tests/istio-operator/isio-citadel-rollback.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -496,6 +552,29 @@ steps:
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
+          - refs/heads/hotfix-*
+          - refs/tags/**
+
+  - name: e2e-requirements
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.19.4_3.8.7_2.4.1
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=118
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-119
+      - cd katalog/tests/istio-operator/requirements
+      - furyctl vendor -H
+      - cd ../../../../
+      - bats -t katalog/tests/istio-operator/istio-requirements.sh
+    when:
+      ref:
+        include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -510,11 +589,14 @@ steps:
       - export CLUSTER_NAME=119
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-119
+      - cat /shared/machine/private_key
+      - cat $KUBECONFIG
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -534,6 +616,7 @@ steps:
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -553,10 +636,11 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
-      - bats -t katalog/tests/istio-operator/isio-citadel-rollback.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -641,6 +725,28 @@ steps:
           - refs/heads/hotfix-*
           - refs/tags/**
 
+  - name: e2e-requirements
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.0_3.8.7_2.4.1
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=120
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-120
+      - cd katalog/tests/istio-operator/requirements
+      - furyctl vendor -H
+      - cd ../../../../
+      - bats -t katalog/tests/istio-operator/istio-requirements.sh
+    when:
+      ref:
+        include:
+          - refs/heads/operator-1.9
+          - refs/heads/hotfix-*
+          - refs/tags/**
+
   - name: e2e-basic-istio
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.0_3.8.7_2.4.1
     pull: always
@@ -652,11 +758,14 @@ steps:
       - export CLUSTER_NAME=120
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-120
+      - cat /shared/machine/private_key
+      - cat $KUBECONFIG
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -676,6 +785,7 @@ steps:
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
@@ -695,10 +805,11 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
-      - bats -t katalog/tests/istio-operator/isio-citadel-rollback.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
