@@ -39,8 +39,6 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
-    commands:
-      - cat ./instance/machine/private_key
     when:
       ref:
         include:
@@ -81,6 +79,7 @@ steps:
       - export CLUSTER_NAME=116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-116
+      - cat /shared/machine/private_key
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
     when:
