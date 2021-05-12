@@ -74,7 +74,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [init]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=116
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -244,7 +244,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [init]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=117
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -414,7 +414,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [init]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=118
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -584,7 +584,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [init]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=119
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -753,7 +753,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [init]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=120
       - export INSTANCE_IP=$(cat /shared/machine/ip)
