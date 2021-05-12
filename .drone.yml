@@ -59,7 +59,7 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - cd katalog/tests/istio-operator/requirements
       - furyctl vendor -H
-      - kustomize build . | kubectl apply -f
+      - kustomize build . | kubectl apply -f -
     when:
       ref:
         include:
