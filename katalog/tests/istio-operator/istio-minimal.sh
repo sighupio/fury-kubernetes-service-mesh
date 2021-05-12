@@ -69,6 +69,7 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
+        echo -n ">>>>>>>>>>>>>> INSTANCE_IP is: ${INSTANCE_IP}" >&3
         if [ $retry_counter -ge $max_retry ]; then echo -n "Timeout waiting a condition" >&3; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
         rm -rf ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt
         curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:31380/login
