@@ -59,7 +59,8 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - cd katalog/tests/istio-operator/requirements
       - furyctl vendor -H
-      - bats -t ../istio-requirements.sh
+      - cd ../../../../
+      - bats -t katalog/tests/istio-operator/istio-requirements.sh
     when:
       ref:
         include:
