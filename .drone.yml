@@ -125,7 +125,7 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
-      - bats -t katalog/tests/istio-operator/isio-citadel-rollback.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
     when:
       ref:
         include:
