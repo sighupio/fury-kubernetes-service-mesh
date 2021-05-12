@@ -5,7 +5,7 @@ load ./../helper
 @test "Install istio requirements" {
   info
   test(){
-    apply katalog/istio-operator/requirements
+    apply katalog/tests/istio-operator/requirements
   }
   loop_it test 30 2
   status=${loop_it_result}
