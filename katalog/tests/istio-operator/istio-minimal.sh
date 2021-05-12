@@ -69,13 +69,15 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
+        if [ $retry_counter -ge $max_retry ]; then echo -n "Timeout waiting a condition" >&3; curl -s ${INSTANCE_IP}:31380/productpage >&2; return 1; fi
         rm -rf ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt
         curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://${INSTANCE_IP}:31380/login
+        output=$(curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage )
         curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))
+        echo -n ">>> Current response is: $output " >&3
     done
   }
   run test
