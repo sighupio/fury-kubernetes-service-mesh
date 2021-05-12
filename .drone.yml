@@ -355,11 +355,11 @@ steps:
         path: /shared
     depends_on: [clone]
     settings:
-      action: custom-cluster-117
+      action: custom-cluster-118
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
       instance_size: extra-large
       cluster_version: "1.18.8"
-      pipeline_id: cluster-116
+      pipeline_id: cluster-118
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
@@ -525,7 +525,7 @@ steps:
         path: /shared
     depends_on: [clone]
     settings:
-      action: custom-cluster-117
+      action: custom-cluster-119
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
       instance_size: extra-large
       cluster_version: "1.19.4"
@@ -564,7 +564,7 @@ steps:
         path: /shared
     depends_on: [init]
     commands:
-      - export CLUSTER_NAME=118
+      - export CLUSTER_NAME=119
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-119
       - cd katalog/tests/istio-operator/requirements
@@ -695,7 +695,7 @@ steps:
         path: /shared
     depends_on: [clone]
     settings:
-      action: custom-cluster-117
+      action: custom-cluster-120
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
       instance_size: extra-large
       cluster_version: "1.20.0"
