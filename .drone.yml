@@ -80,6 +80,7 @@ steps:
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-116
       - cat /shared/machine/private_key
+      - cat $KUBECONFIG
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
     when:
