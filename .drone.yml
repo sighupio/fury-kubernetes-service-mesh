@@ -39,6 +39,8 @@ steps:
         from_secret: dockerhub_username
       dockerhub_password:
         from_secret: dockerhub_password
+    commands:
+      - cat ./instance/machine/private_key
     when:
       ref:
         include:
