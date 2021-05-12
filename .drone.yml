@@ -46,6 +46,27 @@ steps:
           - refs/heads/hotfix-*
           - refs/tags/**
 
+  - name: e2e-requirements
+    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.16.15_3.8.7_2.4.1
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=116
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-116
+      - cd katalog/tests/istio-operator/requirements
+      - furyctl vendor -H
+      - kustomize build . | kubectl apply -f
+    when:
+      ref:
+        include:
+          - refs/heads/operator-1.9
+          - refs/heads/hotfix-*
+          - refs/tags/**
+
   - name: e2e-basic-istio
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.16.15_3.8.7_2.4.1
     pull: always
