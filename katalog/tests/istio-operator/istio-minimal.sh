@@ -7,10 +7,22 @@ load ./../helper
   deploy(){
     kubectl create ns demo
     kubectl label namespace demo istio-injection=enabled
-    kubectl apply -f katalog/tests/istio-operator/bookinfo/bookinfo.yaml -n demo
-    kubectl apply -f katalog/tests/istio-operator/bookinfo/bookinfo-gateway.yaml -n demo
-    kubectl apply -f katalog/tests/istio-operator/bookinfo/destination-rule-all.yaml -n demo
-    kubectl apply -f katalog/tests/istio-operator/bookinfo/virtual-service-all-v1.yaml -n demo
+    if [ "$(kubectl apply -f katalog/tests/istio-operator/bookinfo/bookinfo.yaml -n demo)" -ne 0 ]
+    then
+        return 1
+    fi
+    if [ "$(kubectl apply -f katalog/tests/istio-operator/bookinfo/bookinfo-gateway.yaml -n demo)" -ne 0 ]
+    then
+        return 1
+    fi
+    if [ "$(kubectl apply -f katalog/tests/istio-operator/bookinfo/destination-rule-all.yaml -n demo)" -ne 0 ]
+    then
+        return 1
+    fi
+    if [ "$(kubectl apply -f katalog/tests/istio-operator/bookinfo/virtual-service-all-v1.yaml -n demo)" -ne 0 ]
+    then
+        return 1
+    fi
   }
   wait_for_it() {
     retry_counter=0
