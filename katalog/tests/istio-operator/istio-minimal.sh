@@ -77,7 +77,7 @@ load ./../helper
         curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
         ko=$?
         sleep 3 && echo -n "# waiting..." $retry_counter >&3
-        kubectl_output=$(kubectl get po -A; kubectl get svc -A; kubectl get gateway -A)
+        kubectl_output=$(kubectl get po -A; kubectl get svc -A; kubectl get gateway -A; kubectl describe po -l app=istio-ingressgateway -n istio-system)
         echo -n "current resources are: $kubectl_output" >&3
         retry_counter=$((retry_counter + 1))
         echo -n ">>> Current response is: $output " >&3
