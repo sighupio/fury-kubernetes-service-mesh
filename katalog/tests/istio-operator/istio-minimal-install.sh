@@ -17,10 +17,10 @@ load ./../helper
   test(){
     retry_counter=0
     max_retry=30
-    while kubectl get pods -n istio-system | grep -ie "\(Pending\|Error\|CrashLoop\|ContainerCreating\|PodInitializing\|Init:\)" >&2
+    while [ "$(kubectl get istiooperator -n istio-system -o jsonpath='{.items[0].status.status}')" != "HEALTHY" ] || [ $retry_counter -ne $max_retry ] >&2
     do
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n istio-system >&2 && return 1 )
-      sleep 2 && echo "# waiting..." $retry_counter >&3
+      sleep 20 && echo "# waiting..." $retry_counter >&3
       retry_counter=$[ $retry_counter + 1 ]
     done
   }
