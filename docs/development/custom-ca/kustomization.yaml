@@ -1,0 +1,14 @@
+# Change the base path to point your vendor directory
+bases:
+  - ../vendor/katalog/service-mesh/istio-operator/profiles/minimal
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+- name: cacerts
+  files:
+  - ca-cert.pem=certs/ca-cert.pem
+  - ca-key.pem=certs/ca-key.pem
+  - root-cert.pem=certs/root-cert.pem
+  - cert-chain.pem=certs/cert-chain.pem
