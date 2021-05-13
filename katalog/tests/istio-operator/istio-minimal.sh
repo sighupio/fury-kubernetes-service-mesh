@@ -76,7 +76,9 @@ load ./../helper
         output=$(curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage )
         curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt ${INSTANCE_IP}:31380/productpage |grep -q 'color="black"'
         ko=$?
-        sleep 3 && echo "# waiting..." $retry_counter >&3
+        sleep 3 && echo -n "# waiting..." $retry_counter >&3
+        kubectl_output=$(kubectl get po -A; kubectl get svc -A; kubectl get gateway -A)
+        echo -n "current resources are: $kubectl_output" >&3
         retry_counter=$((retry_counter + 1))
         echo -n ">>> Current response is: $output " >&3
     done
