@@ -1,4 +1,4 @@
-g# For mTLS with nginx
+## For mTLS with nginx
 
 ### Ingress Controller Nginx
 
@@ -9,18 +9,18 @@ g# For mTLS with nginx
 apiVersion: "security.istio.io/v1beta1"
 kind: "PeerAuthentication"
 metadata:
-    name: "default"
+  name: "default"
 spec:
-    mtls:
-        mode: PERMISSIVE
+  mtls:
+    mode: PERMISSIVE
 ```
 
 3. put the following annotation in the Daemonset in `/spec/template`:
 
 ```yaml
 annotations:
-    traffic.sidecar.istio.io/excludeInboundPorts: 80,443
-    traffic.sidecar.istio.io/includeInboundPorts: ""
+  traffic.sidecar.istio.io/excludeInboundPorts: 80,443
+  traffic.sidecar.istio.io/includeInboundPorts: ""
 ```
 
 ### Microservice with mTLS strict
@@ -31,10 +31,10 @@ annotations:
 apiVersion: "security.istio.io/v1beta1"
 kind: "PeerAuthentication"
 metadata:
-    name: "default"
+  name: "default"
 spec:
-    mtls:
-        mode: STRICT
+  mtls:
+    mode: STRICT
 ```
 
 2. For each ingress you create for exposing your service, remember to add those 2 annotations in it:
@@ -63,29 +63,29 @@ metadata:
   namespace: test
 spec:
   gateways:
-  - hello-gateway
+    - hello-gateway
   hosts:
-  - '*'
+    - "*"
   http:
-  - match:
-    - uri:
-        exact: /productpage
-    - uri:
-        prefix: /static
-    - uri:
-        exact: /login
-    - uri:
-        exact: /logout
-    - uri:
-        prefix: /api/v1/products
-    route:
-    - destination:
-        host: productpage # => service name of your app
-        port:
-          number: 9080
+    - match:
+        - uri:
+            exact: /productpage
+        - uri:
+            prefix: /static
+        - uri:
+            exact: /login
+        - uri:
+            exact: /logout
+        - uri:
+            prefix: /api/v1/products
+      route:
+        - destination:
+            host: productpage # => service name of your app
+            port:
+              number: 9080
 ```
 
-2) create the destinationrule for your app
+2. create the destinationrule for your app
 
 ```yaml
 apiVersion: networking.istio.io/v1beta1
@@ -96,14 +96,14 @@ metadata:
 spec:
   host: productpage
   subsets:
-  - labels:
-      version: v1
-    name: v1
+    - labels:
+        version: v1
+      name: v1
 ```
-3) create an external service that point to the ingressGateway Service (that is deployed in a separate ns):
+
+3. create an external service that point to the ingressGateway Service (that is deployed in a separate ns):
 
 ```yaml
-
 kind: Service
 apiVersion: v1
 metadata:
@@ -113,7 +113,7 @@ spec:
   externalName: istio-ingressgateway.istio-system.svc.cluster.local
 ```
 
-4) fix your ingress accordingly with that:
+4. fix your ingress accordingly with that:
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -127,20 +127,18 @@ metadata:
   namespace: test
 spec:
   rules:
-  - host: productpage.sighup-staging.localdomain
-    http:
-      paths:
-      - backend:
-          service:
-            name: hello-istio-ingress # the name of the external service that we did before
-            port:
-              number: 80
-        path: /
-        pathType: Prefix
+    - host: productpage.sighup-staging.localdomain
+      http:
+        paths:
+          - backend:
+              service:
+                name: hello-istio-ingress # the name of the external service that we did before
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
 ```
 
-
 In this way this is what is going to happen:
-
 
 ![nginx-istio-flow](../docs/images/flow.png)

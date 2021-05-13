@@ -12,7 +12,7 @@ Following packages are included in Fury Kubernetes Service Mesh katalog.
 - [istio](katalog/istio): Istio provides behavioral insights and operational control over the service mesh as a whole,
 offering a complete solution to satisfy the diverse requirements of microservice applications. It needs a two phase
 installation. First run: [istio/init](katalog/istio/init) package. Once completed, you are ready to deploy
-[istio](katalog/istio) package. Version: **1.4.2**.
+[istio](katalog/istio) package. Version: **1.9.5**.
 
 
 ## Requirements
@@ -20,7 +20,7 @@ installation. First run: [istio/init](katalog/istio/init) package. Once complete
 All packages in this repository have following dependencies, for package specific dependencies please visit the
 single package's documentation:
 
-- [Kubernetes](https://kubernetes.io) >= `v1.14.0`
+- [Kubernetes](https://kubernetes.io) >= `v1.17.0`
 - [Furyctl](https://github.com/sighup-io/furyctl) package manager to install Fury packages
 - [Kustomize](https://github.com/kubernetes-sigs/kustomize) = `v3.9.1`
 
@@ -103,36 +103,6 @@ To learn how to create you customization layer with it please see the `kustomize
 [repository](https://github.com/kubernetes-sigs/kustomize).
 
 For further details please refer to the single package directories in this repository.
-
-## Examples
-
-In this repository are present some examples:
-
-- [minimal](./examples/istio/minimal/kustomization.yaml)
-   - minimal
-   - sidecar-injection
-- [minimal-and-egress](./examples/istio/minimal-and-egress/kustomization.yaml)
-   - minimal
-   - sidecar-injection/configuration/minimal-and-egress
-   - egress-gateway
-- [citadel](./examples/istio/citadel/kustomization.yaml)
-   - minimal
-   - sidecar-injection/configuration/citadel
-   - citadel
-- [sidecar-injection](./examples/istio/sidecar-injection/kustomization.yaml)
-   - minimal
-   - sidecar-injection
-   - sidecar-injection/configuration/sidecar-injection
-   - citadel
-- [full](./examples/istio/full/kustomization.yaml)
-   - minimal
-   - egress-gateway
-   - citadel
-   - sidecar-injection
-   - telemetry/service-monitor
-   - kiali
-   - sidecar-injection/configuration/sidecar-injection-and-egress
- 
 
 ## License
 
