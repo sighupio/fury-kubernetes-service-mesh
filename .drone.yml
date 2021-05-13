@@ -17,7 +17,7 @@ steps:
     settings:
       action: custom-cluster-116
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
-      instance_size: extra-large
+      instance_size: 2-extra-large
       cluster_version: "1.16.15"
       pipeline_id: cluster-116
       instance_path: /shared
@@ -187,7 +187,7 @@ steps:
     settings:
       action: custom-cluster-117
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
-      instance_size: extra-large
+      instance_size: 2-extra-large
       cluster_version: "1.17.11"
       pipeline_id: cluster-117
       instance_path: /shared
@@ -357,7 +357,7 @@ steps:
     settings:
       action: custom-cluster-118
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
-      instance_size: extra-large
+      instance_size: 2-extra-large
       cluster_version: "1.18.8"
       pipeline_id: cluster-118
       instance_path: /shared
@@ -527,7 +527,7 @@ steps:
     settings:
       action: custom-cluster-119
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
-      instance_size: extra-large
+      instance_size: 2-extra-large
       cluster_version: "1.19.4"
       pipeline_id: cluster-119
       instance_path: /shared
@@ -697,7 +697,7 @@ steps:
     settings:
       action: custom-cluster-120
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
-      instance_size: extra-large
+      instance_size: 2-extra-large
       cluster_version: "1.20.0"
       pipeline_id: cluster-120
       instance_path: /shared
