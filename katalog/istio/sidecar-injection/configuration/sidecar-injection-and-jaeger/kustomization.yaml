@@ -1,7 +1,0 @@
-namespace: istio-system
-
-resources:
-  - ../base
-
-patchesStrategicMerge:
-  - patch.yaml

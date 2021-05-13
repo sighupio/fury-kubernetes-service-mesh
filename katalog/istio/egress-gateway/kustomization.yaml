@@ -1,9 +1,0 @@
-namespace: istio-system
-
-images:
-  - name: docker.io/istio/proxyv2
-    newName: registry.sighup.io/fury/istio/proxyv2
-    newTag: "1.4.2"
-
-resources:
-  - deployment.yaml
