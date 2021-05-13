@@ -722,6 +722,7 @@ steps:
     when:
       ref:
         include:
+          - refs/heads/operator-1.9
           - refs/heads/hotfix-*
           - refs/tags/**
 
