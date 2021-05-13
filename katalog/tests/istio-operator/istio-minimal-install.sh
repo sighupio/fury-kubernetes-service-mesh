@@ -16,7 +16,7 @@ load ./../helper
   info
   test(){
     retry_counter=0
-    max_retry=30
+    max_retry=50
     while [ "$(kubectl get istiooperator -n istio-system istio -o jsonpath='{.status.status}')" != "HEALTHY" ]
     do
       describe_output=$(kubectl get istiooperator -n istio-system istio -o json)
