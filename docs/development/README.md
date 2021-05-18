@@ -20,7 +20,7 @@ Once deployed, you will be able to find some `serviceMonitor` Prometheus Operato
 
 ### Demos / Testing
 
-All of the following examples are tested in the pipeline
+All the following examples are tested in the pipeline
 
 ### e2e tests 
 
