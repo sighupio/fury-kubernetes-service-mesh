@@ -43,7 +43,9 @@ We had to deprecate those versions because of there was a very huge architectura
 For every further help regard upgrade from module version `v0.x.0` to `v1.x.x` please contact us.
 
 
-## Deployment (Istio getting started)
+## Deployment
+
+### Istio
 
 To start using Fury Kubernetes Service Mesh, you need to use
 [furyctl](https://github.com/sighup-io/furyctl/blob/master/README.md) and create a `Furyfile.yml` with the list of
@@ -80,6 +82,10 @@ $ kustomize build . | kubectl apply -f -
 ```
 
 For further details please refer to the single package directories in this repository.
+
+### Kong Mesh
+
+Refer to [./docs/kong-mesh/README.md](./docs/kong-mesh/README.md)
 
 ## License
 
