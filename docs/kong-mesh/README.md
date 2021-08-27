@@ -99,6 +99,8 @@ spec:
 
 Warning! Zone Control Plane cannot be installed in the same cluster the Global Control Plane is located in.
 
+#### Use builtin certificates
+
 ```bash
 kumactl install control-plane \  
   --license-path=secrets/license.json \
@@ -106,6 +108,29 @@ kumactl install control-plane \
   --mode=zone \
   --zone=<ZONE_NAME_1> \
   --ingress-enabled \
+  --kds-global-address=grpcs://<GLOBAL_CP_ADDRESS>:<GLOBAL_CP_PORT> > kuma-zone-1.yml
+
+kubectl apply -f kuma-zone-1.yml
+```
+
+#### Generate custom certificates for your DNS domain
+
+If you generated custom certificates in Global Control Plane, you have to create a secret with the CA:
+
+```bash
+kubectl create secret generic kds-ca-certs -n kong-mesh-system \
+  --from-file=ca.crt.pem=/tmp/ca.crt
+```
+
+Then point to the secret when installing:
+```bash
+kumactl install control-plane \  
+  --license-path=secrets/license.json \
+  --cp-token-path=/tmp/token-1 \
+  --mode=zone \
+  --zone=<ZONE_NAME_1> \
+  --ingress-enabled \
+  --tls-kds-zone-client-secret=kds-ca-certs \
   --kds-global-address=grpcs://<GLOBAL_CP_ADDRESS>:<GLOBAL_CP_PORT> > kuma-zone-1.yml
 
 kubectl apply -f kuma-zone-1.yml
