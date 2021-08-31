@@ -1,12 +1,15 @@
 # Kong Mesh
 
+The following is an imperative flow to understand the operations order.
+Have a look to the declarative example with kustomize [here](../../examples/kong-mesh/README.md).
+
 Kuma (open source Kong Mesh): https://kuma.io/docs/1.3.0/
 Kong Mesh: https://docs.konghq.com/mesh/
 
 ## Install kumactl
 ```bash
 curl -L https://docs.konghq.com/mesh/installer.sh | sh -
-cd kong-mesh-1.3.0/bin
+cd kong-mesh-1.4.0/bin
 cp kumactl /usr/local/bin/
 kumactl version
 ```
@@ -119,7 +122,7 @@ If you generated custom certificates in Global Control Plane, you have to create
 
 ```bash
 kubectl create secret generic kds-ca-certs -n kong-mesh-system \
-  --from-file=ca.crt.pem=/tmp/ca.crt
+  --from-file=ca.crt=/tmp/ca.crt
 ```
 
 Then point to the secret when installing:
