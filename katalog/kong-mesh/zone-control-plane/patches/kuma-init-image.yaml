@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong-mesh-control-plane
+  namespace: kong-mesh-system
+spec:
+  template:
+    spec:
+      containers:
+        - name: control-plane
+          env:
+            - name: KUMA_INJECTOR_INIT_CONTAINER_IMAGE
+              value: "registry.sighup.io/fury/kong/kuma-init:1.4.0"
+            - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_SIDECAR_CONTAINER_IMAGE
+              value: "registry.sighup.io/fury/kong/kuma-dp:1.4.0"

@@ -1,0 +1,53 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+  - name: docker.io/kong/kuma-cp
+    newName: registry.sighup.io/fury/kong/kuma-cp
+    newTag: 1.4.0
+  - name: docker.io/kong/kuma-dp
+    newName: registry.sighup.io/fury/kong/kuma-dp
+    newTag: 1.4.0
+
+patchesStrategicMerge:
+  - patches/kuma-init-image.yaml
+
+resources:
+  - circuitbreakers.kuma.io-crd.yaml
+  - dataplaneinsights.kuma.io-crd.yaml
+  - dataplanes.kuma.io-crd.yaml
+  - externalservices.kuma.io-crd.yaml
+  - faultinjections.kuma.io-crd.yaml
+  - healthchecks.kuma.io-crd.yaml
+  - kong-mesh-admission-mutating-webhook-configuration-mutatingwebhookconfiguration.yaml
+  - kong-mesh-control-plane-config-cm.yaml
+  - kong-mesh-control-plane-cr.yaml
+  - kong-mesh-control-plane-crb.yaml
+  - kong-mesh-control-plane-deployment.yaml
+  - kong-mesh-control-plane-kmesh-cr.yaml
+  - kong-mesh-control-plane-kmesh-crb.yaml
+  - kong-mesh-control-plane-rb.yaml
+  - kong-mesh-control-plane-role.yaml
+  - kong-mesh-control-plane-sa.yaml
+  - kong-mesh-control-plane-svc.yaml
+  - kong-mesh-ingress-deployment.yaml
+  - kong-mesh-ingress-sa.yaml
+  - kong-mesh-ingress-svc.yaml
+  - kong-mesh-system-namespace.yaml
+  - kong-mesh-tls-cert-secret.yaml
+  - kong-mesh-validating-webhook-configuration-validatingwebhookconfiguration.yaml
+  - meshes.kuma.io-crd.yaml
+  - meshinsights.kuma.io-crd.yaml
+  - opapolicies.kuma.io-crd.yaml
+  - proxytemplates.kuma.io-crd.yaml
+  - ratelimits.kuma.io-crd.yaml
+  - retries.kuma.io-crd.yaml
+  - serviceinsights.kuma.io-crd.yaml
+  - timeouts.kuma.io-crd.yaml
+  - trafficlogs.kuma.io-crd.yaml
+  - trafficpermissions.kuma.io-crd.yaml
+  - trafficroutes.kuma.io-crd.yaml
+  - traffictraces.kuma.io-crd.yaml
+  - virtualoutbounds.kuma.io-crd.yaml
+  - zoneingresses.kuma.io-crd.yaml
+  - zoneingressinsights.kuma.io-crd.yaml
+  - zoneinsights.kuma.io-crd.yaml
+  - zones.kuma.io-crd.yaml

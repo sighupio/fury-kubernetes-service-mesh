@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-mesh-global-zone-sync
+  namespace: kong-mesh-system
+  annotations:
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5685
+      name: global-zone-sync
+  selector:
+  
+    app.kubernetes.io/name: kong-mesh
+    app.kubernetes.io/instance: kong-mesh

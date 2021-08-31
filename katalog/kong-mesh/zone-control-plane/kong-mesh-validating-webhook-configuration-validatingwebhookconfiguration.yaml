@@ -1,0 +1,102 @@
+apiVersion: admissionregistration.k8s.io/v1
+
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: kong-mesh-validating-webhook-configuration
+  namespace: kong-mesh-system
+  labels:
+  
+    app.kubernetes.io/name: kong-mesh
+    app.kubernetes.io/instance: kong-mesh
+webhooks:
+  - name: validator.kuma-admission.kuma.io
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUREekNDQWZlZ0F3SUJBZ0lRUHBmZmdPc0JoQ05WRHhoMEJEN09HREFOQmdrcWhraUc5dzBCQVFzRkFEQVMKTVJBd0RnWURWUVFERXdkcmRXMWhMV05oTUI0WERUSXhNRGd6TVRFME1EYzBPRm9YRFRNeE1EZ3lPVEUwTURjMApPRm93RWpFUU1BNEdBMVVFQXhNSGEzVnRZUzFqWVRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDCkFRb0NnZ0VCQUxIajJGRUkvaUQrVEhJQnYrMkcvcTlWTE9vTDRtMVVISFA1ZjJYLzI2TmsvSW91QXJ0N2dnV1oKRWQreG0zWHhCQ3JZUjVINzF5VFRrR0RXYVl4YjhvUkZEWERDZHZ4bUFKOHVyNTViZnlkdGdSRVFlUW9VenlUaQpML09lNW9lMENjcTFCNEFvNW4zWC9aOFBMYU1JK0JKa21jbzR3NGFmeFlUaUdZM0xuWit4RjJWdTUvWkw1QnZhCnhkN0ZBL3AzKzVUUFFVN3o5V1lGTWtZWjAvOVI3Y1haZXJTRUZOZnVpemRlNGZiRldQRUhBeVlLWXh5Rmg4cTEKY2YxZFduRWFodzF3M0NBWU1GZ3NJd1VpeGJGVU8ya0JXNWNtNjlXMzEwVXdwYWdYTVRRcHc0VFFqVzFnQTl4RgpYZUxTeXRwMnQrc0FrVjRZVHFSY2ozRm9XQkJpcWlNQ0F3RUFBYU5oTUY4d0RnWURWUjBQQVFIL0JBUURBZ0trCk1CMEdBMVVkSlFRV01CUUdDQ3NHQVFVRkJ3TUJCZ2dyQmdFRkJRY0RBakFQQmdOVkhSTUJBZjhFQlRBREFRSC8KTUIwR0ExVWREZ1FXQkJUOFRubUtMUGlPNDJMT0ZVVHIrTzdudXh2Rml6QU5CZ2txaGtpRzl3MEJBUXNGQUFPQwpBUUVBUDU2Q05zZzBBaDkwOERCRGxvWU9xODIwZmpBczlCdDExbUZ6ZHBSTWJaYVB0eitQUFkvSmtlRlFzOVNyCnRTNEdFUngyNmNxSHljRmFwQy9oV1ZTN1RVYmhWUURLbkRMSFYxSlhXSnBsN3hLRHFLczBqejZyRldpWFNGZlQKaVNtTHppazh0bldkNHZ4TVkydHRKRTJJUG1QNWZLQzFVY2VDNU81aUFsYTVLSE5pWkJpM1VuNEhqRWhCcjF4MwpEellnOEhEQUUxVm5zTW1QbUtzbmlFWm1aZFVCVEk0MGdZc0p3V1gvNnhiRFVZZy93REhyaEljdHJZbzdHZjAwCndQb2FxYlVoVnQzYWRMTDNyY1pEajZnbE9wOHpqWFhEYVQxM3A5WW1QdE9GVkg5YUVucFVxb2tKQ3R1WXVjUFcKVlVIOGswdW9ybFgwYURFQjBBL2FrQUdhM1E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      service:
+        namespace: kong-mesh-system
+        name: kong-mesh-control-plane
+        path: /validate-kuma-io-v1alpha1
+    rules:
+      - apiGroups:
+          - kuma.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+          - DELETE
+        resources:
+          - circuitbreakers
+          - dataplanes
+          - externalservices
+          - faultinjections
+          - healthchecks
+          - retries
+          - meshes
+          - proxytemplates
+          - ratelimits
+          - trafficlogs
+          - trafficpermissions
+          - trafficroutes
+          - traffictraces
+          - virtualoutbounds
+          - zones
+    
+      - apiGroups:
+          - kuma.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+          - DELETE
+        resources:
+          - opapolicies
+      
+    sideEffects: None
+  - name: service.validator.kuma-admission.kuma.io
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Ignore
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUREekNDQWZlZ0F3SUJBZ0lRUHBmZmdPc0JoQ05WRHhoMEJEN09HREFOQmdrcWhraUc5dzBCQVFzRkFEQVMKTVJBd0RnWURWUVFERXdkcmRXMWhMV05oTUI0WERUSXhNRGd6TVRFME1EYzBPRm9YRFRNeE1EZ3lPVEUwTURjMApPRm93RWpFUU1BNEdBMVVFQXhNSGEzVnRZUzFqWVRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDCkFRb0NnZ0VCQUxIajJGRUkvaUQrVEhJQnYrMkcvcTlWTE9vTDRtMVVISFA1ZjJYLzI2TmsvSW91QXJ0N2dnV1oKRWQreG0zWHhCQ3JZUjVINzF5VFRrR0RXYVl4YjhvUkZEWERDZHZ4bUFKOHVyNTViZnlkdGdSRVFlUW9VenlUaQpML09lNW9lMENjcTFCNEFvNW4zWC9aOFBMYU1JK0JKa21jbzR3NGFmeFlUaUdZM0xuWit4RjJWdTUvWkw1QnZhCnhkN0ZBL3AzKzVUUFFVN3o5V1lGTWtZWjAvOVI3Y1haZXJTRUZOZnVpemRlNGZiRldQRUhBeVlLWXh5Rmg4cTEKY2YxZFduRWFodzF3M0NBWU1GZ3NJd1VpeGJGVU8ya0JXNWNtNjlXMzEwVXdwYWdYTVRRcHc0VFFqVzFnQTl4RgpYZUxTeXRwMnQrc0FrVjRZVHFSY2ozRm9XQkJpcWlNQ0F3RUFBYU5oTUY4d0RnWURWUjBQQVFIL0JBUURBZ0trCk1CMEdBMVVkSlFRV01CUUdDQ3NHQVFVRkJ3TUJCZ2dyQmdFRkJRY0RBakFQQmdOVkhSTUJBZjhFQlRBREFRSC8KTUIwR0ExVWREZ1FXQkJUOFRubUtMUGlPNDJMT0ZVVHIrTzdudXh2Rml6QU5CZ2txaGtpRzl3MEJBUXNGQUFPQwpBUUVBUDU2Q05zZzBBaDkwOERCRGxvWU9xODIwZmpBczlCdDExbUZ6ZHBSTWJaYVB0eitQUFkvSmtlRlFzOVNyCnRTNEdFUngyNmNxSHljRmFwQy9oV1ZTN1RVYmhWUURLbkRMSFYxSlhXSnBsN3hLRHFLczBqejZyRldpWFNGZlQKaVNtTHppazh0bldkNHZ4TVkydHRKRTJJUG1QNWZLQzFVY2VDNU81aUFsYTVLSE5pWkJpM1VuNEhqRWhCcjF4MwpEellnOEhEQUUxVm5zTW1QbUtzbmlFWm1aZFVCVEk0MGdZc0p3V1gvNnhiRFVZZy93REhyaEljdHJZbzdHZjAwCndQb2FxYlVoVnQzYWRMTDNyY1pEajZnbE9wOHpqWFhEYVQxM3A5WW1QdE9GVkg5YUVucFVxb2tKQ3R1WXVjUFcKVlVIOGswdW9ybFgwYURFQjBBL2FrQUdhM1E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      service:
+        namespace: kong-mesh-system
+        name: kong-mesh-control-plane
+        path: /validate-v1-service
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - services
+    sideEffects: None
+  - name: secret.validator.kuma-admission.kuma.io
+    admissionReviewVersions: ["v1beta1"]
+    namespaceSelector:
+      matchLabels:
+        kuma.io/system-namespace: "true"
+    failurePolicy: Ignore
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUREekNDQWZlZ0F3SUJBZ0lRUHBmZmdPc0JoQ05WRHhoMEJEN09HREFOQmdrcWhraUc5dzBCQVFzRkFEQVMKTVJBd0RnWURWUVFERXdkcmRXMWhMV05oTUI0WERUSXhNRGd6TVRFME1EYzBPRm9YRFRNeE1EZ3lPVEUwTURjMApPRm93RWpFUU1BNEdBMVVFQXhNSGEzVnRZUzFqWVRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDCkFRb0NnZ0VCQUxIajJGRUkvaUQrVEhJQnYrMkcvcTlWTE9vTDRtMVVISFA1ZjJYLzI2TmsvSW91QXJ0N2dnV1oKRWQreG0zWHhCQ3JZUjVINzF5VFRrR0RXYVl4YjhvUkZEWERDZHZ4bUFKOHVyNTViZnlkdGdSRVFlUW9VenlUaQpML09lNW9lMENjcTFCNEFvNW4zWC9aOFBMYU1JK0JKa21jbzR3NGFmeFlUaUdZM0xuWit4RjJWdTUvWkw1QnZhCnhkN0ZBL3AzKzVUUFFVN3o5V1lGTWtZWjAvOVI3Y1haZXJTRUZOZnVpemRlNGZiRldQRUhBeVlLWXh5Rmg4cTEKY2YxZFduRWFodzF3M0NBWU1GZ3NJd1VpeGJGVU8ya0JXNWNtNjlXMzEwVXdwYWdYTVRRcHc0VFFqVzFnQTl4RgpYZUxTeXRwMnQrc0FrVjRZVHFSY2ozRm9XQkJpcWlNQ0F3RUFBYU5oTUY4d0RnWURWUjBQQVFIL0JBUURBZ0trCk1CMEdBMVVkSlFRV01CUUdDQ3NHQVFVRkJ3TUJCZ2dyQmdFRkJRY0RBakFQQmdOVkhSTUJBZjhFQlRBREFRSC8KTUIwR0ExVWREZ1FXQkJUOFRubUtMUGlPNDJMT0ZVVHIrTzdudXh2Rml6QU5CZ2txaGtpRzl3MEJBUXNGQUFPQwpBUUVBUDU2Q05zZzBBaDkwOERCRGxvWU9xODIwZmpBczlCdDExbUZ6ZHBSTWJaYVB0eitQUFkvSmtlRlFzOVNyCnRTNEdFUngyNmNxSHljRmFwQy9oV1ZTN1RVYmhWUURLbkRMSFYxSlhXSnBsN3hLRHFLczBqejZyRldpWFNGZlQKaVNtTHppazh0bldkNHZ4TVkydHRKRTJJUG1QNWZLQzFVY2VDNU81aUFsYTVLSE5pWkJpM1VuNEhqRWhCcjF4MwpEellnOEhEQUUxVm5zTW1QbUtzbmlFWm1aZFVCVEk0MGdZc0p3V1gvNnhiRFVZZy93REhyaEljdHJZbzdHZjAwCndQb2FxYlVoVnQzYWRMTDNyY1pEajZnbE9wOHpqWFhEYVQxM3A5WW1QdE9GVkg5YUVucFVxb2tKQ3R1WXVjUFcKVlVIOGswdW9ybFgwYURFQjBBL2FrQUdhM1E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      service:
+        namespace: kong-mesh-system
+        name: kong-mesh-control-plane
+        path: /validate-v1-secret
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+          - DELETE
+        resources:
+          - secrets
+    sideEffects: None

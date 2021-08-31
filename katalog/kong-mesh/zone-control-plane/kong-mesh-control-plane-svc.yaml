@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-mesh-control-plane
+  namespace: kong-mesh-system
+  labels:
+    app.kubernetes.io/name: kong-mesh
+    app.kubernetes.io/instance: kong-mesh
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "5680"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5681
+      name: http-api-server
+    - port: 5682
+      name: https-api-server
+    - port: 443
+      name: https-admission-server
+      targetPort: 5443
+    - port: 5676
+      name: mads-server
+    - port: 5678
+      name: dp-server
+    - port: 5653
+      name: dns-server
+      protocol: UDP
+  selector:
+    app: kuma-control-plane
+    app.kubernetes.io/name: kong-mesh
+    app.kubernetes.io/instance: kong-mesh
