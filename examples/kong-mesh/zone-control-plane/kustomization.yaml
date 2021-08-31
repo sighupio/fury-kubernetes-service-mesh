@@ -1,0 +1,42 @@
+bases:
+  - ../../../katalog/kong-mesh/zone-control-plane
+  # /path/to/prometheus/operator
+
+resources:
+  # Scrape config to collect data about data planes
+  # - resources/kong-mesh-scrape-config.yml
+
+  # Use this only if you want to expose metrics to an existing Prometheus Operator
+  # - resources/service-monitor.yml
+
+patchesStrategicMerge:
+  - patches/kong-mesh-zone.yml
+  - patches/kong-mesh-license-mount.yml
+  - patches/kong-mesh-tls-cert-mount.yml
+  - patches/kong-mesh-public-ingress.yml
+  - patches/kong-mesh-metrics.yml
+
+  # Use together with service monitor and scrape config
+  # - patches/prometheus-kong-mesh-scrape.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+  - name: kong-mesh-license
+    namespace: kong-mesh-system
+    files:
+      - data=secrets/license.json
+
+  # This is equal to tls.crt if you generated the certs with kumactl
+  - name: kds-ca-certs
+    namespace: kong-mesh-system
+    files:
+      - ca.crt=secrets/ca.crt
+
+  # This can be generated from the global control plane with:
+  # kumactl generate control-plane-token --zone=<ZONE_NAME> secrets/token
+  - name: cp-token
+    namespace: kong-mesh-system
+    files:
+      - data=secrets/token

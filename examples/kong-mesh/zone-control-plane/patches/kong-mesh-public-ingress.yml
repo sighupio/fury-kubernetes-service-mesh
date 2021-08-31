@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong-mesh-ingress
+  namespace: kong-mesh-system
+spec:
+  template:
+    metadata:
+      annotations:
+        kuma.io/ingress-public-address: <NODE_IP>
+        kuma.io/ingress-public-port: <NODE_PORT>

@@ -1,0 +1,27 @@
+bases:
+  - ../../../katalog/kong-mesh/global-control-plane
+
+resources:
+  - resources/mesh-default.yml
+
+patchesStrategicMerge:
+  - patches/kong-mesh-license-mount.yml
+  - patches/kong-mesh-tls-cert-mount.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+  - name: kong-mesh-license
+    namespace: kong-mesh-system
+    files:
+      - data=secrets/license.json
+
+  # The following certificates can be generated with 
+  # kumactl generate tls-certificate --type=server --cp-hostname=<CROSS_ZONE_KUMA_CP_DNS_NAME> --cert-file=secrets/tls.crt --key-file=secrets/tls.key
+  - name: kds-server-tls
+    namespace: kong-mesh-system
+    type: tls
+    files:
+      - cert=secrets/tls.crt
+      - key=secrets/tls.key

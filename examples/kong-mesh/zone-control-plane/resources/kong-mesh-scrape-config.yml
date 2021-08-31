@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kuma-scrape-config
+  namespace: monitoring
+stringData:
+  additional-scrape-configs.yml: |
+    - job_name: 'kuma-dataplanes'
+      scrape_interval: "5s"
+      relabel_configs:
+      - source_labels:
+        - k8s_kuma_io_name
+        regex: "(.*)"
+        target_label: pod
+      - source_labels:
+        - k8s_kuma_io_namespace
+        regex: "(.*)"
+        target_label: namespace
+      file_sd_configs:
+      - files:
+        - /etc/prometheus/config_out/kuma.file_sd.json

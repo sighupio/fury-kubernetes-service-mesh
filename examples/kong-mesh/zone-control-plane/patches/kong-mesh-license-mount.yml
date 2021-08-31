@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong-mesh-control-plane
+  namespace: kong-mesh-system
+spec:
+  template:
+    spec:
+      containers:
+        - name: control-plane
+          env:
+            - name: KMESH_LICENSE_INLINE
+              valueFrom:
+                secretKeyRef:
+                  name: kong-mesh-license
+                  key: data
