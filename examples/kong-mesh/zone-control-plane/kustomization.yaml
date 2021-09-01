@@ -1,8 +1,11 @@
-bases:
-  - ../../../katalog/kong-mesh/zone-control-plane
-  # /path/to/prometheus/operator
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
 
 resources:
+  - ../../../katalog/kong-mesh/global-control-plane
+  - resources/mesh-default.yml
+  # /path/to/prometheus/operator
+
   # Scrape config to collect data about data planes
   # - resources/kong-mesh-scrape-config.yml
 
