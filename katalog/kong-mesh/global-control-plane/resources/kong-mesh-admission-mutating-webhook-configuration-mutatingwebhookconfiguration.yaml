@@ -1,0 +1,87 @@
+apiVersion: admissionregistration.k8s.io/v1
+
+kind: MutatingWebhookConfiguration
+metadata:
+  name: kong-mesh-admission-mutating-webhook-configuration
+  namespace: kong-mesh-system
+  labels:
+  
+    app.kubernetes.io/name: kong-mesh
+    app.kubernetes.io/instance: kong-mesh
+webhooks:
+  - name: mesh.defaulter.kuma-admission.kuma.io
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        namespace: kong-mesh-system
+        name: kong-mesh-control-plane
+        path: /default-kuma-io-v1alpha1-mesh
+    rules:
+      - apiGroups:
+          - kuma.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - meshes
+    sideEffects: None
+  - name: owner-reference.kuma-admission.kuma.io
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        namespace: kong-mesh-system
+        name: kong-mesh-control-plane
+        path: /owner-reference-kuma-io-v1alpha1
+    rules:
+      - apiGroups:
+          - kuma.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - circuitbreakers
+          - externalservices
+          - faultinjections
+          - healthchecks
+          - retries
+          - proxytemplates
+          - ratelimits
+          - trafficlogs
+          - trafficpermissions
+          - trafficroutes
+          - traffictraces
+          - virtualoutbounds
+    
+      - apiGroups:
+          - kuma.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - opapolicies
+      
+    sideEffects: None
+  - name: kuma-injector.kuma.io
+    admissionReviewVersions: ["v1beta1"]
+    failurePolicy: Ignore
+    clientConfig:
+      service:
+        namespace: kong-mesh-system
+        name: kong-mesh-control-plane
+        path: /inject-sidecar
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+        resources:
+          - pods
+    sideEffects: None

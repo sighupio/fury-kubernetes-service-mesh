@@ -8,6 +8,42 @@ Install `kumactl` on your local system to better interact with the system.
 
 Ref: https://docs.konghq.com/mesh/1.4.x/install/
 
+### (Mandatory) Use custom CA
+
+1. Generate certificates for internal communication
+
+```bash
+kumactl generate tls-certificate --type=server \
+  --cp-hostname=kong-mesh-control-plane.kong-mesh-system \
+  --cp-hostname=kong-mesh-control-plane.kong-mesh-system.svc \
+  --cert-file=secrets/internal.crt \
+  --key-file=secrets/internal.key
+
+```
+
+2. Generate certificates for external communication
+
+```bash
+kumactl generate tls-certificate --type=server \
+  --cp-hostname=<CROSS_ZONE_KUMA_CP_DNS_NAME> \
+  --cert-file=secrets/tls.crt \
+  --key-file=secrets/tls.key
+```
+
+3. Add secretGenerator for certs, like in `kustomization.yaml`
+
+4. Encode the caBundle in base 64 and paste it in `patches/kong-mesh-ca-bundle.yml`
+
+For example:
+```bash
+# cert = ca for self-signed certificates
+cat secrets/internal.crt | base64
+```
+
+4. Add the following patches to your manifests
+- `patches/kong-mesh-tls-cert-mount.yml` 
+- `patches/kong-mesh-ca-bundle.yml` 
+
 ### (Optional) Mount license on control plane
 
 > If you're not using a license, you will deploy Kuma, the open source version of Kong Mesh.
@@ -17,20 +53,6 @@ Ref: https://docs.konghq.com/mesh/1.4.x/install/
 2. Add a secretGenerator for license, like in `kustomization.yaml`
 
 3. Add `patches/kong-mesh-license-mount.yml` to your manifests
-
-### (Optional) Use custom CA
-
-> If you do not specify, Kong Mesh uses its builtin CA to generate certificates
-
-1. Generate certificates
-
-```bash
-kumactl generate tls-certificate --type=server --cp-hostname=<CROSS_ZONE_KUMA_CP_DNS_NAME> --cert-file=secrets/tls.crt --key-file=secrets/tls.key
-```
-
-2. Add a secretGenerator for certs, like in `kustomization.yaml`
-
-3. Add `patches/kong-mesh-tls-cert-mount.yml` to your manifests
 
 ## Zone Control Plane
 
@@ -58,13 +80,34 @@ kumactl generate control-plane-token --zone=<ZONE_NAME> secrets/token
 
 1. Fill the corresponding fields in `patches/kong-mesh-zone.yml`
 
-### (Optional) Use custom CA
+### (Mandatory) Use custom CA
 
 1. Copy `tls.crt` from global control plane to `secrets/ca.crt`.
 
-2. Add a secretGenerator for ca, like in `kustomization.yaml`
+2. Generate a new certificate for internal communication
 
-3. Mount the secret to Zone CP, like in `patches/kong-mesh-secrets-mount.yml`
+```bash
+kumactl generate tls-certificate --type=server \
+  --cp-hostname=kong-mesh-control-plane.kong-mesh-system \
+  --cp-hostname=kong-mesh-control-plane.kong-mesh-system.svc \
+  --cert-file=secrets/internal.crt \
+  --key-file=secrets/internal.key
+
+```
+
+3. Add a secretGenerator for certs, like in `kustomization.yaml`
+
+4. Encode the caBundle in base 64 and paste it in `patches/kong-mesh-ca-bundle.yml`
+
+For example:
+```bash
+# cert = ca for self-signed certificates
+cat secrets/internal.crt | base64
+```
+
+5. Add the following patches to your manifests
+- `patches/kong-mesh-secrets-mount.yml` 
+- `patches/kong-mesh-ca-bundle.yml` 
 
 ### (Optional) Expose metrics for Prometheus Operator
 
@@ -75,7 +118,7 @@ Add the following files to your manifests:
 - `patches/prometheus-kong-mesh-scrape.yml`
 - `resource/service-monitor.yml`
 
-### Add dashboards to Grafana
+### (Optional) Add dashboards to Grafana
 
 Add the following resources as configMaps, like in `kustomization.yaml`:
 

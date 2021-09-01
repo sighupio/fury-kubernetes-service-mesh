@@ -34,6 +34,15 @@ secretGenerator:
     files:
       - ca.crt=secrets/ca.crt
 
+  # The following certificates can be generated with
+  # kumactl generate tls-certificate --type=server --cp-hostname=kong-mesh-control-plane.kong-mesh-system --cp-hostname=kong-mesh-control-plane.kong-mesh-system.svc --cert-file=secrets/internal.crt --key-file=secrets/internal.key
+  - name: kong-mesh-tls-cert
+    namespace: kong-mesh-system
+    files:
+      - tls.crt=secrets/internal.crt
+      - tls.key=secrets/internal.key
+      - ca.crt=secrets/internal.crt
+
   # This can be generated from the global control plane with:
   # kumactl generate control-plane-token --zone=<ZONE_NAME> secrets/token
   - name: cp-token
