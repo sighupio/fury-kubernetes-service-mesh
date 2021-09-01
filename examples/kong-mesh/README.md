@@ -75,6 +75,17 @@ Add the following files to your manifests:
 - `patches/prometheus-kong-mesh-scrape.yml`
 - `resource/service-monitor.yml`
 
+### Add dashboards to Grafana
+
+Add the following resources as configMaps, like in `kustomization.yaml`:
+
+- `resources/dashboards/kmesh-controlplane.json`
+- `resources/dashboards/kmesh-dataplane.json`
+- `resources/dashboards/kmesh-mesh.json`
+- `resources/dashboards/kmesh-service-to-service.json`
+
+Remember to label all of them with `grafana-sighup-dashboard: kong-mesh`
+
 ## Demo application
 
 Follow this: https://kuma.io/docs/1.3.0/quickstart/kubernetes/#_1-run-the-marketplace-application

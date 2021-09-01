@@ -40,3 +40,33 @@ secretGenerator:
     namespace: kong-mesh-system
     files:
       - data=secrets/token
+
+configMapGenerator:
+  - name: kong-mesh-cp-dashboard
+    namespace: kong-mesh-system
+    files:
+      - resources/dashboards/kmesh-controlplane.json
+    options:
+      labels:
+        grafana-sighup-dashboard: kong-mesh
+  - name: kong-mesh-dp-dashboard
+    namespace: kong-mesh-system
+    files:
+      - resources/dashboards/kmesh-dataplane.json
+    options:
+      labels:
+        grafana-sighup-dashboard: kong-mesh
+  - name: kong-mesh-mesh-dashboard
+    namespace: kong-mesh-system
+    files:
+      - resources/dashboards/kmesh-mesh.json
+    options:
+      labels:
+        grafana-sighup-dashboard: kong-mesh
+  - name: kong-mesh-service-dashboard
+    namespace: kong-mesh-system
+    files:
+      - resources/dashboards/kmesh-service-to-service.json
+    options:
+      labels:
+        grafana-sighup-dashboard: kong-mesh
