@@ -4,26 +4,23 @@ This repository contains all needed components to deploy service meshes. We star
 [istio](https://istio.io/) into this module. [istio](https://istio.io/) addresses the challenges developers and
 operators face as monolithic applications transition towards a distributed microservice architecture.
 
-
 ## Service Mesh Packages
 
 Following packages are included in Fury Kubernetes Service Mesh katalog.
 
-- [istio](katalog/istio): Istio provides behavioral insights and operational control over the service mesh as a whole,
-offering a complete solution to satisfy the diverse requirements of microservice applications. It needs a two phase
-installation. First run: [istio/init](katalog/istio/init) package. Once completed, you are ready to deploy
-[istio](katalog/istio) package. Version: **1.9.5**.
-
+-   [istio](katalog/istio): Istio provides behavioral insights and operational control over the service mesh as a whole,
+    offering a complete solution to satisfy the diverse requirements of microservice applications. It needs a two phase
+    installation. First run: [istio/init](katalog/istio/init) package. Once completed, you are ready to deploy
+    [istio](katalog/istio) package. Version: **1.9.5**.
 
 ## Requirements
 
 All packages in this repository have following dependencies, for package specific dependencies please visit the
 single package's documentation:
 
-- [Kubernetes](https://kubernetes.io) >= `v1.17.0`
-- [Furyctl](https://github.com/sighup-io/furyctl) package manager to install Fury packages
-- [Kustomize](https://github.com/kubernetes-sigs/kustomize) = `v3.9.1`
-
+-   [Kubernetes](https://kubernetes.io) >= `v1.17.0`
+-   [Furyctl](https://github.com/sighup-io/furyctl) package manager to install Fury packages
+-   [Kustomize](https://github.com/kubernetes-sigs/kustomize) = `v3.9.1`
 
 ## Compatibility
 
@@ -33,15 +30,15 @@ single package's documentation:
 | v0.2.0                              | :exclamation: | :exclamation: | :exclamation: |
 | v1.0.0                              |               |               |               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |        |
 
-- :white_check_mark: Compatible
-- :warning: Has issues
-- :x: Incompatible
-- :exclamation: Deprecated
+-   :white_check_mark: Compatible
+-   :warning: Has issues
+-   :x: Incompatible
+-   :exclamation: Deprecated
 
-###  Deprecation Note
-We had to deprecate those versions because of there was a very huge architectural change from istio 1.4 to 1.5. 
+### Deprecation Note
+
+We had to deprecate those versions because of there was a very huge architectural change from istio 1.4 to 1.5.
 For every further help regard upgrade from module version `v0.x.0` to `v1.x.x` please contact us.
-
 
 ## Deployment (Istio getting started)
 
@@ -51,8 +48,8 @@ all the packages that you want to download.
 
 ```yaml
 bases:
-  - name: service-mesh/istio
-    version: v1.0.0
+    - name: service-mesh/istio
+      version: v1.0.0
 ```
 
 and execute
@@ -71,15 +68,33 @@ following content:
 
 ```yaml
 bases:
-  - ./vendor/katalog/service-mesh/istio-operator/profiles/minimal
+    - ./vendor/katalog/service-mesh/istio-operator/profiles/minimal
 ```
 
 and execute
+
 ```shell
 $ kustomize build . | kubectl apply -f -
 ```
 
 For further details please refer to the single package directories in this repository.
+
+## CHANGELOG
+
+You can use the [Makefile](./Makefile) as follow:
+
+```bash
+make update-CHANGELOG 
+```
+
+without parameters and it will list the commits that contain the words listed in the [config](.chglog/config.yml) file as `unreleased`
+
+
+```bash
+make update-CHANGELOG next-rel=v1.0.1
+```
+
+with the `next-rel` parameter, will list the commits that contain the words listed in the [config](.chglog/config.yml) file as `v1.0.1`.
 
 ## License
 
