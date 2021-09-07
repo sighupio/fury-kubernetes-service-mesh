@@ -7,6 +7,9 @@
 ### Bug Fixes
 - duplicated serviceAccount Due to the serviceAccount already created by the Jaeger Operator, I've removed the manual created serviceAccount in order to avoid duplicated metric entries in Prometheus
 
+### Code Refactoring
+- improved Makefile and updated CHANGELOG
+
 ### Features
 - added git-chglog Created Makefile with git-chglog that can have a `next-rel` parameter for passing the release of the tag you want add
 
