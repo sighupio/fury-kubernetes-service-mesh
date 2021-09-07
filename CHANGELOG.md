@@ -4,6 +4,9 @@
 
 <a name="unreleased"></a>
 ## [unreleased] - 2021-09-07
+### Bug Fixes
+- duplicated serviceAccount Due to the serviceAccount already created by the Jaeger Operator, I've removed the manual created serviceAccount in order to avoid duplicated metric entries in Prometheus
+
 ### Features
 - added git-chglog Created Makefile with git-chglog that can have a `next-rel` parameter for passing the release of the tag you want add
 
