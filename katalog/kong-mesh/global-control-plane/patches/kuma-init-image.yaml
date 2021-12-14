@@ -10,6 +10,6 @@ spec:
         - name: control-plane
           env:
             - name: KUMA_INJECTOR_INIT_CONTAINER_IMAGE
-              value: "registry.sighup.io/fury/kong/kuma-init:1.4.0"
+              value: "registry.sighup.io/fury/kong/kuma-init:1.4.1"
             - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_SIDECAR_CONTAINER_IMAGE
-              value: "registry.sighup.io/fury/kong/kuma-dp:1.4.0"
+              value: "registry.sighup.io/fury/kong/kuma-dp:1.4.1"

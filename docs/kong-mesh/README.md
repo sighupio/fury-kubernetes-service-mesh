@@ -8,8 +8,10 @@ Kong Mesh: https://docs.konghq.com/mesh/
 
 ## Install kumactl
 ```bash
+# If you do not set version, the latest will be downloaded
+export VERSION=1.4.1
 curl -L https://docs.konghq.com/mesh/installer.sh | sh -
-cd kong-mesh-1.4.0/bin
+cd kong-mesh-1.4.1/bin
 cp kumactl /usr/local/bin/
 kumactl version
 ```

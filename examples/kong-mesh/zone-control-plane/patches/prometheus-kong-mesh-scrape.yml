@@ -9,7 +9,7 @@ spec:
     name: kuma-scrape-config
   containers:
     - name: kuma-prometheus-sd
-      image: registry.sighup.io/fury/kong/kuma-prometheus-sd:1.4.0
+      image: registry.sighup.io/fury/kong/kuma-prometheus-sd:1.4.1
       imagePullPolicy: IfNotPresent
       args:
         - run

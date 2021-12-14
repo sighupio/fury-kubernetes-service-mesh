@@ -35,7 +35,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: control-plane
-          image: "docker.io/kong/kuma-cp:1.4.0"
+          image: "docker.io/kong/kuma-cp:1.4.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: KUMA_API_SERVER_READ_ONLY
@@ -51,7 +51,7 @@ spec:
             - name: KUMA_GENERAL_TLS_KEY_FILE
               value: "/var/run/secrets/kuma.io/tls-cert/tls.key"
             - name: KUMA_INJECTOR_INIT_CONTAINER_IMAGE
-              value: "docker.io/kong/kuma-init:1.4.0"
+              value: "docker.io/kong/kuma-init:1.4.1"
             - name: KUMA_MODE
               value: "zone"
             - name: KUMA_MULTIZONE_ZONE_GLOBAL_ADDRESS
@@ -69,7 +69,7 @@ spec:
             - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_CNI_ENABLED
               value: "false"
             - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_SIDECAR_CONTAINER_IMAGE
-              value: "docker.io/kong/kuma-dp:1.4.0"
+              value: "docker.io/kong/kuma-dp:1.4.1"
             - name: KUMA_STORE_KUBERNETES_SYSTEM_NAMESPACE
               value: "kong-mesh-system"
             - name: KUMA_STORE_TYPE
