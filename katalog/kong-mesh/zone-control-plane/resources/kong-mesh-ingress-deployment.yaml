@@ -27,6 +27,18 @@ spec:
         app.kubernetes.io/instance: kong-mesh
         app: kuma-ingress
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - kuma-ingress
+              topologyKey: kubernetes.io/hostname
       serviceAccountName: kong-mesh-ingress
       nodeSelector:
       
@@ -34,7 +46,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: ingress
-          image: "docker.io/kong/kuma-dp:1.4.1"
+          image: "docker.io/kong/kuma-dp:1.5.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: POD_NAME

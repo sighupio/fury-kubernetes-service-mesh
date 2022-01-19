@@ -3,7 +3,7 @@ kind: Kustomization
 images:
   - name: docker.io/kong/kuma-cp
     newName: registry.sighup.io/fury/kong/kuma-cp
-    newTag: 1.4.1
+    newTag: 1.5.1
 
 patchesStrategicMerge:
   - patches/kuma-init-image.yaml
