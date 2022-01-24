@@ -12,6 +12,8 @@ patchesStrategicMerge:
   - patches/kuma-init-image.yaml
 
 resources:
+  - resources/accessrolebindings.kuma.io-crd.yaml
+  - resources/accessroles.kuma.io-crd.yaml
   - resources/circuitbreakers.kuma.io-crd.yaml
   - resources/dataplaneinsights.kuma.io-crd.yaml
   - resources/dataplanes.kuma.io-crd.yaml
