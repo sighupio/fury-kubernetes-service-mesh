@@ -8,6 +8,22 @@ images:
 patchesStrategicMerge:
   - patches/kuma-init-image.yaml
 
+patchesJson6902:
+- path: patches/kong-mesh-admission-webhook-cainjector.yaml
+  target:
+    group: admissionregistration.k8s.io
+    version: v1
+    kind: MutatingWebhookConfiguration
+    name: kong-mesh-admission-mutating-webhook-configuration
+    namespace: kong-mesh-system
+- path: patches/kong-mesh-admission-webhook-cainjector.yaml
+  target:
+    group: admissionregistration.k8s.io
+    version: v1
+    kind: ValidatingWebhookConfiguration
+    name: kong-mesh-validating-webhook-configuration
+    namespace: kong-mesh-system
+
 resources:
   - resources/circuitbreakers.kuma.io-crd.yaml
   - resources/dataplaneinsights.kuma.io-crd.yaml

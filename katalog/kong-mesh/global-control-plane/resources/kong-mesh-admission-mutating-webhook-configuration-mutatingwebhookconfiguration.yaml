@@ -4,7 +4,6 @@ metadata:
   name: kong-mesh-admission-mutating-webhook-configuration
   namespace: kong-mesh-system
   labels:
-  
     app.kubernetes.io/name: kong-mesh
     app.kubernetes.io/instance: kong-mesh
 webhooks:
@@ -55,7 +54,6 @@ webhooks:
           - trafficroutes
           - traffictraces
           - virtualoutbounds
-    
       - apiGroups:
           - kuma.io
         apiVersions:
@@ -64,7 +62,6 @@ webhooks:
           - CREATE
         resources:
           - opapolicies
-      
     sideEffects: None
   - name: namespace-kuma-injector.kuma.io
     admissionReviewVersions: ["v1"]
@@ -110,7 +107,7 @@ webhooks:
     sideEffects: None
   - name: kuma-injector.kuma.io
     admissionReviewVersions: ["v1"]
-    failurePolicy: Ignore 
+    failurePolicy: Ignore
     clientConfig:
       service:
         namespace: kong-mesh-system

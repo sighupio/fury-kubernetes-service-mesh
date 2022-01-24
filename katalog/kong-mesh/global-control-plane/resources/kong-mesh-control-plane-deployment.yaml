@@ -42,7 +42,6 @@ spec:
               topologyKey: kubernetes.io/hostname
       serviceAccountName: kong-mesh-control-plane
       nodeSelector:
-        
         kubernetes.io/arch: amd64
         kubernetes.io/os: linux
       containers:

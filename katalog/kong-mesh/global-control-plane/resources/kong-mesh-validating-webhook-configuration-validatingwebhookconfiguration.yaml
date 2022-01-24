@@ -4,7 +4,6 @@ metadata:
   name: kong-mesh-validating-webhook-configuration
   namespace: kong-mesh-system
   labels:
-  
     app.kubernetes.io/name: kong-mesh
     app.kubernetes.io/instance: kong-mesh
 webhooks:
@@ -41,7 +40,6 @@ webhooks:
           - traffictraces
           - virtualoutbounds
           - zones
-    
       - apiGroups:
           - kuma.io
         apiVersions:
@@ -52,7 +50,6 @@ webhooks:
           - DELETE
         resources:
           - opapolicies
-      
     sideEffects: None
   - name: service.validator.kuma-admission.kuma.io
     admissionReviewVersions: ["v1"]
