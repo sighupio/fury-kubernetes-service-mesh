@@ -1,0 +1,6 @@
+# Source: istio-operator/templates/service_account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: istio-operator
+  name: istio-operator

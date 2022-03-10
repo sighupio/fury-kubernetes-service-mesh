@@ -1,0 +1,16 @@
+# Source: istio-operator/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: istio-operator
+  labels:
+    name: istio-operator
+  name: istio-operator
+spec:
+  ports:
+  - name: http-metrics
+    port: 8383
+    targetPort: 8383
+    protocol: TCP
+  selector:
+    name: istio-operator
