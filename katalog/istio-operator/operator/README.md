@@ -1,5 +1,9 @@
 ## Istio operator
 
+Requirements:
+
+- [kubernetes-split-yaml](https://github.com/mogensen/kubernetes-split-yaml)
+
 The current manifests were generated using:
 ```bash
 wget https://raw.githubusercontent.com/istio/istio/1.9.5/manifests/charts/istio-operator/crds/crd-operator.yaml
