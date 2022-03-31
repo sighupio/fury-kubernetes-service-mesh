@@ -1,3 +1,4 @@
+# From: https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.22.1/deploy/cluster_role.yaml
 ## When using the operator in cluster-wide mode, this ClusterRole has to be created and bound to the jaeger-operator service account,
 ## so that the operator can watch and create resources in every namespace in the cluster.
 ## An alternative to this cluster role is to create one role binding for each namespace that the operator should watch
