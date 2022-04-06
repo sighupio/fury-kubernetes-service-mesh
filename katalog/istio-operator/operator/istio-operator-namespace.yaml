@@ -1,4 +1,5 @@
 ---
+# From: https://raw.githubusercontent.com/istio/istio/1.9.5/manifests/charts/istio-operator/files/gen-operator.yaml
 # Source: istio-operator/templates/namespace.yaml
 apiVersion: v1
 kind: Namespace
