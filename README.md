@@ -79,23 +79,6 @@ $ kustomize build . | kubectl apply -f -
 
 For further details please refer to the single package directories in this repository.
 
-## CHANGELOG
-
-You can use the [Makefile](./Makefile) as follow:
-
-```bash
-make update-CHANGELOG 
-```
-
-without parameters and it will list the commits that contain the words listed in the [config](.chglog/config.yml) file as `unreleased`
-
-
-```bash
-make update-CHANGELOG next-rel=v1.0.1
-```
-
-with the `next-rel` parameter, will list the commits that contain the words listed in the [config](.chglog/config.yml) file as `v1.0.1`.
-
 ## License
 
 For license details please see [LICENSE](LICENSE)
