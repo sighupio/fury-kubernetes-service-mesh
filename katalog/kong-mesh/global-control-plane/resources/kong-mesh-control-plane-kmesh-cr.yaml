@@ -10,6 +10,8 @@ rules:
       - kuma.io
     resources:
       - opapolicies
+      - accessroles
+      - accessrolebindings
     verbs:
       - get
       - list

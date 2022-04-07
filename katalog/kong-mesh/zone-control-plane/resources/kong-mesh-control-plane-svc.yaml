@@ -27,6 +27,6 @@ spec:
       name: dns-server
       protocol: UDP
   selector:
-    app: kuma-control-plane
+    app: kong-mesh-control-plane
     app.kubernetes.io/name: kong-mesh
     app.kubernetes.io/instance: kong-mesh

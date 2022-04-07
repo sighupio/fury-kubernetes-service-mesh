@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: kong-mesh
     app.kubernetes.io/instance: kong-mesh
-    app: kuma-control-plane
+    app: kong-mesh-control-plane
 spec:
   replicas: 1
   strategy:
@@ -17,29 +17,42 @@ spec:
     matchLabels:
       app.kubernetes.io/name: kong-mesh
       app.kubernetes.io/instance: kong-mesh
-      app: kuma-control-plane
+      app: kong-mesh-control-plane
   template:
     metadata:
       annotations:
-        checksum/config: a8c332b04d709a1da917eecc6f00a096d73871531d325d8728bb16c7f86c99f1
-        checksum/tls-secrets: de65d0619b22fc2e1d19a5012d918e2e6d8ab71cef102386f8dd53da3e9953e8
+        checksum/config: 669fd7d355256611cd099f465c305179f7960a1234fa819da6116a4a6f735f24
+        checksum/tls-secrets: 7f2d9e840083632d9d6a955074b46caa1af4d22ac84618ef2d7c44ea7570fe36
       labels:
         app.kubernetes.io/name: kong-mesh
         app.kubernetes.io/instance: kong-mesh
-        app: kuma-control-plane
+        app: kong-mesh-control-plane
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - kong-mesh-control-plane
+              topologyKey: kubernetes.io/hostname
       serviceAccountName: kong-mesh-control-plane
       nodeSelector:
-        
         kubernetes.io/arch: amd64
         kubernetes.io/os: linux
       containers:
         - name: control-plane
-          image: "docker.io/kong/kuma-cp:1.4.1"
+          image: "docker.io/kong/kuma-cp:1.5.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: KMESH_MULTIZONE_GLOBAL_KDS_AUTH_TYPE
               value: "cpToken"
+            - name: KUMA_API_SERVER_AUTHN_LOCALHOST_IS_ADMIN
+              value: "false"
             - name: KUMA_API_SERVER_READ_ONLY
               value: "true"
             - name: KUMA_DEFAULTS_SKIP_MESH_CREATION
@@ -53,7 +66,7 @@ spec:
             - name: KUMA_GENERAL_TLS_KEY_FILE
               value: "/var/run/secrets/kuma.io/tls-cert/tls.key"
             - name: KUMA_INJECTOR_INIT_CONTAINER_IMAGE
-              value: "docker.io/kong/kuma-init:1.4.1"
+              value: "docker.io/kong/kuma-init:1.5.1"
             - name: KUMA_MODE
               value: "global"
             - name: KUMA_RUNTIME_KUBERNETES_ADMISSION_SERVER_CERT_DIR
@@ -67,11 +80,17 @@ spec:
             - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_CNI_ENABLED
               value: "false"
             - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_SIDECAR_CONTAINER_IMAGE
-              value: "docker.io/kong/kuma-dp:1.4.1"
+              value: "docker.io/kong/kuma-dp:1.5.1"
+            - name: KUMA_RUNTIME_KUBERNETES_SERVICE_ACCOUNT_NAME
+              value: "system:serviceaccount:kong-mesh-system:kong-mesh-control-plane"
             - name: KUMA_STORE_KUBERNETES_SYSTEM_NAMESPACE
               value: "kong-mesh-system"
             - name: KUMA_STORE_TYPE
               value: "kubernetes"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           args:
             - run
             - --log-level=info

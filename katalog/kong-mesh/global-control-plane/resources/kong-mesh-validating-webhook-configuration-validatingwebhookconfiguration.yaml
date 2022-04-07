@@ -1,16 +1,14 @@
 apiVersion: admissionregistration.k8s.io/v1
-
 kind: ValidatingWebhookConfiguration
 metadata:
   name: kong-mesh-validating-webhook-configuration
   namespace: kong-mesh-system
   labels:
-  
     app.kubernetes.io/name: kong-mesh
     app.kubernetes.io/instance: kong-mesh
 webhooks:
   - name: validator.kuma-admission.kuma.io
-    admissionReviewVersions: ["v1beta1"]
+    admissionReviewVersions: ["v1"]
     failurePolicy: Fail
     clientConfig:
       service:
@@ -42,7 +40,6 @@ webhooks:
           - traffictraces
           - virtualoutbounds
           - zones
-    
       - apiGroups:
           - kuma.io
         apiVersions:
@@ -53,10 +50,9 @@ webhooks:
           - DELETE
         resources:
           - opapolicies
-      
     sideEffects: None
   - name: service.validator.kuma-admission.kuma.io
-    admissionReviewVersions: ["v1beta1"]
+    admissionReviewVersions: ["v1"]
     failurePolicy: Ignore
     clientConfig:
       service:
@@ -75,7 +71,7 @@ webhooks:
           - services
     sideEffects: None
   - name: secret.validator.kuma-admission.kuma.io
-    admissionReviewVersions: ["v1beta1"]
+    admissionReviewVersions: ["v1"]
     namespaceSelector:
       matchLabels:
         kuma.io/system-namespace: "true"
