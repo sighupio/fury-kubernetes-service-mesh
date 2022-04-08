@@ -1,0 +1,57 @@
+# From: https://raw.githubusercontent.com/istio/istio/1.9.5/manifests/charts/istio-operator/files/gen-operator.yaml
+# Source: istio-operator/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: istio-operator
+  name: istio-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: istio-operator
+  template:
+    metadata:
+      labels:
+        name: istio-operator
+    spec:
+      serviceAccountName: istio-operator
+      containers:
+        - name: istio-operator
+          image: gcr.io/istio-testing/operator:1.9-dev
+          command:
+          - operator
+          - server
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1337
+            runAsUser: 1337
+            runAsNonRoot: true
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          env:
+            - name: WATCH_NAMESPACE
+              value: "istio-system"
+            - name: LEADER_ELECTION_NAMESPACE
+              value: "istio-operator"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "istio-operator"
+            - name: WAIT_FOR_RESOURCES_TIMEOUT
+              value: "300s"
+            - name: REVISION
+              value: ""

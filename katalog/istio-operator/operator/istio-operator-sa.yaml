@@ -1,0 +1,7 @@
+# From: https://raw.githubusercontent.com/istio/istio/1.9.5/manifests/charts/istio-operator/files/gen-operator.yaml
+# Source: istio-operator/templates/service_account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: istio-operator
+  name: istio-operator

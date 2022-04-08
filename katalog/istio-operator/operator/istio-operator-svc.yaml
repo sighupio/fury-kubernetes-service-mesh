@@ -1,0 +1,17 @@
+# From: https://raw.githubusercontent.com/istio/istio/1.9.5/manifests/charts/istio-operator/files/gen-operator.yaml
+# Source: istio-operator/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: istio-operator
+  labels:
+    name: istio-operator
+  name: istio-operator
+spec:
+  ports:
+  - name: http-metrics
+    port: 8383
+    targetPort: 8383
+    protocol: TCP
+  selector:
+    name: istio-operator
