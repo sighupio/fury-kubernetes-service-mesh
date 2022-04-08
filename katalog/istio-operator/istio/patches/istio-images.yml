@@ -1,0 +1,9 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istio
+spec:
+  # This targets all images used by the operator: currently pilot and proxyv2
+  hub: registry.sighup.io/fury/istio
+  tag: 1.9.5

@@ -10,3 +10,8 @@ resources:
   - istio-operator-namespace.yaml
   - istio-operator-sa.yaml
   - istio-operator-svc.yaml
+
+images:
+  - name: gcr.io/istio-testing/operator
+    newName: registry.sighup.io/fury/istio/operator
+    newTag: 1.9.5
