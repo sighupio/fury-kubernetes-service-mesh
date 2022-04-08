@@ -6,4 +6,3 @@ metadata:
 spec:
   # This targets all images used by the operator: currently pilot and proxyv2
   hub: registry.sighup.io/fury/istio
-  tag: 1.9.5
