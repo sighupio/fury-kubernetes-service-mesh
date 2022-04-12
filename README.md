@@ -29,6 +29,7 @@ single package's documentation:
 | v0.1.0                              |               |               |               |
 | v0.2.0                              | :exclamation: | :exclamation: | :exclamation: |
 | v1.0.0                              |               |               |               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |        |
+| v1.0.1                              |               |               |               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |        |
 
 -   :white_check_mark: Compatible
 -   :warning: Has issues
@@ -49,7 +50,7 @@ all the packages that you want to download.
 ```yaml
 bases:
     - name: service-mesh/istio
-      version: v1.0.0
+      version: v1.0.1
 ```
 
 and execute
