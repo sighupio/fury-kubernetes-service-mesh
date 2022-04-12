@@ -32,6 +32,7 @@ single package's documentation:
 | v0.1.0                              |               |               |               |
 | v0.2.0                              | :exclamation: | :exclamation: | :exclamation: |
 | v1.0.0                              |               |               |               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |        |
+| v1.0.1                              |               |               |               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |        |
 
 - :white_check_mark: Compatible
 - :warning: Has issues
@@ -39,7 +40,7 @@ single package's documentation:
 - :exclamation: Deprecated
 
 ###  Deprecation Note
-We had to deprecate those versions because of there was a very huge architectural change from istio 1.4 to 1.5. 
+We had to deprecate those versions because of there was a very huge architectural change from istio 1.4 to 1.5.
 For every further help regard upgrade from module version `v0.x.0` to `v1.x.x` please contact us.
 
 
