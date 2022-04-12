@@ -9,7 +9,6 @@ resources:
   - ns.yml
   - operator.yaml
   - service_account.yaml
-  - sm.yml
 
 patches:
   - target:
