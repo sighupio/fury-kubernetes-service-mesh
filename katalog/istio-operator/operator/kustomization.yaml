@@ -3,5 +3,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: istio-operator
 resources:
-  - https://raw.githubusercontent.com/istio/istio/1.9.5/manifests/charts/istio-operator/crds/crd-operator.yaml
-  - https://raw.githubusercontent.com/istio/istio/1.9.5/manifests/charts/istio-operator/files/gen-operator.yaml
+  - crds/crd-operator.yaml
+  - istio-operator-cr.yaml
+  - istio-operator-crb.yaml
+  - istio-operator-deployment.yaml
+  - istio-operator-namespace.yaml
+  - istio-operator-sa.yaml
+  - istio-operator-svc.yaml
+
+images:
+  - name: gcr.io/istio-testing/operator
+    newName: registry.sighup.io/fury/istio/operator
+    newTag: 1.9.5
