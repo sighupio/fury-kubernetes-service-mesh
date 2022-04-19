@@ -24,6 +24,8 @@ patchesStrategicMerge:
 
 generatorOptions:
   disableNameSuffixHash: true
+  annotations:
+    cert-manager.io/allow-direct-injection: "true"
 
 secretGenerator:
   - name: kong-mesh-license

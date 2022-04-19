@@ -8,10 +8,11 @@ resources:
 patchesStrategicMerge:
   - patches/kong-mesh-license-mount.yml
   - patches/kong-mesh-tls-cert-mount.yml
-  - patches/kong-mesh-ca-bundle.yml
 
 generatorOptions:
   disableNameSuffixHash: true
+  annotations:
+    cert-manager.io/allow-direct-injection: "true"
 
 secretGenerator:
   - name: kong-mesh-license
@@ -29,10 +30,10 @@ secretGenerator:
       - ca.crt=secrets/internal.crt
 
   # The following certificates can be generated with 
-  # kumactl generate tls-certificate --type=server --cp-hostname=<CROSS_ZONE_KUMA_CP_DNS_NAME> --cert-file=secrets/tls.crt --key-file=secrets/tls.key
+  # kumactl generate tls-certificate --type=server --cp-hostname=<CROSS_ZONE_KUMA_CP_DNS_NAME> --cert-file=secrets/external.crt --key-file=secrets/external.key
   - name: kds-server-tls
     namespace: kong-mesh-system
-    type: tls
+    type: kubernetes.io/tls
     files:
-      - cert=secrets/tls.crt
-      - key=secrets/tls.key
+      - tls.crt=secrets/external.crt
+      - tls.key=secrets/external.key

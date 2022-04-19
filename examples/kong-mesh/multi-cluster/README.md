@@ -6,7 +6,7 @@ Have a look at [global-control-plane/kustomization.yaml](global-control-plane/ku
 
 Install `kumactl` on your local system to better interact with the system.
 
-Ref: https://docs.konghq.com/mesh/1.4.x/install/
+Ref: https://docs.konghq.com/mesh/1.5.x/install/
 
 ### (Mandatory) Use custom CA
 
@@ -26,23 +26,14 @@ kumactl generate tls-certificate --type=server \
 ```bash
 kumactl generate tls-certificate --type=server \
   --cp-hostname=<CROSS_ZONE_KUMA_CP_DNS_NAME> \
-  --cert-file=secrets/tls.crt \
-  --key-file=secrets/tls.key
+  --cert-file=secrets/external.crt \
+  --key-file=secrets/external.key
 ```
 
 3. Add secretGenerator for certs, like in `kustomization.yaml`
 
-4. Encode the caBundle in base 64 and paste it in `patches/kong-mesh-ca-bundle.yml`
-
-For example:
-```bash
-# cert = ca for self-signed certificates
-cat secrets/internal.crt | base64
-```
-
 4. Add the following patches to your manifests
 - `patches/kong-mesh-tls-cert-mount.yml` 
-- `patches/kong-mesh-ca-bundle.yml` 
 
 ### (Optional) Mount license on control plane
 
@@ -82,7 +73,7 @@ kumactl generate control-plane-token --zone=<ZONE_NAME> secrets/token
 
 ### (Mandatory) Use custom CA
 
-1. Copy `tls.crt` from global control plane to `secrets/ca.crt`.
+1. Copy `external.crt` from global control plane to `secrets/ca.crt`.
 
 2. Generate a new certificate for internal communication
 
@@ -97,15 +88,7 @@ kumactl generate tls-certificate --type=server \
 
 3. Add a secretGenerator for certs, like in `kustomization.yaml`
 
-4. Encode the caBundle in base 64 and paste it in `patches/kong-mesh-ca-bundle.yml`
-
-For example:
-```bash
-# cert = ca for self-signed certificates
-cat secrets/internal.crt | base64
-```
-
-5. Add the following patches to your manifests
+4. Add the following patches to your manifests
 - `patches/kong-mesh-secrets-mount.yml` 
 - `patches/kong-mesh-ca-bundle.yml` 
 
