@@ -6,7 +6,7 @@ images:
     newTag: 1.5.1
 
 patchesStrategicMerge:
-  - patches/kuma-init-image.yaml
+  - patches/kong-mesh-init-image.yaml
 
 patchesJson6902:
   - path: patches/kong-mesh-admission-webhook-cainjector.yaml
