@@ -13,7 +13,7 @@ resources:
 
 patchesStrategicMerge:
   - patches/kuma-zone.yml
-  - patches/kuma-secrets-mount.yml
+  - patches/kuma-tls-cert-mount.yml
   - patches/kuma-public-ingress.yml
   - patches/kuma-metrics.yml
 
@@ -47,25 +47,25 @@ secretGenerator:
 #configMapGenerator:
 #  - name: kuma-cp-dashboard
 #    files:
-#      - resources/dashboards/kmesh-controlplane.json
+#      - resources/dashboards/kuma-controlplane.json
 #    options:
 #      labels:
 #        grafana-sighup-dashboard: kuma
 #  - name: kuma-dp-dashboard
 #    files:
-#      - resources/dashboards/kmesh-dataplane.json
+#      - resources/dashboards/kuma-dataplane.json
 #    options:
 #      labels:
 #        grafana-sighup-dashboard: kuma
 #  - name: kuma-mesh-dashboard
 #    files:
-#      - resources/dashboards/kmesh-mesh.json
+#      - resources/dashboards/kuma-mesh.json
 #    options:
 #      labels:
 #        grafana-sighup-dashboard: kuma
 #  - name: kuma-service-dashboard
 #    files:
-#      - resources/dashboards/kmesh-service-to-service.json
+#      - resources/dashboards/kuma-service-to-service.json
 #    options:
 #      labels:
 #        grafana-sighup-dashboard: kuma
