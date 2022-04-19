@@ -6,7 +6,7 @@ The manifests in the current folders were generated in this way:
 
 First of all, download the version you need for kumactl package and point to it for the next commands.
 ```bash
-cd ../../tools/kuma/$VERSION
+cd ../../tools/$OS/kuma/$VERSION
 ./download.sh
 alias kumactl=$PWD/kumactl
 
