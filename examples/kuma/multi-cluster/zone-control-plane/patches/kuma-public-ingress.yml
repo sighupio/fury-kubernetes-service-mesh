@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kuma-ingress
+  namespace: kuma-system
+spec:
+  template:
+    metadata:
+      annotations:
+        kuma.io/ingress-public-address: <NODE_IP>
+        kuma.io/ingress-public-port: <NODE_PORT>
