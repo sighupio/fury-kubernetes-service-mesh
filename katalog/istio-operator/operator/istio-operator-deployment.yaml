@@ -1,4 +1,3 @@
-# From: https://raw.githubusercontent.com/istio/istio/1.9.5/manifests/charts/istio-operator/files/gen-operator.yaml
 # Source: istio-operator/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -18,7 +17,7 @@ spec:
       serviceAccountName: istio-operator
       containers:
         - name: istio-operator
-          image: gcr.io/istio-testing/operator:1.9-dev
+          image: gcr.io/istio-testing/operator:1.12-dev
           command:
           - operator
           - server
