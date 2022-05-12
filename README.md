@@ -1,85 +1,111 @@
-# Fury Kubernetes Service Mesh
+<h1>
+    <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="90" style="margin-right: 15px"/>
+    Kubernetes Fury Service Mesh
+</h1>
 
-This repository contains all needed components to deploy service meshes. We started integrating
-[istio](https://istio.io/) into this module. [istio](https://istio.io/) addresses the challenges developers and
-operators face as monolithic applications transition towards a distributed microservice architecture.
+![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-service-mesh?label=Latest%20Release)
+![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-service-mesh?label=License)
+![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
-## Service Mesh Packages
+<!-- <KFD-DOCS> -->
 
-Following packages are included in Fury Kubernetes Service Mesh katalog.
+**Kubernetes Fury Service Mesh** add-on module for the [Kubernetes Fury Distribution (KFD)][kfd-repo] allows to transparently add capabilities like observability, traffic management, and security to applications, without modifying their source code.
 
--   [istio](katalog/istio): Istio provides behavioral insights and operational control over the service mesh as a whole,
-    offering a complete solution to satisfy the diverse requirements of microservice applications. It needs a two phase
-    installation. First run: [istio/init](katalog/istio/init) package. Once completed, you are ready to deploy
-    [istio](katalog/istio) package. Version: **1.9.5**.
+If you are new to KFD please refer to the [official documentation][kfd-docs] on how to get started with KFD.
 
-## Requirements
+## Overview
 
-All packages in this repository have following dependencies, for package specific dependencies please visit the
-single package's documentation:
+**Kubernetes Fury Service Mesh** add-on module deploys a service mesh into a Kubernetes cluster. A service mesh, such as Istio, allows to transparently add capabilities like observability, traffic management, and security to applications, without modifying their source code. These capabilities are of great value when running microservices at scale or under strict security requirements.
 
--   [Kubernetes](https://kubernetes.io) >= `v1.17.0`
--   [Furyctl](https://github.com/sighup-io/furyctl) package manager to install Fury packages
--   [Kustomize](https://github.com/kubernetes-sigs/kustomize) = `v3.9.1`
+This module is based on the Istio Project. Istio provides behavioral insights and operational control over the service mesh as a whole, offering a complete solution to satisfy the diverse requirements of microservice applications.
+
+Read more on [Istio's documentation site][istio-docs-site].
+
+## Packages
+
+Kubernetes Fury Service Mesh provides the following packages:
+
+| Package                                    | Version   | Description                                                                                                                   |
+|--------------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------|
+| [Istio Operator](katalog/istio-operator) | `v1.12.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`.|
 
 ## Compatibility
 
-| Module Version / Kubernetes Version |    1.14.X     |    1.15.X     |    1.16.X     |       1.17.X       |       1.18.X       |       1.19.X       |       1.20.X       | 1.21.X |
-| ----------------------------------- | :-----------: | :-----------: | :-----------: | :----------------: | :----------------: | :----------------: | :----------------: | :----: |
-| v0.1.0                              |               |               |               |
-| v0.2.0                              | :exclamation: | :exclamation: | :exclamation: |
-| v1.0.0                              |               |               |               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |        |
-| v1.0.1                              |               |               |               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |        |
+| Kubernetes Version |   Compatibility    |                        Notes                        |
+| ------------------ | :----------------: | --------------------------------------------------- |
+| `1.18.x`           | :white_check_mark: | No known issues                                     |
+| `1.19.x`           | :white_check_mark: | No known issues                                     |
+| `1.20.x`           | :white_check_mark: | No known issues                                     |
 
--   :white_check_mark: Compatible
--   :warning: Has issues
--   :x: Incompatible
--   :exclamation: Deprecated
+Check the [compatibility matrix][compatibility-matrix] for additional information about previous releases of the modules.
 
-### Deprecation Note
+## Usage
 
-We had to deprecate those versions because of there was a very huge architectural change from istio 1.4 to 1.5.
-For every further help regard upgrade from module version `v0.x.0` to `v1.x.x` please contact us.
+### Prerequisites
 
-## Deployment (Istio getting started)
+| Tool                                    | Version    | Description                                                                                                                                                    |
+|-----------------------------------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [furyctl][furyctl-repo]                 | `>=0.6.0`  | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
+| [kustomize][kustomize-repo]             | `>=3.9.1`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
 
-To start using Fury Kubernetes Service Mesh, you need to use
-[furyctl](https://github.com/sighup-io/furyctl/blob/master/README.md) and create a `Furyfile.yml` with the list of
-all the packages that you want to download.
+### Deployment
+
+1. To start using Kubernetes Fury Service Mesh, add to your `Furyfile.yml` the module as a base, you can also specify the single package:
 
 ```yaml
 bases:
-    - name: service-mesh/istio
+    - name: service-mesh/istio-operator
       version: v1.0.1
 ```
 
-and execute
+> See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
+
+2. Execute the following command to download the packages to your machine:
 
 ```bash
-$ furyctl install
+furyctl vendor -H
 ```
 
-to download the packages under `./vendor/katalog/service-mesh`.
+3. Inspect the downloaded packages under `./vendor/katalog/service-mesh` to get familiar with the content.
 
-See `furyctl`
-[documentation](https://github.com/sighup-io/furyctl/blob/master/README.md) for details about `Furyfile.yml` format.
-
-To deploy the packages to your cluster, define a `kustomization.yaml` with the
-following content:
+4. Define a `kustomization.yaml` with that includes the `./vendor/katalog/service-mesh` directory as a resource:
 
 ```yaml
-bases:
+resources:
     - ./vendor/katalog/service-mesh/istio-operator/profiles/minimal
 ```
 
-and execute
+> You can point to one of the predefined profiles (`minimal`, `tracing` or `full`) here.
+
+5. Finally, to deploy the selected profile to your cluster, execute:
 
 ```shell
-$ kustomize build . | kubectl apply -f -
+kustomize build . | kubectl apply -f -
 ```
 
-For further details please refer to the single package directories in this repository.
+For further details please refer to each package's directory in this repository.
+
+<!-- links -->
+[kfd-repo]: https://github.com/sighupio/fury-distribution
+[istio-docs-site]: https://istio.io/latest/about/service-mesh/
+
+[furyctl-repo]: https://github.com/sighupio/furyctl
+[sighup-page]: https://sighup.io
+[kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
+[kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
+[compatibility-matrix]: https://github.com/sighupio/fury-kubernetes-service-mesh/blob/master/docs/COMPATIBILITY_MATRIX.md
+<!-- </KFD-DOCS> -->
+
+<!-- <FOOTER> -->
+## Contributing
+
+Before contributing, please read first the [Contributing Guidelines](docs/CONTRIBUTING.md).
+
+### Reporting Issues
+
+In case you experience any problem with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-service-mesh/issues/new/choose).
 
 ## License
 
-For license details please see [LICENSE](LICENSE)
+This module is open-source and it's released under the following [LICENSE](LICENSE)
+<!-- </FOOTER> -->
