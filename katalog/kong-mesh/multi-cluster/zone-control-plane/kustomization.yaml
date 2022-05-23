@@ -65,6 +65,8 @@ resources:
   - resources/trafficroutes.kuma.io-crd.yaml
   - resources/traffictraces.kuma.io-crd.yaml
   - resources/virtualoutbounds.kuma.io-crd.yaml
+  - resources/zoneegresses.kuma.io-crd.yaml
+  - resources/zoneegressinsights.kuma.io-crd.yaml
   - resources/zoneingresses.kuma.io-crd.yaml
   - resources/zoneingressinsights.kuma.io-crd.yaml
   - resources/zoneinsights.kuma.io-crd.yaml
