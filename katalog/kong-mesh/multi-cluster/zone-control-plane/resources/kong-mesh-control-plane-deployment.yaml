@@ -21,8 +21,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 669fd7d355256611cd099f465c305179f7960a1234fa819da6116a4a6f735f24
-        checksum/tls-secrets: 736b59561028272ef4a9ba3a26cde7e6c0e505ea9da3f209751e6ed6fc35c9ea
+        checksum/config: bf5d50b9198a228bc31cc4707b6208d4532705b5670f487461ed985e810a90bb
+        checksum/tls-secrets: eb2c65f271549025b0159d169a1aa4a4815f426425ef4dc186dfcb6400676e11
       labels:
         app.kubernetes.io/name: kong-mesh
         app.kubernetes.io/instance: kong-mesh
@@ -47,7 +47,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: control-plane
-          image: "docker.io/kong/kuma-cp:1.5.1"
+          image: "docker.io/kong/kuma-cp:1.7.0"
           imagePullPolicy: IfNotPresent
           env:
             - name: KUMA_API_SERVER_AUTHN_LOCALHOST_IS_ADMIN
@@ -65,7 +65,7 @@ spec:
             - name: KUMA_GENERAL_TLS_KEY_FILE
               value: "/var/run/secrets/kuma.io/tls-cert/tls.key"
             - name: KUMA_INJECTOR_INIT_CONTAINER_IMAGE
-              value: "docker.io/kong/kuma-init:1.5.1"
+              value: "docker.io/kong/kuma-init:1.7.0"
             - name: KUMA_MODE
               value: "zone"
             - name: KUMA_MULTIZONE_ZONE_GLOBAL_ADDRESS
@@ -83,7 +83,7 @@ spec:
             - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_CNI_ENABLED
               value: "false"
             - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_SIDECAR_CONTAINER_IMAGE
-              value: "docker.io/kong/kuma-dp:1.5.1"
+              value: "docker.io/kong/kuma-dp:1.7.0"
             - name: KUMA_RUNTIME_KUBERNETES_SERVICE_ACCOUNT_NAME
               value: "system:serviceaccount:kong-mesh-system:kong-mesh-control-plane"
             - name: KUMA_STORE_KUBERNETES_SYSTEM_NAMESPACE
@@ -99,6 +99,9 @@ spec:
             - --log-level=info
             - --config-file=/etc/kuma.io/kuma-control-plane/config.yaml
           ports:
+            - containerPort: 5680
+              name: diagnostics
+              protocol: TCP
             - containerPort: 5681
             - containerPort: 5682
             - containerPort: 5443
@@ -119,7 +122,16 @@ spec:
               memory: 256Mi
           volumeMounts:
             - name: general-tls-cert
-              mountPath: /var/run/secrets/kuma.io/tls-cert
+              mountPath: /var/run/secrets/kuma.io/tls-cert/tls.crt
+              subPath: tls.crt
+              readOnly: true
+            - name: general-tls-cert
+              mountPath: /var/run/secrets/kuma.io/tls-cert/tls.key
+              subPath: tls.key
+              readOnly: true
+            - name: general-tls-cert
+              mountPath: /var/run/secrets/kuma.io/tls-cert/ca.crt
+              subPath: ca.crt
               readOnly: true
             - name: kong-mesh-control-plane-config
               mountPath: /etc/kuma.io/kuma-control-plane

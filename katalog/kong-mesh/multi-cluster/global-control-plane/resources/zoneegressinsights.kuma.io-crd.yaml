@@ -4,15 +4,15 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: healthchecks.kuma.io
+  name: zoneegressinsights.kuma.io
 spec:
   group: kuma.io
   names:
-    kind: HealthCheck
-    listKind: HealthCheckList
-    plural: healthchecks
-    singular: healthcheck
-  scope: Cluster
+    kind: ZoneEgressInsight
+    listKind: ZoneEgressInsightList
+    plural: zoneegressinsights
+    singular: zoneegressinsight
+  scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
@@ -35,7 +35,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: Spec is the specification of the Kuma HealthCheck resource.
+            description: Spec is the specification of the Kuma ZoneEgressInsight resource.
             x-kubernetes-preserve-unknown-fields: true
         type: object
     served: true

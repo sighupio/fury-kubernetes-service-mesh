@@ -47,9 +47,11 @@ webhooks:
           - externalservices
           - faultinjections
           - healthchecks
-          - retries
+          - meshgateways
+          - meshgatewayroutes
           - proxytemplates
           - ratelimits
+          - retries
           - trafficlogs
           - trafficpermissions
           - trafficroutes

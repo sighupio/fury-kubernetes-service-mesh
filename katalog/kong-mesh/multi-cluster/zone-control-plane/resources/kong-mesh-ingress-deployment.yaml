@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: kong-mesh
     app.kubernetes.io/instance: kong-mesh
-    app: kuma-ingress
+    app: kong-mesh-ingress
 spec:
   strategy:
     rollingUpdate:
@@ -17,7 +17,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: kong-mesh
       app.kubernetes.io/instance: kong-mesh
-      app: kuma-ingress
+      app: kong-mesh-ingress
   template:
     metadata:
       annotations:
@@ -25,7 +25,7 @@ spec:
       labels:
         app.kubernetes.io/name: kong-mesh
         app.kubernetes.io/instance: kong-mesh
-        app: kuma-ingress
+        app: kong-mesh-ingress
     spec:
       affinity:
         podAntiAffinity:
@@ -37,7 +37,7 @@ spec:
                 - key: app
                   operator: In
                   values:
-                  - kuma-ingress
+                  - kong-mesh-ingress
               topologyKey: kubernetes.io/hostname
       serviceAccountName: kong-mesh-ingress
       nodeSelector:
@@ -46,7 +46,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: ingress
-          image: "docker.io/kong/kuma-dp:1.5.1"
+          image: "docker.io/kong/kuma-dp:1.7.0"
           imagePullPolicy: IfNotPresent
           env:
             - name: POD_NAME
@@ -63,8 +63,6 @@ spec:
               value: /var/run/secrets/kuma.io/tls-cert/ca.crt
             - name: KUMA_DATAPLANE_NAME
               value: $(POD_NAME).$(POD_NAMESPACE)
-            - name: KUMA_DATAPLANE_ADMIN_PORT
-              value: "9901"
             - name: KUMA_DATAPLANE_DRAIN_TIME
               value: 30s
             - name: KUMA_DATAPLANE_RUNTIME_TOKEN_PATH
@@ -77,22 +75,18 @@ spec:
           ports:
             - containerPort: 10001
           livenessProbe:
-            exec:
-              command:
-                - wget
-                - -qO-
-                - http://127.0.0.1:9901
+            httpGet:
+              path: "/ready"
+              port: 9901
             failureThreshold: 12
             initialDelaySeconds: 60
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 3
           readinessProbe:
-            exec:
-              command:
-                - wget
-                - -qO-
-                - http://127.0.0.1:9901
+            httpGet:
+              path: "/ready"
+              port: 9901
             failureThreshold: 12
             initialDelaySeconds: 1
             periodSeconds: 5

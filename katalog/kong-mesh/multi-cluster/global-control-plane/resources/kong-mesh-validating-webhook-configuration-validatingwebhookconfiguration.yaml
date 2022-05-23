@@ -4,6 +4,7 @@ metadata:
   name: kong-mesh-validating-webhook-configuration
   namespace: kong-mesh-system
   labels:
+  
     app.kubernetes.io/name: kong-mesh
     app.kubernetes.io/instance: kong-mesh
 webhooks:
@@ -29,17 +30,21 @@ webhooks:
           - dataplanes
           - externalservices
           - faultinjections
+          - gatewayinstances
           - healthchecks
-          - retries
           - meshes
+          - meshgateways
+          - meshgatewayroutes
           - proxytemplates
           - ratelimits
+          - retries
           - trafficlogs
           - trafficpermissions
           - trafficroutes
           - traffictraces
           - virtualoutbounds
           - zones
+    
       - apiGroups:
           - kuma.io
         apiVersions:
@@ -50,6 +55,7 @@ webhooks:
           - DELETE
         resources:
           - opapolicies
+      
     sideEffects: None
   - name: service.validator.kuma-admission.kuma.io
     admissionReviewVersions: ["v1"]
@@ -92,4 +98,44 @@ webhooks:
           - DELETE
         resources:
           - secrets
+    sideEffects: None
+  - name: gateway.validator.kuma-admission.kuma.io
+    admissionReviewVersions: ["v1"]
+    failurePolicy: Ignore
+    clientConfig:
+      service:
+        namespace: kong-mesh-system
+        name: kong-mesh-control-plane
+        path: /validate-v1alpha2-gateway
+    rules:
+      - apiGroups:
+          - "gateway.networking.k8s.io"
+        apiVersions:
+          - v1alpha2
+        operations:
+          - CREATE
+        resources:
+          - gatewayclasses
+    sideEffects: None
+  - name: validate.gateway.networking.k8s.io
+    admissionReviewVersions: ["v1"]
+    failurePolicy: Fail
+    matchPolicy: Equivalent
+    clientConfig:
+      service:
+        namespace: kong-mesh-system
+        name: kong-mesh-control-plane
+        path: /validate-v1alpha2-gateway-upstream
+    rules:
+      - apiGroups:
+          - "gateway.networking.k8s.io"
+        apiVersions:
+          - v1alpha2
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - gateways
+          - gatewayclasses
+          - httproutes
     sideEffects: None

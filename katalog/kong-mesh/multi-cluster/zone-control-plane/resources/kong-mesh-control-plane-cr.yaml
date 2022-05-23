@@ -17,6 +17,7 @@ rules:
       - get
       - list
       - watch
+
   - apiGroups:
       - coordination.k8s.io
     resources:
@@ -42,6 +43,7 @@ rules:
       - services
     verbs:
       - get
+      - delete
       - list
       - watch
       - create
@@ -64,6 +66,8 @@ rules:
       - zoneinsights
       - zoneingresses
       - zoneingressinsights
+      - zoneegresses
+      - zoneegressinsights
       - meshinsights
       - serviceinsights
       - proxytemplates
@@ -82,6 +86,7 @@ rules:
       - update
       - patch
       - delete
+
   - apiGroups:
       - kuma.io
     resources:
@@ -103,19 +108,37 @@ rules:
     resources:
       - pods/finalizers
     verbs:
-      - "*"
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
   - apiGroups:
       - kuma.io
     resources:
       - meshes/finalizers
     verbs:
-      - "*"
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
   - apiGroups:
       - kuma.io
     resources:
       - dataplanes/finalizers
     verbs:
-      - "*"
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
   # validate k8s token before issuing mTLS cert
   - apiGroups:
       - authentication.k8s.io
