@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
+# shellcheck disable=SC2086,SC2154,SC2034
 
 load ./../helper
 
@@ -37,14 +38,12 @@ load ./../helper
   # https://istio.io/docs/tasks/security/authentication/authn-policy/#request-from-non-istio-services-to-istio-services
   info
   test(){
-    for from in "legacy"
+    from="legacy"
+    for to in "foo" "bar"
     do
-      for to in "foo" "bar"
-      do
-        pod_name=$(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name})
-        http_code=$(kubectl exec ${pod_name} -c sleep -n ${from} -- curl "http://httpbin.${to}:8000/ip" -s -o /dev/null -w "%{http_code}")
-        if [ "${http_code}" -ne "000" ]; then return 1; fi
-      done
+      pod_name=$(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name})
+      http_code=$(kubectl exec ${pod_name} -c sleep -n ${from} -- curl "http://httpbin.${to}:8000/ip" -s -o /dev/null -w "%{http_code}")
+      if [ "${http_code}" -ne "000" ]; then return 1; fi
     done
   }
   run test
