@@ -79,7 +79,6 @@ node:
 trigger:
   ref:
     include:
-      - refs/heads/chore/fix-ci # just for testing. Drop me afterwards
       - refs/heads/master
       - refs/tags/**
 
