@@ -205,7 +205,7 @@ steps:
         - failure
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.10.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
     depends_on: [ wait_for_debug ]
     settings:
@@ -383,7 +383,7 @@ steps:
         - failure
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.10.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
     depends_on: [ wait_for_debug ]
     settings:
@@ -561,7 +561,7 @@ steps:
         - failure
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.10.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
     depends_on: [ wait_for_debug ]
     settings:
@@ -739,7 +739,7 @@ steps:
         - failure
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.10.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
     depends_on: [ wait_for_debug ]
     settings:
