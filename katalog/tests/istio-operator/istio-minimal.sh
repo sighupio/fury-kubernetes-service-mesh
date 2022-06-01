@@ -36,7 +36,7 @@ load ./../helper
     do
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n demo >&2 && return 1 )
       sleep 2 && echo "# waiting..." $retry_counter >&3
-      retry_counter=$[ $retry_counter + 1 ]
+      retry_counter=$(( retry_counter + 1 ))
     done
     # Wait for productpage review endpoint
     retry_counter=0
@@ -45,7 +45,7 @@ load ./../helper
     do
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n demo >&2 && return 1 )
       sleep 2 && echo "# waiting..." $retry_counter >&3
-      retry_counter=$[ $retry_counter + 1 ]
+      retry_counter=$(( retry_counter + 1 ))
     done
   }
   run deploy
