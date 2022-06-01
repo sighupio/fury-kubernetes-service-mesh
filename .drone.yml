@@ -1,6 +1,7 @@
 ---
-kind: pipeline
 name: e2e-kubernetes-1.17
+kind: pipeline
+type: docker
 
 platform:
   os: linux
@@ -174,8 +175,9 @@ volumes:
     temp: {}
 
 ---
-kind: pipeline
 name: e2e-kubernetes-1.18
+kind: pipeline
+type: docker
 
 platform:
   os: linux
@@ -349,8 +351,9 @@ volumes:
     temp: {}
 
 ---
-kind: pipeline
 name: e2e-kubernetes-1.19
+kind: pipeline
+type: docker
 
 platform:
   os: linux
@@ -524,8 +527,9 @@ volumes:
     temp: {}
 
 ---
-kind: pipeline
 name: e2e-kubernetes-1.20
+kind: pipeline
+type: docker
 
 platform:
   os: linux
