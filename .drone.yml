@@ -40,6 +40,8 @@ steps:
       VALIDATE_DOCKERFILE: "false"
       # Disable natural language checks
       VALIDATE_NATURAL_LANGUAGE: "false"
+      # Disable .env files validation
+      VALIDATE_ENV: "false"
     depends_on:
       - clone
 
