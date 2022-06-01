@@ -21,7 +21,7 @@ Also, it's required to know what `katalog/istio/sidecar-injection/configuration`
 needed.
 
 _Optional_ : you can generate by yourself the certificate using this [script](https://raw.githubusercontent.com/istio/istio/master/tools/certs/Makefile.selfsigned.mk). Give a look to this [link](https://istio.io/v1.9/docs/tasks/security/cert-management/plugin-ca-cert/#plug-in-certificates-and-key-into-the-cluster) on how to use it.
- 
+
 ### Hands on
 
 #### Istio Sidecar Configuration
