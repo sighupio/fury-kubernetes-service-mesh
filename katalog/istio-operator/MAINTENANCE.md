@@ -7,7 +7,7 @@ maintain this document updated. So, any new/modified action has to be written he
 
 ## Runbooks
 
-- [`custom-ca`](custom-ca/): If you need to configure Istio to run with a specific CA
+- [`custom-ca`](../../docs/development/custom-ca/): If you need to configure Istio to run with a specific CA
   instead of the self-signed one.
 
 ### Service monitor manifests
