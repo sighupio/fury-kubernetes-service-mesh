@@ -770,3 +770,111 @@ steps:
 volumes:
   - name: shared
     temp: {}
+
+---
+name: release
+kind: pipeline
+type: docker
+
+depends_on:
+  - e2e-kubernetes-1.20
+  - e2e-kubernetes-1.21
+  - e2e-kubernetes-1.22
+  - e2e-kubernetes-1.23
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/tags/**
+
+steps:
+  - name: prepare-canonical-json
+    image: registry.sighup.io/poc/fury-repo-automations:v0.0.3
+    pull: always
+    depends_on: [ clone ]
+    commands:
+      - spock module-json -m=fury-kubernetes-service-mesh -r=False -v=${DRONE_TAG}
+    when:
+      ref:
+        include:
+          - refs/tags/**
+
+  - name: prepare-tar-gz
+    image: alpine:latest
+    pull: always
+    depends_on: [ clone ]
+    commands:
+      - tar -zcvf fury-kubernetes-service-mesh-${DRONE_TAG}.tar.gz katalog/ LICENSE README.md
+    when:
+      ref:
+        include:
+          - refs/tags/**
+
+  - name: prepare-release-notes
+    image: quay.io/sighup/fury-release-notes-plugin:3.7_2.8.4
+    pull: always
+    depends_on: [ clone ]
+    settings:
+      release_notes_file_path: release-notes.md
+    when:
+      ref:
+        include:
+          - refs/tags/**
+
+  - name: publish-prerelease
+    image: plugins/github-release
+    pull: always
+    depends_on:
+      - prepare-canonical-json
+      - prepare-tar-gz
+      - prepare-release-notes
+    settings:
+      api_key:
+        from_secret: github_token
+      file_exists: overwrite
+      files:
+        - fury-kubernetes-service-mesh-${DRONE_TAG}.tar.gz
+        - fury-kubernetes-service-mesh-canonical-definition-${DRONE_TAG}.json
+      prerelease: true
+      overwrite: true
+      title: "Preview ${DRONE_TAG}"
+      note: release-notes.md
+      checksum:
+        - md5
+        - sha256
+    when:
+      ref:
+        include:
+          - refs/tags/v**-rc**
+
+  - name: publish-stable
+    image: plugins/github-release
+    pull: always
+    depends_on:
+      - prepare-canonical-json
+      - prepare-tar-gz
+      - prepare-release-notes
+    settings:
+      api_key:
+        from_secret: github_token
+      file_exists: overwrite
+      files:
+        - fury-kubernetes-service-mesh-${DRONE_TAG}.tar.gz
+        - fury-kubernetes-service-mesh-canonical-definition-${DRONE_TAG}.json
+      prerelease: false
+      overwrite: true
+      title: "Release ${DRONE_TAG}"
+      note: release-notes.md
+      checksum:
+        - md5
+        - sha256
+    when:
+      ref:
+        exclude:
+          - refs/tags/v**-rc**
+        include:
+          - refs/tags/v**
