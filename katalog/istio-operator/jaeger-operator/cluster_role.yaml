@@ -1,3 +1,7 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 # From: https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.22.1/deploy/cluster_role.yaml
 ## When using the operator in cluster-wide mode, this ClusterRole has to be created and bound to the jaeger-operator service account,
 ## so that the operator can watch and create resources in every namespace in the cluster.
