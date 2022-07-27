@@ -58,7 +58,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 ```yaml
 bases:
     - name: service-mesh/istio-operator
-      version: v1.0.1
+      version: v1.1.0
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
