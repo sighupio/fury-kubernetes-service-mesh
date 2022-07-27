@@ -1,7 +1,9 @@
+<!-- markdownlint-disable MD033 -->
 <h1>
     <img src="https://github.com/sighupio/fury-distribution/blob/master/docs/assets/fury-epta-white.png?raw=true" align="left" width="90" style="margin-right: 15px"/>
     Kubernetes Fury Service Mesh
 </h1>
+<!-- markdownlint-enable MD033 -->
 
 ![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-service-mesh?label=Latest%20Release)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-service-mesh?label=License)
@@ -25,17 +27,18 @@ Read more on [Istio's documentation site][istio-docs-site].
 
 Kubernetes Fury Service Mesh provides the following packages:
 
-| Package                                    | Version   | Description                                                                                                                   |
-|--------------------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------|
-| [Istio Operator](katalog/istio-operator) | `v1.12.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`.|
+| Package                                  | Version   | Description                                                                                                                                                               |
+| ---------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Istio Operator](katalog/istio-operator) | `v1.12.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
 
 ## Compatibility
 
-| Kubernetes Version |   Compatibility    |                        Notes                        |
-| ------------------ | :----------------: | --------------------------------------------------- |
-| `1.18.x`           | :white_check_mark: | No known issues                                     |
-| `1.19.x`           | :white_check_mark: | No known issues                                     |
-| `1.20.x`           | :white_check_mark: | No known issues                                     |
+| Kubernetes Version |   Compatibility    | Notes           |
+| ------------------ | :----------------: | --------------- |
+| `1.18.x`           | :white_check_mark: | No known issues |
+| `1.19.x`           | :white_check_mark: | No known issues |
+| `1.20.x`           | :white_check_mark: | No known issues |
+| `1.21.x`           | :white_check_mark: | No known issues |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information about previous releases of the modules.
 
@@ -43,10 +46,10 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 ### Prerequisites
 
-| Tool                                    | Version    | Description                                                                                                                                                    |
-|-----------------------------------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [furyctl][furyctl-repo]                 | `>=0.6.0`  | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
-| [kustomize][kustomize-repo]             | `>=3.9.1`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
+| Tool                        | Version   | Description                                                                                                                                                    |
+| --------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
+| [kustomize][kustomize-repo] | `>=3.9.1` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
 
 ### Deployment
 

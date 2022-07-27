@@ -89,7 +89,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ clone ]
+    depends_on: [clone]
     settings:
       action: custom-cluster-120
       pipeline_id: cluster-120
@@ -116,14 +116,13 @@ steps:
       dockerhub_password:
         from_secret: dockerhub_password
 
-
   - name: e2e-requirements
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ init ]
+    depends_on: [init]
     commands:
       - export CLUSTER_NAME=120
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -133,14 +132,13 @@ steps:
       - cd ../../../../
       - bats -t katalog/tests/istio-operator/istio-requirements.sh
 
-
   - name: e2e-basic-istio
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-requirements ]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=120
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -150,14 +148,13 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
-
   - name: e2e-egress-gateway
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-basic-istio ]
+    depends_on: [e2e-basic-istio]
     commands:
       - export CLUSTER_NAME=120
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -176,7 +173,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-egress-gateway ]
+    depends_on: [e2e-egress-gateway]
     commands:
       - export CLUSTER_NAME=120
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -196,7 +193,7 @@ steps:
   - name: wait_for_debug
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
-    depends_on: [ e2e-istio-with-citadel ]
+    depends_on: [e2e-istio-with-citadel]
     commands:
       - sleep 1h
     when:
@@ -206,7 +203,7 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
-    depends_on: [ wait_for_debug ]
+    depends_on: [wait_for_debug]
     settings:
       action: destroy
       pipeline_id: cluster-120
@@ -266,7 +263,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ clone ]
+    depends_on: [clone]
     settings:
       action: custom-cluster-121
       pipeline_id: cluster-121
@@ -293,15 +290,14 @@ steps:
       dockerhub_password:
         from_secret: dockerhub_password
 
-
   - name: e2e-requirements
-                                      #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
+    #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ init ]
+    depends_on: [init]
     commands:
       - export CLUSTER_NAME=121
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -311,14 +307,13 @@ steps:
       - cd ../../../../
       - bats -t katalog/tests/istio-operator/istio-requirements.sh
 
-
   - name: e2e-basic-istio
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-requirements ]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=121
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -328,14 +323,13 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
-
   - name: e2e-egress-gateway
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-basic-istio ]
+    depends_on: [e2e-basic-istio]
     commands:
       - export CLUSTER_NAME=121
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -354,7 +348,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-egress-gateway ]
+    depends_on: [e2e-egress-gateway]
     commands:
       - export CLUSTER_NAME=121
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -374,7 +368,7 @@ steps:
   - name: wait_for_debug
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
-    depends_on: [ e2e-istio-with-citadel ]
+    depends_on: [e2e-istio-with-citadel]
     commands:
       - sleep 1h
     when:
@@ -384,7 +378,7 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
-    depends_on: [ wait_for_debug ]
+    depends_on: [wait_for_debug]
     settings:
       action: destroy
       pipeline_id: cluster-121
@@ -444,7 +438,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ clone ]
+    depends_on: [clone]
     settings:
       action: custom-cluster-122
       pipeline_id: cluster-122
@@ -471,15 +465,14 @@ steps:
       dockerhub_password:
         from_secret: dockerhub_password
 
-
   - name: e2e-requirements
-                                      #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
+    #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ init ]
+    depends_on: [init]
     commands:
       - export CLUSTER_NAME=122
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -489,14 +482,13 @@ steps:
       - cd ../../../../
       - bats -t katalog/tests/istio-operator/istio-requirements.sh
 
-
   - name: e2e-basic-istio
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-requirements ]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=122
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -506,14 +498,13 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
-
   - name: e2e-egress-gateway
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-basic-istio ]
+    depends_on: [e2e-basic-istio]
     commands:
       - export CLUSTER_NAME=122
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -532,7 +523,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-egress-gateway ]
+    depends_on: [e2e-egress-gateway]
     commands:
       - export CLUSTER_NAME=122
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -552,7 +543,7 @@ steps:
   - name: wait_for_debug
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
-    depends_on: [ e2e-istio-with-citadel ]
+    depends_on: [e2e-istio-with-citadel]
     commands:
       - sleep 1h
     when:
@@ -562,7 +553,7 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
-    depends_on: [ wait_for_debug ]
+    depends_on: [wait_for_debug]
     settings:
       action: destroy
       pipeline_id: cluster-122
@@ -622,7 +613,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ clone ]
+    depends_on: [clone]
     settings:
       action: custom-cluster-123
       pipeline_id: cluster-123
@@ -649,15 +640,14 @@ steps:
       dockerhub_password:
         from_secret: dockerhub_password
 
-
   - name: e2e-requirements
-                                      #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
+    #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ init ]
+    depends_on: [init]
     commands:
       - export CLUSTER_NAME=123
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -667,14 +657,13 @@ steps:
       - cd ../../../../
       - bats -t katalog/tests/istio-operator/istio-requirements.sh
 
-
   - name: e2e-basic-istio
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-requirements ]
+    depends_on: [e2e-requirements]
     commands:
       - export CLUSTER_NAME=123
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -684,14 +673,13 @@ steps:
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
-
   - name: e2e-egress-gateway
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-basic-istio ]
+    depends_on: [e2e-basic-istio]
     commands:
       - export CLUSTER_NAME=123
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -710,7 +698,7 @@ steps:
     volumes:
       - name: shared
         path: /shared
-    depends_on: [ e2e-egress-gateway ]
+    depends_on: [e2e-egress-gateway]
     commands:
       - export CLUSTER_NAME=123
       - export INSTANCE_IP=$(cat /shared/machine/ip)
@@ -730,7 +718,7 @@ steps:
   - name: wait_for_debug
     image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
     pull: always
-    depends_on: [ e2e-istio-with-citadel ]
+    depends_on: [e2e-istio-with-citadel]
     commands:
       - sleep 1h
     when:
@@ -740,7 +728,7 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
-    depends_on: [ wait_for_debug ]
+    depends_on: [wait_for_debug]
     settings:
       action: destroy
       pipeline_id: cluster-123
@@ -779,8 +767,10 @@ type: docker
 depends_on:
   - e2e-kubernetes-1.20
   - e2e-kubernetes-1.21
-  - e2e-kubernetes-1.22
-  - e2e-kubernetes-1.23
+  # Disabling the dependency on 1.22 and 1.23 to release because of issue #27:
+  # https://github.com/sighupio/fury-kubernetes-service-mesh/issues/27
+  # - e2e-kubernetes-1.22
+  # - e2e-kubernetes-1.23
 
 platform:
   os: linux
@@ -795,7 +785,7 @@ steps:
   - name: prepare-canonical-json
     image: registry.sighup.io/poc/fury-repo-automations:v0.0.3
     pull: always
-    depends_on: [ clone ]
+    depends_on: [clone]
     commands:
       - spock module-json -m=fury-kubernetes-service-mesh -r=False -v=${DRONE_TAG}
     when:
@@ -806,7 +796,7 @@ steps:
   - name: prepare-tar-gz
     image: alpine:latest
     pull: always
-    depends_on: [ clone ]
+    depends_on: [clone]
     commands:
       - tar -zcvf fury-kubernetes-service-mesh-${DRONE_TAG}.tar.gz katalog/ LICENSE README.md
     when:
@@ -817,7 +807,7 @@ steps:
   - name: prepare-release-notes
     image: quay.io/sighup/fury-release-notes-plugin:3.7_2.8.4
     pull: always
-    depends_on: [ clone ]
+    depends_on: [clone]
     settings:
       release_notes_file_path: release-notes.md
     when:
