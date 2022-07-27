@@ -143,4 +143,4 @@ spec:
 
 In this way this is what is going to happen:
 
-![nginx-istio-flow](../docs/images/flow.png)
+![nginx-istio-flow](../../docs/images/flow.png)
