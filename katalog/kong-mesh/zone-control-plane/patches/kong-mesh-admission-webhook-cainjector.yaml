@@ -1,4 +1,0 @@
-- op: add
-  path: /metadata/annotations
-  value:
-    cert-manager.io/inject-ca-from-secret: kong-mesh-tls-cert

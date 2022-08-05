@@ -1,56 +1,27 @@
 # Kong Mesh
 
-The manifests in the current folders were generated in this way:
+Kong Mesh is built on top of Kuma and Envoy. To create a seamless experience, Kong Mesh follows the same installation and configuration procedures as Kuma, but with Kong Mesh-specific binaries.
 
-## Global Control Plane
+> Kong Mesh version is always one minor ahead of Kuma. For example, Kong Mesh 1.5.1 is built on top of Kuma 1.4.1
 
-```bash
-kumactl install control-plane \
-  --without-kubernetes-connection \
-  --mode=global \
-  --cp-auth=cpToken > kuma-global.yml
+## Requirements
 
-# Using a tool to split the giant yaml
-go get -v github.com/mogensen/kubernetes-split-yaml
+- Kubernetes >= `1.14.0`
+- Kustomize >= `v3.6.1`
+- [cert-manager](https://github.com/sighupio/fury-kubernetes-ingress/tree/master/katalog/cert-manager)
 
-kubernetes-split-yaml --outdir $PWD/resources kuma-global.yml
+> Cert Manager is required since we need TLS certificates to be injected in data planes
 
-rm kuma-global.yaml
+## Image repository and tag:
 
-# Remove auto-generated secret, we will override it with a custom one
-rm resources/kong-mesh-tls-cert-secret.yaml
+* Kuma Control Plane: `docker.io/kong/kuma-cp`
+* Kuma Data Plane: `docker.io/kong/kuma-dp`
+* Kuma Prometheus Service Discovery: `docker.io/kong/kuma-prometheus-sd`
+* Kuma Init: `docker.io/kong/kuma-init`
 
-# Remove caBundle, we will override it with a custom one
-grep -v "caBundle" kong-mesh-validating-webhook-configuration-validatingwebhookconfiguration.yaml > tmp
-mv -f tmp kong-mesh-validating-webhook-configuration-validatingwebhookconfiguration.yaml
+## Deployment
 
-grep -v "caBundle" kong-mesh-admission-mutating-webhook-configuration-mutatingwebhookconfiguration.yaml > tmp
-mv -f tmp kong-mesh-admission-mutating-webhook-configuration-mutatingwebhookconfiguration.yaml
-```
+> To deploy Kong Mesh you will need a License from Kong
 
-In `kustomization.yaml` and `patches/kuma-init-image.yaml` the default images are overridden by Sighup registry ones.
+Before deploy, you have to create some resources: follow the [example](../../examples/kong-mesh/multi-cluster/README.md) to learn how.
 
-## Zone Control Plane
-
-```bash
-kumactl install control-plane \
-  --without-kubernetes-connection \
-  --mode=zone \
-  --zone=zone1 \
-  --ingress-enabled \
-  --kds-global-address=grpcs://localhost:1234 > kuma-zone-1.yml
-
-kubernetes-split-yaml --outdir $PWD/resources kuma-zone-1.yml
-
-rm kuma-zone-1.yml
-rm resources/kong-mesh-tls-cert-secret.yaml
-
-# Remove caBundle, we will override it with a custom one
-grep -v "caBundle" kong-mesh-validating-webhook-configuration-validatingwebhookconfiguration.yaml > tmp
-mv -f tmp kong-mesh-validating-webhook-configuration-validatingwebhookconfiguration.yaml
-
-grep -v "caBundle" kong-mesh-admission-mutating-webhook-configuration-mutatingwebhookconfiguration.yaml > tmp
-mv -f tmp kong-mesh-admission-mutating-webhook-configuration-mutatingwebhookconfiguration.yaml
-```
-
-In `kustomization.yaml` and `patches/kuma-init-image.yaml` the default images are overridden by Sighup registry ones.
