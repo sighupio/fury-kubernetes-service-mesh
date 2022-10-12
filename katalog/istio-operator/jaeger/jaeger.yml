@@ -21,8 +21,7 @@ spec:
         cpu: 100m
         memory: 128Mi
   query:
-    minReplicas: 2
-    maxReplicas: 5
+    replicas: 2
   ui:
     options:
       dependencies:
