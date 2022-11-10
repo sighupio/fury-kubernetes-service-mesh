@@ -18,4 +18,4 @@ resources:
 images:
   - name: gcr.io/istio-testing/operator
     newName: registry.sighup.io/fury/istio/operator
-    newTag: 1.12.6
+    newTag: 1.13.9
