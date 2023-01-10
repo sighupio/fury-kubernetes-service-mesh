@@ -28,6 +28,20 @@ All the following examples are tested in the pipeline
 [mtls-test-2](../../katalog/tests/istio-operator/istio-citadel-authn-2.sh)
 [mtls-test-3](../../katalog/tests/istio-operator/istio-citadel-authn-3.sh)
 
+### Dashboard and Rules
+
+#### Grafana Dashboards
+This manifest has been templated from the `katalog/istio-operator/istio/dashboards` and uses the following dashboards:
+- [Istio Mesh Dashboard](https://grafana.com/grafana/dashboards/7639-istio-mesh-dashboard)
+- [Istio Control Plane Dashboard](https://grafana.com/grafana/dashboards/7645-istio-control-plane-dashboard/)
+- [Istio Service Dashboard](https://grafana.com/grafana/dashboards/7636-istio-service-dashboard)
+- [Istio Workload Dashboard](https://grafana.com/grafana/dashboards/7630-istio-workload-dashboard)
+
+#### Prometheus Rules
+This manifest has been templated from the [katalog/istio-operator/istio/rules.yml](https://github.com/istio/tools/blob/1.12.6/perf/stability/alertmanager/prometheusrule.yaml)
+
+Once deployed, you will be able to find some `Alert` on prometheus dashboard.
+
 ## Links
 
 - [istio in action @ GITHUB](https://github.com/istioinaction/book-source-code)
