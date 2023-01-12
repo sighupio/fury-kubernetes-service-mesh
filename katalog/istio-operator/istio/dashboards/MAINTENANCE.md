@@ -12,4 +12,5 @@ Compared to the official dashboards, the following changes have been made:
 - added tag "istio" on each dashboard
 
 ## Prometheus Rules
+
 This manifest has been templated from the [katalog/istio-operator/istio/rules.yml](https://github.com/istio/tools/blob/1.12.6/perf/stability/alertmanager/prometheusrule.yaml)
