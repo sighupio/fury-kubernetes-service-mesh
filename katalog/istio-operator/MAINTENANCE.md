@@ -39,6 +39,7 @@ This manifest has been templated from the `katalog/istio-operator/istio/dashboar
 - [Istio Workload Dashboard](https://grafana.com/grafana/dashboards/7630-istio-workload-dashboard)
 
 #### Prometheus Rules
+
 This manifest has been templated from the [katalog/istio-operator/istio/rules.yml](https://github.com/istio/tools/blob/1.12.6/perf/stability/alertmanager/prometheusrule.yaml)
 
 Once deployed, you will be able to find some `Alert` on prometheus dashboard.
