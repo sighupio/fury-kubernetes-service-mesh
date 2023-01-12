@@ -31,6 +31,7 @@ All the following examples are tested in the pipeline
 ### Dashboard and Rules
 
 #### Grafana Dashboards
+
 This manifest has been templated from the `katalog/istio-operator/istio/dashboards` and uses the following dashboards:
 - [Istio Mesh Dashboard](https://grafana.com/grafana/dashboards/7639-istio-mesh-dashboard)
 - [Istio Control Plane Dashboard](https://grafana.com/grafana/dashboards/7645-istio-control-plane-dashboard/)
