@@ -46,10 +46,12 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 ### Prerequisites
 
-| Tool                        | Version   | Description                                                                                                                                                    |
-| --------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [furyctl][furyctl-repo]     | `>=0.6.0` | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
-| [kustomize][kustomize-repo] | `>=3.9.1` | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
+| Tool                                    | Version    | Description                                                                                                                                                    |
+| --------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [furyctl][furyctl-repo]                 | `>=0.6.0`  | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
+| [kustomize][kustomize-repo]             | `>=3.9.1`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
+| [KFD Monitoring Module][kfd-monitoring] | `>=1.10.2` | To have functioning metrics, dashboards and alerts. Prometheus Operator is also required by Kiali.                                                             |
+| [KFD Logging Module][kfd-logging]       | `>=1.6.0`  | When using tracing, ElasticSearch / OpenSearch is used as storage.                                                                                             |
 
 ### Deployment
 
@@ -88,15 +90,53 @@ kustomize build . | kubectl apply -f -
 
 For further details please refer to each package's directory in this repository.
 
+### Monitoring
+
+The Service Mesh Module not only provides you with Kiali to visualize the status of the service mesh from a UI, but also includes metrics, dashboards and alerts for Istio's components out-of-the-box.
+
+You can monitor the status of Istio, the service-mesh itself and its components from the provided Grafana Dashboards. Here are some screenshots:
+
+<!-- markdownlint-disable MD033 -->
+<a href="docs/images/screenshots/kiali.png"><img src="docs/images/screenshots/kiali.png" width="250"/></a>
+<a href="docs/images/screenshots/istio-control-plane-dashboard.png"><img src="docs/images/screenshots/istio-control-plane-dashboard.png" width="250"/></a>
+<a href="docs/images/screenshots/istio-mesh-darshboard.png"><img src="docs/images/screenshots/istio-mesh-darshboard.png" width="250"/></a>
+<a href="docs/images/screenshots/istio-service-dashboard.png"><img src="docs/images/screenshots/istio-service-dashboard.png" width="250"/></a>
+<a href="docs/images/screenshots/istio-workload-dashboard.png"><img src="docs/images/screenshots/istio-workload-dashboard.png" width="250"/></a>
+<!-- markdownlint-enable MD033 -->
+
+> click on each screenshot for the full screen version
+
+The following set of alerts is included:
+
+| Alert Name                         | Summary                                                                                                                                             | Description                                                                                     |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| IstioMetricsMissing                | Istio Metrics missing                                                                                                                               | [Critical]: Check prometheus deployment or whether the prometheus filters are applied correctly |
+| HTTP5xxRateHigh                    | 5xx rate too high                                                                                                                                   | The HTTP 5xx errors rate higher than 0.05 in 5 mins                                             |
+| WorkloadLatencyP99High             | -                                                                                                                                                   | The workload request latency P99 > 160ms                                                        |
+| IngressLatencyP99High              | -                                                                                                                                                   | The ingress latency P99 > 250ms                                                                 |
+| ProxyContainerCPUUsageHigh         | Proxy Container CPU usage (namespace {{ $labels.namespace }}) (pod {{ $labels.pod }}) (container {{ $labels.container }})  VALUE = {{ $value }}.    | Proxy Container CPU usage is above 80%                                                          |
+| ProxyContainerMemoryUsageHigh      | Proxy Container Memory usage (namespace {{ $labels.namespace }}) (pod {{ $labels.pod }}) (container {{ $labels.container }})  VALUE = {{ $value }}. | Proxy Container Memory usage is above 80%                                                       |
+| IngressMemoryUsageIncreaseRateHigh | Ingress proxy Memory change rate, VALUE = {{ $value }}.                                                                                             | Ingress proxy Memory Usage increases more than 200 Bytes/sec                                    |
+| IstiodContainerCPUUsageHigh        | Istiod Container CPU usage (namespace {{ $labels.namespace }}) (pod {{ $labels.pod }}) (container {{ $labels.container }}) VALUE = {{ $value }}.    | Isitod Container CPU usage is above 80%                                                         |
+| IstiodMemoryUsageHigh              | Istiod Container Memory usage (namespace {{ $labels.namespace }}) (pod {{ $labels.pod }}) (container {{ $labels.container }}) VALUE = {{ $value }}. | Istiod Container Memory usage is above 80%                                                      |
+| IstiodMemoryUsageIncreaseRateHigh  | Istiod Container Memory usage increase rate high, VALUE = {{ $value }}.                                                                             | Istiod Container Memory usage increases more than 1k Bytes/sec                                  |
+| IstiodxdsPushErrorsHigh            | istiod push errors is too high                                                                                                                      | istiod push error rate is higher than 0.05                                                      |
+| IstiodxdsRejectHigh                | istiod rejects rate is too high                                                                                                                     | istiod rejects rate is higher than 0.05                                                         |
+| IstiodContainerNotReady            | istiod container not ready                                                                                                                          | container: discovery not running                                                                |
+| IstiodUnavailableReplica           | Istiod unavailable pod                                                                                                                              | Istiod unavailable replica > 0                                                                  |
+| Ingress200RateLow                  | ingress gateway 200 rate drops                                                                                                                      | The expected rate is 100 per ns, the limit is set based on 15ns                                 |
+
 <!-- links -->
 [kfd-repo]: https://github.com/sighupio/fury-distribution
 [istio-docs-site]: https://istio.io/latest/about/service-mesh/
 
 [furyctl-repo]: https://github.com/sighupio/furyctl
-[sighup-page]: https://sighup.io
 [kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
 [kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
 [compatibility-matrix]: https://github.com/sighupio/fury-kubernetes-service-mesh/blob/master/docs/COMPATIBILITY_MATRIX.md
+
+[kfd-monitoring]: https://github.com/sighupio/fury-kubernetes-monitoring
+[kfd-logging]: https://github.com/sighupio/fury-kubernetes-logging
 <!-- </KFD-DOCS> -->
 
 <!-- <FOOTER> -->

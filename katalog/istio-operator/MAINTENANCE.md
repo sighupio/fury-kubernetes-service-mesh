@@ -50,7 +50,15 @@ Compared to the official dashboards, the following changes have been made:
 The Prometheus Rules defined in `katalog/istio-operator/istio/rules.yml` are taken from:
 <https://github.com/istio/tools/blob/1.12.6/perf/stability/alertmanager/prometheusrule.yaml>
 
+⚠️ notice that we dropped the alert `IngressTrafficMissing` because we consider it too noisy.
+
 Once deployed, you will be able to find some `Alert`s defined on the Prometheus dashboard.
+
+To export the list of alerts from the YAML file to include them in the readme you can use the following command:
+
+```bash
+yq e '.spec.groups[] | .rules[] |  "| " + .alert + " | " + (.annotations.summary // "-" | sub("\n",". "))+ " | " + (.annotations.description // "-" | sub("\n",". ")) + " |"' katalog/istio-operator/istio/rules.yml
+```
 
 ## Links
 
