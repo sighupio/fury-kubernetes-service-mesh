@@ -60,6 +60,27 @@ To export the list of alerts from the YAML file to include them in the readme yo
 yq e '.spec.groups[] | .rules[] |  "| " + .alert + " | " + (.annotations.summary // "-" | sub("\n",". "))+ " | " + (.annotations.description // "-" | sub("\n",". ")) + " |"' katalog/istio-operator/istio/rules.yml
 ```
 
+## Kiali
+
+To update Kiali, follow the next steps:
+
+1. From the downloaded Istio bundle, take the `samples/addons/kiali.yaml` file and split it using [kubernetes-split-yaml](https://github.com/mogensen/kubernetes-split-yaml):
+
+```bash
+mkdir kiali-tmp
+cp istio-1.12.6/samples/addons/kiali.yaml kiali-tmp
+cd kiali-tmp
+kubernetes-split-yaml kiali.yaml
+```
+
+2. Diff the generated files with the ones included in `katalog/istio-operator/kiali` and port the required differences.
+
+> All the Helm-related labels have been removed.
+
+3. Delete the `kiali-tmp` directory
+
+Don't forget to sync the new images to our registry if needed.
+
 ## Links
 
 - [istio in action @ GITHUB](https://github.com/istioinaction/book-source-code)

@@ -13,94 +13,79 @@ spec:
       app: kiali
   template:
     metadata:
-      annotations:
-        kiali.io/runtimes: go,kiali
+      name: kiali
       labels:
         app: kiali
         release: istio
-      name: kiali
+        sidecar.istio.io/inject: "false"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        kiali.io/dashboards: go,kiali
     spec:
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - preference:
-                matchExpressions:
-                  - key: beta.kubernetes.io/arch
-                    operator: In
-                    values:
-                      - amd64
-              weight: 2
-            - preference:
-                matchExpressions:
-                  - key: beta.kubernetes.io/arch
-                    operator: In
-                    values:
-                      - ppc64le
-              weight: 2
-            - preference:
-                matchExpressions:
-                  - key: beta.kubernetes.io/arch
-                    operator: In
-                    values:
-                      - s390x
-              weight: 2
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: beta.kubernetes.io/arch
-                    operator: In
-                    values:
-                      - amd64
-                      - ppc64le
-                      - s390x
+      serviceAccountName: kiali
       containers:
-        - command:
-            - /opt/kiali/kiali
-          args:
+        - image: "quay.io/kiali/kiali:v1.42"
+          imagePullPolicy: IfNotPresent
+          name: kiali
+          command:
+            - "/opt/kiali/kiali"
             - "-config"
             - "/kiali-configuration/config.yaml"
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+          ports:
+            - name: api-port
+              containerPort: 20001
+            - name: http-metrics
+              containerPort: 9090
+          readinessProbe:
+            httpGet:
+              path: /kiali/healthz
+              port: api-port
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /kiali/healthz
+              port: api-port
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 30
           env:
             - name: ACTIVE_NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: quay.io/kiali/kiali:v1.33.1
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            httpGet:
-              path: /kiali/healthz
-              port: 20001
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 30
-          name: kiali
-          readinessProbe:
-            httpGet:
-              path: /kiali/healthz
-              port: 20001
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 30
           resources:
             requests:
               cpu: 10m
           volumeMounts:
-            - mountPath: /kiali-configuration
-              name: kiali-configuration
-            - mountPath: /kiali-cert
-              name: kiali-cert
-            - mountPath: /kiali-secret
-              name: kiali-secret
-      serviceAccountName: kiali
+            - name: kiali-configuration
+              mountPath: "/kiali-configuration"
+            - name: kiali-cert
+              mountPath: "/kiali-cert"
+            - name: kiali-secret
+              mountPath: "/kiali-secret"
+            - name: kiali-cabundle
+              mountPath: "/kiali-cabundle"
       volumes:
-        - configMap:
+        - name: kiali-configuration
+          configMap:
             name: kiali
-          name: kiali-configuration
         - name: kiali-cert
           secret:
+            secretName: istio.kiali-service-account
             optional: true
-            secretName: istio.kiali
         - name: kiali-secret
           secret:
-            optional: true
             secretName: kiali
+            optional: true
+        - name: kiali-cabundle
+          configMap:
+            name: kiali-cabundle
+            optional: true
