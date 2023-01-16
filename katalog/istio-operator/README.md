@@ -1,11 +1,11 @@
 # Istio Operator Package
 
-## For mTLS with nginx
+## For mTLS with NGINX
 
-### Ingress Controller Nginx
+### Ingress Controller NGINX
 
 1. label the ingress-nginx with the `istio-injection=enabled`
-2. crete the following crd:
+2. crete the following CRD:
 
 ```yaml
 apiVersion: "security.istio.io/v1beta1"
@@ -27,7 +27,7 @@ annotations:
 
 ### Microservice with mTLS strict
 
-1. in the namespace of your applications just put this crd:
+1. in the namespace of your applications just put this CRD:
 
 ```yaml
 apiVersion: "security.istio.io/v1beta1"
@@ -47,15 +47,15 @@ nginx.ingress.kubernetes.io/service-upstream: "true"
 nginx.ingress.kubernetes.io/upstream-vhost: productpage.test.svc.cluster.local
 ```
 
-This will enable the traffic from the ingress to a service deployed in a namespace with a mTLS in STRICT mode
+This will enable the traffic from the ingress to a service deployed in a namespace with mTLS in STRICT mode.
 
-### Enable Tracing for application using nginx ingress controller
+### Enable Tracing for application using NGINX ingress controller
 
-Is pretty tricky to preserve both ingress nginx functionality and in the same keep of Istio tracing advantages, but somehow is possible to do that.
+Is pretty tricky to preserve both ingress NGINX functionality and in the same keep of Istio tracing advantages, but somehow is possible to do that.
 
-Given the application "hello" in a namaspace "test", you have to do the following stuff:
+Given the application "hello" in a namespace "test", you have to do the following stuff:
 
-1. create virtualservice for your app
+1. create `VirtualService` for your app
 
 ```yaml
 apiVersion: networking.istio.io/v1beta1
@@ -103,7 +103,7 @@ spec:
       name: v1
 ```
 
-3. create an external service that point to the ingressGateway Service (that is deployed in a separate ns):
+3. create an external service that points to the `ingressGateway` Service (that is deployed in a separate ns):
 
 ```yaml
 kind: Service
