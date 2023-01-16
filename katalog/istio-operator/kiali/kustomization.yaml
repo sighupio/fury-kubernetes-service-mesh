@@ -16,6 +16,9 @@ resources:
   - service.yml
   - dashboards.yml
   - sm.yml
+  - controlplane-rb.yaml
+  - controlplane-role.yaml
+  - viewer-cr.yaml
 
 configMapGenerator:
   - name: kiali

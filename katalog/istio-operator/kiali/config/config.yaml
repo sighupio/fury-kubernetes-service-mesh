@@ -31,3 +31,6 @@ external_services:
     enabled: true
   prometheus:
     url: http://prometheus-k8s.monitoring.svc.cluster.local:9090
+  grafana:
+    url: http://grafana.monitoring.svc.cluster.local:3000
+    in_cluster_url: http://grafana.monitoring.svc.cluster.local:3000

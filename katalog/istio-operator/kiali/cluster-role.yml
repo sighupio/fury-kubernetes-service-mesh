@@ -11,16 +11,28 @@ rules:
     resources:
       - configmaps
       - endpoints
-      - namespaces
-      - nodes
-      - pods
       - pods/log
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups: [""]
+    resources:
+      - namespaces
+      - pods
       - replicationcontrollers
       - services
     verbs:
       - get
       - list
       - watch
+      - patch
+  - apiGroups: [""]
+    resources:
+      - pods/portforward
+    verbs:
+      - create
+      - post
   - apiGroups: ["extensions", "apps"]
     resources:
       - daemonsets
@@ -31,13 +43,7 @@ rules:
       - get
       - list
       - watch
-  - apiGroups: ["autoscaling"]
-    resources:
-      - horizontalpodautoscalers
-    verbs:
-      - get
-      - list
-      - watch
+      - patch
   - apiGroups: ["batch"]
     resources:
       - cronjobs
@@ -46,23 +52,48 @@ rules:
       - get
       - list
       - watch
+      - patch
   - apiGroups:
-      - config.istio.io
       - networking.istio.io
-      - authentication.istio.io
-      - rbac.istio.io
       - security.istio.io
     resources: ["*"]
     verbs:
-      - create
-      - delete
       - get
       - list
-      - patch
       - watch
-  - apiGroups: ["monitoring.kiali.io"]
+      - create
+      - delete
+      - patch
+  - apiGroups: ["apps.openshift.io"]
     resources:
-      - monitoringdashboards
+      - deploymentconfigs
     verbs:
       - get
       - list
+      - watch
+      - patch
+  - apiGroups: ["project.openshift.io"]
+    resources:
+      - projects
+    verbs:
+      - get
+  - apiGroups: ["route.openshift.io"]
+    resources:
+      - routes
+    verbs:
+      - get
+  - apiGroups: ["iter8.tools"]
+    resources:
+      - experiments
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - delete
+      - patch
+  - apiGroups: ["authentication.k8s.io"]
+    resources:
+      - tokenreviews
+    verbs:
+      - create
