@@ -475,7 +475,7 @@ steps:
     depends_on: [init]
     commands:
       - export CLUSTER_NAME=122
-      - echo "[DEBUG] INSTANCE_IP is: $(cat /shared/machine/ip)"
+      - "echo [DEBUG] INSTANCE_IP is: $(cat /shared/machine/ip)"
       - export INSTANCE_IP=$(cat /shared/machine/ip)
       - export KUBECONFIG=/shared/kube/kubeconfig-122
       - cd katalog/tests/istio-operator/requirements
