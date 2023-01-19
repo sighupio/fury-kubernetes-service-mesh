@@ -5,7 +5,7 @@
 </h1>
 <!-- markdownlint-enable MD033 -->
 
-![Release](https://img.shields.io/github/v/release/sighupio/fury-kubernetes-service-mesh?label=Latest%20Release)
+![Release](https://img.shields.io/badge/Latest%20Release-v1.2.0-blue)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-service-mesh?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
@@ -50,8 +50,8 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 | --------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [furyctl][furyctl-repo]                 | `>=0.6.0`  | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
 | [kustomize][kustomize-repo]             | `>=3.9.1`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
-| [KFD Monitoring Module][kfd-monitoring] | `>=1.10.2` | To have functioning metrics, dashboards and alerts. Prometheus Operator is also required by Kiali.                                                             |
-| [KFD Logging Module][kfd-logging]       | `>=1.6.0`  | When using tracing, ElasticSearch / OpenSearch is used as storage.                                                                                             |
+| [KFD Monitoring Module][kfd-monitoring] | `>=1.11.1` | To have functioning metrics, dashboards and alerts. Prometheus Operator is also required by Kiali.                                                             |
+| [KFD Logging Module][kfd-logging]       | `>=1.7.1`  | When using tracing, ElasticSearch / OpenSearch is used as storage.                                                                                             |
 
 ### Deployment
 
@@ -60,7 +60,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 ```yaml
 bases:
     - name: service-mesh/istio-operator
-      version: v1.1.0
+      version: v1.2.0
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
@@ -146,7 +146,7 @@ Before contributing, please read first the [Contributing Guidelines](docs/CONTRI
 
 ### Reporting Issues
 
-In case you experience any problem with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-service-mesh/issues/new/choose).
+In case you experience any problems with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-service-mesh/issues/new/choose).
 
 ## License
 

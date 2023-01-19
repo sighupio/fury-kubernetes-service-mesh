@@ -60,7 +60,9 @@ To export the list of alerts from the YAML file to include them in the readme yo
 yq e '.spec.groups[] | .rules[] |  "| " + .alert + " | " + (.annotations.summary // "-" | sub("\n",". "))+ " | " + (.annotations.description // "-" | sub("\n",". ")) + " |"' katalog/istio-operator/istio/rules.yml
 ```
 
-## Kiali
+## Addons
+
+### Kiali
 
 To update Kiali, follow the next steps:
 
@@ -80,6 +82,10 @@ kubernetes-split-yaml kiali.yaml
 3. Delete the `kiali-tmp` directory
 
 Don't forget to sync the new images to our registry if needed.
+
+Customizations:
+
+- The port name for the service has been changed to `http`, as it was in previous versions to not break ingresses definitions in customers' installations. In the future, we should align with upstream and add a notice to the release notes.
 
 ## Links
 

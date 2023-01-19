@@ -53,13 +53,16 @@ steps:
     commands:
       - kustomize build katalog/istio-operator/profiles/full > isito-operator-full.yml
 
-  - name: deprek8ion
-    image: eu.gcr.io/swade1987/deprek8ion:1.1.35
+  - name: check-deprecated-apis
+    image: us-docker.pkg.dev/fairwinds-ops/oss/pluto:v5
     pull: always
     depends_on:
       - render
     commands:
-      - /conftest test -p /policies isito-operator-full.yml
+      # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
+      - /pluto detect isito-operator-full.yml --ignore-deprecations --target-versions=k8s=v1.21.0,istio=v1.12.6
+      # adding preemtive check for Kubernetes 1.24 without blockin the CI to have a list of unspported APIs in use.
+      - /pluto detect isito-operator-full.yml --ignore-deprecations  --ignore-removals --target-versions=k8s=v1.24.0,istio=v1.12.6
 
 ---
 name: e2e-kubernetes-1.20
