@@ -2,11 +2,6 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-istio_component_namespaces:
-  grafana: monitoring
-  tracing: istio-system
-  prometheus: monitoring
-istio_namespace: istio-system
 auth:
   strategy: "anonymous"
 deployment:
@@ -16,9 +11,13 @@ deployment:
 api:
   namespaces:
     exclude:
-      - kube-public
-      - kube-system
-      - kube-node-lease
+      - "^kube-.*"
+kiali_feature_flags:
+  certificates_information_indicators:
+    enabled: true
+    secrets:
+    - cacerts
+    - istio-ca-secret
 login_token:
   signing_key: "eto6tUSMft"
 server:
