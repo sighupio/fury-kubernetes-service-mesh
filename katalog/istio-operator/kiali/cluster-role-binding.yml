@@ -4,15 +4,14 @@
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
 kind: ClusterRoleBinding
 metadata:
   name: kiali
-subjects:
-  - kind: ServiceAccount
-    name: kiali # Name is case sensitive
-    apiGroup: ""
 roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: kiali
-  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: kiali
+  namespace: istio-system
