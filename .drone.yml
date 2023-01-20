@@ -556,7 +556,11 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
+    # 1.22 always fails because our version of istio is not compatible. Disabling the wait_for_debug step and changing
+    # the dependency on wait_for_debug to the previous step.
+    # Once the compatibility is working you can enable again the wait for debug step and change the following depends_on
     # depends_on: [wait_for_debug]
+    depends_on: [e2e-istio-with-citadel]
     settings:
       action: destroy
       pipeline_id: cluster-122
@@ -731,7 +735,11 @@ steps:
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
     pull: always
+    # 1.23 always fails because our version of istio is not compatible. Disabling the wait_for_debug step and changing
+    # the dependency on wait_for_debug to the previous step.
+    # Once the compatibility is working you can enable again the wait for debug step and change the following depends_on
     # depends_on: [wait_for_debug]
+    depends_on: [e2e-istio-with-citadel]
     settings:
       action: destroy
       pipeline_id: cluster-123
