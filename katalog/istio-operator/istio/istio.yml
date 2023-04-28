@@ -8,18 +8,14 @@ metadata:
   namespace: istio-system
   name: istio
 spec:
-  components:
-    pilot:
-      k8s:
-        hpaSpec:
-          maxReplicas: 10
-          minReplicas: 2
-    ingressGateways:
-      - name: istio-ingressgateway
-        enabled: true
   profile: minimal
   values:
     global:
+      proxy:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 40Mi
       defaultNodeSelector:
         {}
         # node.kubernetes.io/role: infra
@@ -28,31 +24,52 @@ spec:
         # - key: " node-role.kubernetes.io/infra"
         #   operator: "Exists"
         #   effect: "NoSchedule"
-    gateways:
-      istio-ingressgateway:
-        # the default is type LoadBalancer
-        type: NodePort
-        ports:
-          - name: status-port
-            port: 15021
-            protocol: TCP
-            targetPort: 15021
-          - name: http2
-            nodePort: 31380
-            port: 80
-            protocol: TCP
-            targetPort: 8080
-          - name: https
-            nodePort: 31390
-            port: 443
-            protocol: TCP
-            targetPort: 8443
-          - name: tcp-istiod
-            nodePort: 31400
-            port: 15012
-            protocol: TCP
-            targetPort: 15012
-          - name: tls
-            port: 15443
-            protocol: TCP
-            targetPort: 15443
+  components:
+    pilot:
+      k8s:
+        hpaSpec:
+          maxReplicas: 10
+          minReplicas: 2
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: false
+      k8s:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 40Mi
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 40Mi
+        service:
+      # the default is type LoadBalancer
+      type: NodePort
+      ports:
+        - name: status-port
+          port: 15021
+          protocol: TCP
+          targetPort: 15021
+        - name: http2
+          nodePort: 31380
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+        - name: https
+          nodePort: 31390
+          port: 443
+          protocol: TCP
+          targetPort: 8443
+        - name: tcp-istiod
+          nodePort: 31400
+          port: 15012
+          protocol: TCP
+          targetPort: 15012
+        - name: tls
+          port: 15443
+          protocol: TCP
+          targetPort: 15443
