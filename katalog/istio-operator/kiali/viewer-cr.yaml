@@ -56,6 +56,9 @@ rules:
 - apiGroups:
   - networking.istio.io
   - security.istio.io
+  - extensions.istio.io
+  - telemetry.istio.io
+  - gateway.networking.k8s.io
   resources: ["*"]
   verbs:
   - get
@@ -78,13 +81,6 @@ rules:
   - routes
   verbs:
   - get
-- apiGroups: ["iter8.tools"]
-  resources:
-  - experiments
-  verbs:
-  - get
-  - list
-  - watch
 - apiGroups: ["authentication.k8s.io"]
   resources:
   - tokenreviews
