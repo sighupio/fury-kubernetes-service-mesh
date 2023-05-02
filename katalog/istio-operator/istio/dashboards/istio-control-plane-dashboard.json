@@ -35,7 +35,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "fill": 1,
       "gridPos": {
         "h": 5,
@@ -133,7 +133,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -285,7 +285,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -388,7 +388,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -482,7 +482,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -581,7 +581,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "description": "Shows the rate of pilot pushes",
       "fill": 1,
       "gridPos": {
@@ -703,7 +703,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "description": "Captures a variety of pilot errors",
       "fill": 1,
       "gridPos": {
@@ -854,7 +854,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "description": "Shows the total time it takes to push a config update to a proxy",
       "fill": 1,
       "gridPos": {
@@ -961,7 +961,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1073,7 +1073,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1185,7 +1185,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "description": "Shows details about Envoy proxies in the mesh",
       "fill": 1,
       "gridPos": {
@@ -1287,7 +1287,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1373,7 +1373,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${datasource}",
       "description": "Shows the size of XDS requests and responses",
       "fill": 1,
       "gridPos": {
@@ -1498,7 +1498,13 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1524,7 +1530,7 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
       "pointradius": 2,
@@ -1536,13 +1542,17 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": false,
           "expr": "sum(rate(galley_validation_passed[1m]))",
+          "hide": false,
           "interval": "",
-          "legendFormat": "Validations (Success)",
+          "legendFormat": "Validation (Success)",
           "refId": "A"
         },
         {
+          "exemplar": false,
           "expr": "sum(rate(galley_validation_failed[1m]))",
+          "hide": false,
           "interval": "",
           "legendFormat": "Validation (Failure)",
           "refId": "B"
@@ -1594,7 +1604,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fill": 1,
       "fillGradient": 0,
@@ -1620,7 +1630,7 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
       "pointradius": 2,
@@ -1632,13 +1642,17 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": false,
           "expr": "sum(rate(sidecar_injection_success_total[1m]))",
+          "hide": false,
           "interval": "",
           "legendFormat": "Injections (Success)",
           "refId": "A"
         },
         {
+          "exemplar": false,
           "expr": "sum(rate(sidecar_injection_failure_total[1m]))",
+          "hide": false,
           "interval": "",
           "legendFormat": "Injections (Failure)",
           "refId": "B"
@@ -1687,16 +1701,18 @@
     }
   ],
   "refresh": "5s",
-  "schemaVersion": 18,
+  "schemaVersion": 30,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "istio"
+  ],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "default",
-          "value": "default"
+          "selected": false,
+          "text": "prometheus",
+          "value": "prometheus"
         },
         "hide": 0,
         "includeAll": false,
@@ -1745,5 +1761,5 @@
   "timezone": "browser",
   "title": "Istio Control Plane Dashboard",
   "uid": "3--MLVZZk",
-  "version": 11
+  "version": 1
 }
