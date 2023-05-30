@@ -50,8 +50,9 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 | --------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [furyctl][furyctl-repo]                 | `>=0.6.0`  | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
 | [kustomize][kustomize-repo]             | `>=3.9.1`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
-| [KFD Monitoring Module][kfd-monitoring] | `>=2.1.0` | To have functioning metrics, dashboards and alerts. Prometheus Operator is also required by Kiali.                                                             |
-| [KFD Logging Module][kfd-logging]       | `>=3.1.3`  | When using tracing, ElasticSearch / OpenSearch is used as storage.                                                                                             |
+| [KFD Monitoring Module][kfd-monitoring] | `>=2.0.0`  | To have functioning metrics, dashboards and alerts. Prometheus Operator is also required by Kiali.                                                             |
+| [KFD Logging Module][kfd-logging]       | `>=3.1.0`  | When using tracing, OpenSearch is used as storage.                                                                                                             |
+| [KFD Ingress Module][kfd-ingress]       | `>=1.13.0` | Required for certificate generation using cert-manager.                                                                                                        |
 
 ### Deployment
 
