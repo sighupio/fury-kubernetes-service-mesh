@@ -60,3 +60,19 @@ load ./../helper
   run test
   [ "$status" -eq 0 ]
 }
+
+@test "wait for cert-manager requirements to be running" {
+  info
+  test(){
+    retry_counter=0
+    max_retry=30
+    while kubectl get pods -n cert-manager | grep -ie "\(Pending\|Error\|CrashLoop\|ContainerCreating\|PodInitializing\|Init:\)" >&2
+    do
+      [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n cert-manager >&2 && return 1 )
+      sleep 2 && echo "# waiting..." $retry_counter >&3
+      retry_counter=$(( retry_counter + 1 ))
+    done
+  }
+  run test
+  [ "$status" -eq 0 ]
+}
