@@ -138,6 +138,7 @@ The following set of alerts is included:
 
 [kfd-monitoring]: https://github.com/sighupio/fury-kubernetes-monitoring
 [kfd-logging]: https://github.com/sighupio/fury-kubernetes-logging
+[kfd-ingress]: https://github.com/sighupio/fury-kubernetes-ingress
 <!-- </KFD-DOCS> -->
 
 <!-- <FOOTER> -->
