@@ -13,6 +13,8 @@ resources:
   - ns.yml
   - operator.yaml
   - service_account.yaml
+  - pki.yaml
+  - mwh.yaml
 
 patches:
   - target:
