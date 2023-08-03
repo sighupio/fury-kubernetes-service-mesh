@@ -2,35 +2,34 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: metrics
+    name: jaeger-operator
+  name: jaeger-operator-metrics
+  namespace: jaeger
+spec:
+  ports:
+  - name: https
+    port: 8443
+    protocol: TCP
+    targetPort: https
+  selector:
+    name: jaeger-operator
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: jaeger-collector
-  name: collector-monitoring
+    name: jaeger-operator
+  name: jaeger-operator-webhook-service
+  namespace: jaeger
 spec:
   ports:
-    - name: admin-http
-      port: 14269
-      protocol: TCP
-      targetPort: 14269
+  - port: 443
+    protocol: TCP
+    targetPort: 9443
   selector:
-    app.kubernetes.io/name: jaeger-collector
-  type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: jaeger-query
-  name: query-monitoring
-spec:
-  ports:
-    - name: admin-http
-      port: 16687
-      protocol: TCP
-      targetPort: 16687
-  selector:
-    app.kubernetes.io/name: jaeger-query
-  type: ClusterIP
+    name: jaeger-operator

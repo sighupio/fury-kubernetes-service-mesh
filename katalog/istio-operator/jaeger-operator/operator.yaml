@@ -2,44 +2,99 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-# From: https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.22.1/deploy/operator.yaml
+# From: https://github.com/jaegertracing/jaeger-operator/releases/download/v1.43.0/jaeger-operator.yaml 
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    name: jaeger-operator
   name: jaeger-operator
+  namespace: jaeger
 spec:
   replicas: 1
   selector:
     matchLabels:
       name: jaeger-operator
+  strategy: {}
   template:
     metadata:
       labels:
         name: jaeger-operator
     spec:
-      serviceAccountName: jaeger-operator
       containers:
-      - name: jaeger-operator
-        image: jaegertracing/jaeger-operator:1.22.1
-        ports:
-        - containerPort: 8383
-          name: http-metrics
-        - containerPort: 8686
-          name: cr-metrics
-        args: ["start"]
-        imagePullPolicy: Always
+      - args:
+        - start
+        - --health-probe-bind-address=:8081
+        - --leader-elect
+        command:
+        - /jaeger-operator
         env:
         - name: WATCH_NAMESPACE
           valueFrom:
             fieldRef:
-              fieldPath: metadata.namespace
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
+              fieldPath: metadata.annotations['olm.targetNamespaces']
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
         - name: OPERATOR_NAME
-          value: "jaeger-operator"
+          value: jaeger-operator
+        image: quay.io/jaegertracing/jaeger-operator:1.43.0
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: jaeger-operator
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8383/
+        - --logtostderr=true
+        - --v=0
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.13.0
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: jaeger-operator
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: jaeger-operator-service-cert

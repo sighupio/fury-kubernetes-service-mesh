@@ -2,16 +2,33 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-# From: https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.22.1/deploy/cluster_role_binding.yaml
-kind: ClusterRoleBinding
+# From: https://github.com/jaegertracing/jaeger-operator/releases/download/v1.43.0/jaeger-operator.yaml
 apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
 metadata:
-  name: jaeger-operator
+  labels:
+    name: jaeger-operator
+  name: jaeger-operator-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: proxy-role
 subjects:
 - kind: ServiceAccount
   name: jaeger-operator
-  namespace: "observability" # change to point to the namespace you installed your operator
+  namespace: jaeger
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    name: jaeger-operator
+  name: manager-rolebinding
 roleRef:
-  kind: ClusterRole
-  name: jaeger-operator
   apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: manager-role
+subjects:
+- kind: ServiceAccount
+  name: jaeger-operator
+  namespace: jaeger
