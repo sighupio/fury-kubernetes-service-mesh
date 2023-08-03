@@ -5,7 +5,7 @@
 </h1>
 <!-- markdownlint-enable MD033 -->
 
-![Release](https://img.shields.io/badge/Latest%20Release-v1.2.0-blue)
+![Release](https://img.shields.io/badge/Latest%20Release-v1.3.0-blue)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-service-mesh?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
@@ -29,16 +29,16 @@ Kubernetes Fury Service Mesh provides the following packages:
 
 | Package                                  | Version   | Description                                                                                                                                                               |
 | ---------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Istio Operator](katalog/istio-operator) | `v1.12.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
+| [Istio Operator](katalog/istio-operator) | `v1.16.7` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
 
 ## Compatibility
 
 | Kubernetes Version |   Compatibility    | Notes           |
 | ------------------ | :----------------: | --------------- |
-| `1.18.x`           | :white_check_mark: | No known issues |
-| `1.19.x`           | :white_check_mark: | No known issues |
-| `1.20.x`           | :white_check_mark: | No known issues |
-| `1.21.x`           | :white_check_mark: | No known issues |
+| `1.22.x`           | :white_check_mark: | No known issues |
+| `1.23.x`           | :white_check_mark: | No known issues |
+| `1.24.x`           | :white_check_mark: | No known issues |
+| `1.25.x`           | :white_check_mark: | No known issues |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information about previous releases of the modules.
 
@@ -50,8 +50,9 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 | --------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [furyctl][furyctl-repo]                 | `>=0.6.0`  | The recommended tool to download and manage KFD modules and their packages. To learn more about `furyctl` read the [official documentation][furyctl-repo].     |
 | [kustomize][kustomize-repo]             | `>=3.9.1`  | Packages are customized using `kustomize`. To learn how to create your customization layer with `kustomize`, please refer to the [repository][kustomize-repo]. |
-| [KFD Monitoring Module][kfd-monitoring] | `>=1.11.1` | To have functioning metrics, dashboards and alerts. Prometheus Operator is also required by Kiali.                                                             |
-| [KFD Logging Module][kfd-logging]       | `>=1.7.1`  | When using tracing, ElasticSearch / OpenSearch is used as storage.                                                                                             |
+| [KFD Monitoring Module][kfd-monitoring] | `>=2.0.0`  | To have functioning metrics, dashboards and alerts. Prometheus Operator is also required by Kiali.                                                             |
+| [KFD Logging Module][kfd-logging]       | `>=3.1.0`  | When using tracing, OpenSearch is used as storage.                                                                                                             |
+| [KFD Ingress Module][kfd-ingress]       | `>=1.13.0` | Required for certificate generation using cert-manager.                                                                                                        |
 
 ### Deployment
 
@@ -60,7 +61,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 ```yaml
 bases:
     - name: service-mesh/istio-operator
-      version: v1.2.0
+      version: v1.3.0
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
