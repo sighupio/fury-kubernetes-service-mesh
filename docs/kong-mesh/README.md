@@ -3,8 +3,8 @@
 The following is an imperative flow to understand the operations order.
 Have a look to the declarative example with kustomize [here](../../examples/kong-mesh/README.md).
 
-Kuma (open source Kong Mesh): https://kuma.io/docs/1.3.0/
-Kong Mesh: https://docs.konghq.com/mesh/
+Kuma (open source Kong Mesh): <https://kuma.io/docs/1.3.0/>
+Kong Mesh: <https://docs.konghq.com/mesh/>
 
 ## Install kumactl
 ```bash

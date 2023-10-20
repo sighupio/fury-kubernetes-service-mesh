@@ -6,7 +6,7 @@ Have a look at [global-control-plane/kustomization.yaml](global-control-plane/ku
 
 Install `kumactl` on your local system to better interact with the system.
 
-Ref: https://docs.konghq.com/mesh/1.5.x/install/
+Ref: <https://docs.konghq.com/mesh/1.5.x/install/>
 
 ### (Mandatory) Use custom CA
 
@@ -114,4 +114,4 @@ Remember to label all of them with `grafana-sighup-dashboard: kong-mesh`
 
 ## Demo application
 
-Follow this: https://kuma.io/docs/1.3.0/quickstart/kubernetes/#_1-run-the-marketplace-application
+Follow this: <https://kuma.io/docs/1.3.0/quickstart/kubernetes/#_1-run-the-marketplace-application>

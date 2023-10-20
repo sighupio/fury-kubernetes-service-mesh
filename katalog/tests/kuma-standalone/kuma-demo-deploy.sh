@@ -25,7 +25,7 @@ load ../helper
 @test "Verify that exactly two Dataplanes are attached" {
   info
   test() {
-    [ `kubectl get dataplanes -n kuma-demo --no-headers | wc -l` = 2 ] && exit 0 || exit 1
+    [ $(kubectl get dataplanes -n kuma-demo --no-headers | wc -l) = 2 ] && exit 0 || exit 1
   }
   run test
   [ "$status" -eq 0 ]

@@ -12,7 +12,7 @@ Kong Mesh is built on top of Kuma and Envoy. To create a seamless experience, Ko
 
 > Cert Manager is required since we need TLS certificates to be injected in data planes
 
-## Image repository and tag:
+## Image repository and tag
 
 * Kuma Control Plane: `docker.io/kong/kuma-cp`
 * Kuma Data Plane: `docker.io/kong/kuma-dp`
