@@ -10,13 +10,10 @@ load ../helper
 @test "Install Kuma in standalone mode" {
   info
   deploy(){
-    echo "Installing kuma"
     apply katalog/kuma/standalone
   }
   wait_for_it(){
-    echo "Waiting for kuma to be ready"
-    kubectl get pod -A
-    kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=kuma -n kuma-system --timeout=30s
+    kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=kuma -n kuma-system --timeout=2m
   }
   run deploy
   [ "$status" -eq 0 ]

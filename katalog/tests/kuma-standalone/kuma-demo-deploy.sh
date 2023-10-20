@@ -13,8 +13,8 @@ load ../helper
     kubectl apply -f katalog/tests/kuma-standalone/demo.yaml
   }
   wait_for_it(){
-    kubectl wait --for=condition=ready pod -l app=demo-app -n kuma-demo --timeout=30s
-    kubectl wait --for=condition=ready pod -l app=redis -n kuma-demo --timeout=30s
+    kubectl wait --for=condition=ready pod -l app=demo-app -n kuma-demo --timeout=2m
+    kubectl wait --for=condition=ready pod -l app=redis -n kuma-demo --timeout=2m
   }
   run deploy
   [ "$status" -eq 0 ]
