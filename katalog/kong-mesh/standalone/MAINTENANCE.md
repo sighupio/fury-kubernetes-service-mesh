@@ -17,13 +17,12 @@ kumactl version
 
 ## Control Plane
 
-Move to the folder `global-control-plane` and run the following commands:
+Run the following command:
 
 ```bash
 kumactl install control-plane \
   --without-kubernetes-connection \
-  --mode=standalone \
-  --ingress-enabled > resources/kong-mesh-standalone.yml
+  --mode=standalone > resources/kong-mesh-standalone.yml
 
 ```
 
