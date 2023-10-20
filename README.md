@@ -29,16 +29,16 @@ Kubernetes Fury Service Mesh provides the following packages:
 
 | Package                                  | Version   | Description                                                                                                                                                               |
 | ---------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Istio Operator](katalog/istio-operator) | `v1.12.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
+| [Istio Operator](katalog/istio-operator) | `v1.19.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
 
 ## Compatibility
 
 | Kubernetes Version |   Compatibility    | Notes           |
 | ------------------ | :----------------: | --------------- |
-| `1.18.x`           | :white_check_mark: | No known issues |
-| `1.19.x`           | :white_check_mark: | No known issues |
-| `1.20.x`           | :white_check_mark: | No known issues |
-| `1.21.x`           | :white_check_mark: | No known issues |
+| `1.24.x`           | :white_check_mark: | No known issues |
+| `1.25.x`           | :white_check_mark: | No known issues |
+| `1.26.x`           | :white_check_mark: | No known issues |
+| `1.27.x`           | :white_check_mark: | No known issues |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information about previous releases of the modules.
 

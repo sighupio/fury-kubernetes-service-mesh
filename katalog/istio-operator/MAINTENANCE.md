@@ -13,7 +13,7 @@ maintain this document updated. So, any new/modified action has to be written he
 ### Service monitor manifests
 
 The service monitor manifests `katalog/istio-operator/istio/sm.yml` file has been templated from:
-<https://github.com/istio/istio/blob/1.12.6/samples/addons/extras/prometheus-operator.yaml>
+<https://github.com/istio/istio/blob/1.19.3/samples/addons/extras/prometheus-operator.yaml>
 
 Once deployed, you will be able to find some `serviceMonitor` Prometheus Operator resources. It is required by Kiali dashboard.
 
@@ -48,7 +48,7 @@ Compared to the official dashboards, the following changes have been made:
 #### Prometheus Rules
 
 The Prometheus Rules defined in `katalog/istio-operator/istio/rules.yml` are taken from:
-<https://github.com/istio/tools/blob/1.12.6/perf/stability/alertmanager/prometheusrule.yaml>
+<https://github.com/istio/tools/blob/1.19.3/perf/stability/alertmanager/prometheusrule.yaml>
 
 ⚠️ notice that we dropped the alert `IngressTrafficMissing` because we consider it too noisy.
 
