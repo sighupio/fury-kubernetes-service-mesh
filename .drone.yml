@@ -757,11 +757,11 @@ steps:
       - export KUBECONFIG=/shared/kube/kubeconfig-123
       - bats -t katalog/tests/kuma-standalone/kuma-standalone-deploy.sh
       - bats -t katalog/tests/kuma-standalone/kuma-demo-deploy.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
+    # when:
+    #   ref:
+    #     include:
+    #       - refs/heads/hotfix-*
+    #       - refs/tags/**
 
   - name: destroy
     image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
