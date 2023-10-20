@@ -10,7 +10,7 @@ Kuma is a platform agnostic open-source control plane for service mesh and micro
 
 > Cert Manager is required since we need TLS certificates to be injected in data planes
 
-## Image repository and tag:
+## Image repository and tag
 
 * Kuma Control Plane: `docker.io/kumahq/kuma-cp`
 * Kuma Data Plane: `docker.io/kumahq/kuma-dp`

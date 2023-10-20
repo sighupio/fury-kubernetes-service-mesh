@@ -6,9 +6,9 @@ Have a look at [global-control-plane/kustomization.yaml](global-control-plane/ku
 
 Install `kumactl` on your local system to better interact with the system.
 
-Ref: https://kuma.io/docs/1.4.x/installation/kubernetes/
+Ref: <https://kuma.io/docs/1.4.x/installation/kubernetes/>
 
-### (Mandatory) Use custom CA
+### Global Control Plane - (Mandatory) Use custom CA
 
 1. Generate certificates for internal communication
 
@@ -31,17 +31,17 @@ kumactl generate tls-certificate --type=server \
 ```
 
 3. Add the following patches to your manifests to mount certificates:
-- `patches/kuma-tls-cert-mount.yml` 
+- `patches/kuma-tls-cert-mount.yml`
 
 ## Zone Control Plane
 
 Have a look at [zone-control-plane/kustomization.yaml](zone-control-plane/kustomization.yaml) to see a full example of Zone Control Plane.
 
-### (Mandatory) Set zone name and global cp address
+### Zone Control Plane - (Mandatory) Set zone name and global cp address
 
 1. Fill the corresponding fields in `patches/kuma-zone.yml`
 
-### (Mandatory) Use custom CA
+### Zone Control Plane - (Mandatory) Use custom CA
 
 1. Copy `external.crt` from global control plane to `secrets/ca.crt`.
 
@@ -57,13 +57,13 @@ kumactl generate tls-certificate --type=server \
 ```
 
 3. Add the following patches to your manifests to mount certificates:
-- `patches/kuma-tls-cert-mount.yml` 
+- `patches/kuma-tls-cert-mount.yml`
 
-### (Optional) Expose kuma ingress using NodePort
+### Zone Control Plane - (Optional) Expose kuma ingress using NodePort
 
 1. Fill the corresponding fields in `patches/kuma-public-ingress.yml` and add it to your manifests.
 
-### (Optional) Expose metrics for Prometheus Operator
+### Zone Control Plane - (Optional) Expose metrics for Prometheus Operator
 
 Add the following files to your manifests:
 
@@ -72,7 +72,7 @@ Add the following files to your manifests:
 - `patches/prometheus-kuma-scrape.yml`
 - `resources/service-monitor.yml`
 
-### (Optional) Add dashboards to Grafana
+### Zone Control Plane - (Optional) Add dashboards to Grafana
 
 Add the following resources as configMaps, like in `kustomization.yaml`:
 
@@ -83,8 +83,8 @@ Add the following resources as configMaps, like in `kustomization.yaml`:
 
 Remember to label all of them with `grafana-sighup-dashboard: kuma`
 
-Ref: https://grafana.com/orgs/konghq/dashboards
+Ref: <https://grafana.com/orgs/konghq/dashboards>
 
 ## Demo application
 
-Follow this: https://kuma.io/docs/1.4.x/quickstart/kubernetes/#_1-run-the-marketplace-application
+Follow this: <https://kuma.io/docs/1.4.x/quickstart/kubernetes/#_1-run-the-marketplace-application>

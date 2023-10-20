@@ -18,9 +18,9 @@ kumactl version
 
 ## Global Control Plane
 
-### Installation
+### Global Control Plane - Installation
 
-#### Use builtin certificates
+#### Global Control Plane - Use builtin certificates
 
 Supposing to have your license at `secrets/license.json`:
 
@@ -33,7 +33,7 @@ kumactl install control-plane \
 kubectl apply -f kuma-global.yml
 ```
 
-#### Generate custom certificates for your DNS domain
+#### Global Control Plane - Generate custom certificates for your DNS domain
 
 ```bash
 kumactl generate tls-certificate \
@@ -57,7 +57,7 @@ kumactl install control-plane \
 kubectl apply -f kuma-global.yml
 ```
 
-### Generate tokens for Zone Control Planes
+### Global Control Plane - Generate tokens for Zone Control Planes
 Expose the service locally:
 ```bash
 kubectl port-forward svc/kong-mesh-control-plane -n kong-mesh-system 5681:5681
@@ -69,7 +69,7 @@ kumactl generate control-plane-token --zone=<ZONE_NAME_1> /tmp/token-1
 kumactl generate control-plane-token --zone=<ZONE_NAME_2> /tmp/token-2
 ```
 
-### Enable mTLS and metrics
+### Global Control Plane - Enable mTLS and metrics
 Use the following as default Mesh:
 
 ```yaml
@@ -100,11 +100,11 @@ spec:
 
 ## Zone Control Plane
 
-### Installation
+### Zone Control Plane - Installation
 
 Warning! Zone Control Plane cannot be installed in the same cluster the Global Control Plane is located in.
 
-#### Use builtin certificates
+#### Zone Control Plane - Use builtin certificates
 
 ```bash
 kumactl install control-plane \  
@@ -118,7 +118,7 @@ kumactl install control-plane \
 kubectl apply -f kuma-zone-1.yml
 ```
 
-#### Generate custom certificates for your DNS domain
+#### Zone Control Plane - Generate custom certificates for your DNS domain
 
 If you generated custom certificates in Global Control Plane, you have to create a secret with the CA:
 
@@ -156,7 +156,7 @@ spec:
         kuma.io/ingress-public-port: <NODE_PORT>
 ```
 
-### Expose metrics for Prometheus Operator
+### Zone Control Plane - Expose metrics for Prometheus Operator
 
 To expose metrics the following patch is needed:
 ```yaml

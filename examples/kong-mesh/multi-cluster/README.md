@@ -8,7 +8,7 @@ Install `kumactl` on your local system to better interact with the system.
 
 Ref: <https://docs.konghq.com/mesh/1.5.x/install/>
 
-### (Mandatory) Use custom CA
+### Global Control Plane - (Mandatory) Use custom CA
 
 1. Generate certificates for internal communication
 
@@ -33,9 +33,9 @@ kumactl generate tls-certificate --type=server \
 3. Add secretGenerator for certs, like in `kustomization.yaml`
 
 4. Add the following patches to your manifests
-- `patches/kong-mesh-tls-cert-mount.yml` 
+- `patches/kong-mesh-tls-cert-mount.yml`
 
-### (Optional) Mount license on control plane
+### Global Control Plane - (Optional) Mount license on control plane
 
 > If you're not using a license, you will deploy Kuma, the open source version of Kong Mesh.
 
@@ -49,7 +49,7 @@ kumactl generate tls-certificate --type=server \
 
 Have a look at [zone-control-plane/kustomization.yaml](zone-control-plane/kustomization.yaml) to see a full example of Zone Control Plane.
 
-### (Mandatory) Register the Zone Control Plane to the Global Control Plane
+### Zone Control Plane - (Mandatory) Register the Zone Control Plane to the Global Control Plane
 
 1. Generate token from Global CP
 
@@ -67,11 +67,11 @@ kumactl generate control-plane-token --zone=<ZONE_NAME> secrets/token
 
 3. Mount the secret to Zone CP, like in `patches/kong-mesh-secrets-mount.yml`
 
-### (Mandatory) Set zone name and global cp address
+### Zone Control Plane - (Mandatory) Set zone name and global cp address
 
 1. Fill the corresponding fields in `patches/kong-mesh-zone.yml`
 
-### (Mandatory) Use custom CA
+### Zone Control Plane - (Mandatory) Use custom CA
 
 1. Copy `external.crt` from global control plane to `secrets/ca.crt`.
 
@@ -89,10 +89,10 @@ kumactl generate tls-certificate --type=server \
 3. Add a secretGenerator for certs, like in `kustomization.yaml`
 
 4. Add the following patches to your manifests
-- `patches/kong-mesh-secrets-mount.yml` 
-- `patches/kong-mesh-ca-bundle.yml` 
+- `patches/kong-mesh-secrets-mount.yml`
+- `patches/kong-mesh-ca-bundle.yml`
 
-### (Optional) Expose metrics for Prometheus Operator
+### Zone Control Plane - (Optional) Expose metrics for Prometheus Operator
 
 Add the following files to your manifests:
 
@@ -101,7 +101,7 @@ Add the following files to your manifests:
 - `patches/prometheus-kong-mesh-scrape.yml`
 - `resource/service-monitor.yml`
 
-### (Optional) Add dashboards to Grafana
+### Zone Control Plane - (Optional) Add dashboards to Grafana
 
 Add the following resources as configMaps, like in `kustomization.yaml`:
 
