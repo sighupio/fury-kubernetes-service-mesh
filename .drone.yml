@@ -63,7 +63,7 @@ steps:
       #- /conftest test -p /policies isito-operator-full.yml
       - /conftest test -p /policies kuma-standalone.yml
 
----
+#---
 # name: e2e-kubernetes-1.20
 # kind: pipeline
 # type: docker
