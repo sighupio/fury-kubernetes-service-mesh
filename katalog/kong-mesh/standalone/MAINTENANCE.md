@@ -15,33 +15,16 @@ kumactl version
 
 ```
 
-## Global Control Plane
+## Control Plane
 
 Move to the folder `global-control-plane` and run the following commands:
 
 ```bash
 kumactl install control-plane \
   --without-kubernetes-connection \
-  --mode=global \
-  --cp-auth=cpToken \
-  --tls-kds-global-server-secret=kds-server-tls > resources/kong-mesh-global.yml
+  --mode=standalone \
+  --ingress-enabled > resources/kong-mesh-standalone.yml
 
 ```
 
 In `kustomization.yaml` and `patches/kong-mesh-init-image.yaml` the default images are overridden by Sighup registry ones.
-
-## Zone Control Plane
-
-Move to the folder `zone-control-plane` and run the following commands:
-
-```bash
-kumactl install control-plane \
-  --without-kubernetes-connection \
-  --mode=zone \
-  --zone=zone1 \
-  --ingress-enabled \
-  --kds-global-address=grpcs://localhost:1234 > resources/kong-mesh-zone.yml
-
-```
-
-In `kustomization.yaml` and `patches/kong-mesh-init-image.yaml` the default images are overridden by SIGHUP registry ones.

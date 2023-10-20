@@ -4,9 +4,6 @@ images:
   - name: docker.io/kong/kuma-cp
     newName: registry.sighup.io/fury/kong/kuma-cp
     newTag: 2.4.3
-  - name: docker.io/kong/kuma-dp
-    newName: registry.sighup.io/fury/kong/kuma-dp
-    newTag: 2.4.3
 
 patchesStrategicMerge:
   - patches/kong-mesh-init-image.yaml
@@ -28,4 +25,4 @@ patchesJson6902:
       namespace: kong-mesh-system
 
 resources:
-  - resources/kong-mesh-zone.yml
+  - resources/kong-mesh-standalone.yml

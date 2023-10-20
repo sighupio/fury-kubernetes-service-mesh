@@ -3,7 +3,7 @@ kind: Kustomization
 images:
   - name: docker.io/kong/kuma-cp
     newName: registry.sighup.io/fury/kong/kuma-cp
-    newTag: 1.7.0
+    newTag: 2.4.3
 
 patchesStrategicMerge:
   - patches/kong-mesh-init-image.yaml
@@ -25,44 +25,4 @@ patchesJson6902:
       namespace: kong-mesh-system
 
 resources:
-  - resources/accessrolebindings.kuma.io-crd.yaml
-  - resources/accessroles.kuma.io-crd.yaml
-  - resources/circuitbreakers.kuma.io-crd.yaml
-  - resources/dataplaneinsights.kuma.io-crd.yaml
-  - resources/dataplanes.kuma.io-crd.yaml
-  - resources/externalservices.kuma.io-crd.yaml
-  - resources/faultinjections.kuma.io-crd.yaml
-  - resources/healthchecks.kuma.io-crd.yaml
-  - resources/kong-mesh-admission-mutating-webhook-configuration-mutatingwebhookconfiguration.yaml
-  - resources/kong-mesh-control-plane-config-cm.yaml
-  - resources/kong-mesh-control-plane-cr.yaml
-  - resources/kong-mesh-control-plane-crb.yaml
-  - resources/kong-mesh-control-plane-deployment.yaml
-  - resources/kong-mesh-control-plane-kmesh-cr.yaml
-  - resources/kong-mesh-control-plane-kmesh-crb.yaml
-  - resources/kong-mesh-control-plane-rb.yaml
-  - resources/kong-mesh-control-plane-role.yaml
-  - resources/kong-mesh-control-plane-sa.yaml
-  - resources/kong-mesh-control-plane-svc.yaml
-  - resources/kong-mesh-global-zone-sync-svc.yaml
-  - resources/kong-mesh-system-namespace.yaml
-  - resources/kong-mesh-validating-webhook-configuration-validatingwebhookconfiguration.yaml
-  - resources/meshes.kuma.io-crd.yaml
-  - resources/meshinsights.kuma.io-crd.yaml
-  - resources/opapolicies.kuma.io-crd.yaml
-  - resources/proxytemplates.kuma.io-crd.yaml
-  - resources/ratelimits.kuma.io-crd.yaml
-  - resources/retries.kuma.io-crd.yaml
-  - resources/serviceinsights.kuma.io-crd.yaml
-  - resources/timeouts.kuma.io-crd.yaml
-  - resources/trafficlogs.kuma.io-crd.yaml
-  - resources/trafficpermissions.kuma.io-crd.yaml
-  - resources/trafficroutes.kuma.io-crd.yaml
-  - resources/traffictraces.kuma.io-crd.yaml
-  - resources/virtualoutbounds.kuma.io-crd.yaml
-  - resources/zoneegresses.kuma.io-crd.yaml
-  - resources/zoneegressinsights.kuma.io-crd.yaml
-  - resources/zoneingresses.kuma.io-crd.yaml
-  - resources/zoneingressinsights.kuma.io-crd.yaml
-  - resources/zoneinsights.kuma.io-crd.yaml
-  - resources/zones.kuma.io-crd.yaml
+  - resources/kong-mesh-global.yml
