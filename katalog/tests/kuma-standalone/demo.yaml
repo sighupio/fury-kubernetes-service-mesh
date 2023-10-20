@@ -48,8 +48,8 @@ spec:
   selector:
     app: redis
   ports:
-  - protocol: TCP
-    port: 6379
+    - protocol: TCP
+      port: 6379
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -91,6 +91,6 @@ spec:
   selector:
     app: demo-app
   ports:
-  - protocol: TCP
-    appProtocol: http
-    port: 5000
+    - protocol: TCP
+      appProtocol: http
+      port: 5000

@@ -156,7 +156,7 @@ spec:
         kuma.io/ingress-public-port: <NODE_PORT>
 ```
 
-### Zone Control Plane - Expose metrics for Prometheus Operator
+### Zone Control Plane - Expose metrics for Prometheus Operator
 
 To expose metrics the following patch is needed:
 ```yaml
