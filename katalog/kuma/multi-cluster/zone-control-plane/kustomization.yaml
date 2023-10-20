@@ -29,40 +29,4 @@ patchesJson6902:
       namespace: kuma-system
 
 resources:
-  - resources/circuitbreakers.kuma.io-crd.yaml
-  - resources/dataplaneinsights.kuma.io-crd.yaml
-  - resources/dataplanes.kuma.io-crd.yaml
-  - resources/externalservices.kuma.io-crd.yaml
-  - resources/faultinjections.kuma.io-crd.yaml
-  - resources/healthchecks.kuma.io-crd.yaml
-  - resources/kuma-admission-mutating-webhook-configuration-mutatingwebhookconfiguration.yaml
-  - resources/kuma-control-plane-config-cm.yaml
-  - resources/kuma-control-plane-cr.yaml
-  - resources/kuma-control-plane-crb.yaml
-  - resources/kuma-control-plane-deployment.yaml
-  - resources/kuma-control-plane-rb.yaml
-  - resources/kuma-control-plane-role.yaml
-  - resources/kuma-control-plane-sa.yaml
-  - resources/kuma-control-plane-svc.yaml
-  - resources/kuma-ingress-deployment.yaml
-  - resources/kuma-ingress-sa.yaml
-  - resources/kuma-ingress-svc.yaml
-  - resources/kuma-system-namespace.yaml
-  - resources/kuma-validating-webhook-configuration-validatingwebhookconfiguration.yaml
-  - resources/meshes.kuma.io-crd.yaml
-  - resources/meshinsights.kuma.io-crd.yaml
-  - resources/proxytemplates.kuma.io-crd.yaml
-  - resources/ratelimits.kuma.io-crd.yaml
-  - resources/retries.kuma.io-crd.yaml
-  - resources/serviceinsights.kuma.io-crd.yaml
-  - resources/timeouts.kuma.io-crd.yaml
-  - resources/trafficlogs.kuma.io-crd.yaml
-  - resources/trafficpermissions.kuma.io-crd.yaml
-  - resources/trafficroutes.kuma.io-crd.yaml
-  - resources/traffictraces.kuma.io-crd.yaml
-  - resources/virtualoutbounds.kuma.io-crd.yaml
-  - resources/zoneingresses.kuma.io-crd.yaml
-  - resources/zoneingressinsights.kuma.io-crd.yaml
-  - resources/zoneinsights.kuma.io-crd.yaml
-  - resources/zones.kuma.io-crd.yaml
-
+  - resources/kuma-zone.yml

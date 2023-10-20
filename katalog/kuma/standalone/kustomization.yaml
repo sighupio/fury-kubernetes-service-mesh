@@ -1,9 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 images:
-  - name: docker.io/kumahq/kuma-cp
-    newName: registry.sighup.io/fury/kumahq/kuma-cp
+  - name: docker.io/kong/kuma-cp
+    newName: registry.sighup.io/fury/kong/kuma-cp
     newTag: 2.4.3
 
 patchesStrategicMerge:
@@ -26,4 +25,4 @@ patchesJson6902:
       namespace: kuma-system
 
 resources:
-  - resources/kuma-global.yml
+  - resources/kuma-standalone.yml
