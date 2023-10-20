@@ -1,13 +1,19 @@
 #!/usr/bin/env bats
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+# shellcheck disable=SC2086,SC2154,SC2034
 
 load ./../helper
 
 @test "Vendor requirements" {
   info
   vendor(){
-    cd katalog/tests/istio-operator/requirements
-    furyctl vendor -H
-    cd -
+    (
+      cd katalog/tests/istio-operator/requirements
+      furyctl vendor -H
+    )
   }
   run vendor
   [ "$status" -eq 0 ]
@@ -32,7 +38,7 @@ load ./../helper
     do
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n monitoring >&2 && return 1 )
       sleep 2 && echo "# waiting..." $retry_counter >&3
-      retry_counter=$[ $retry_counter + 1 ]
+      retry_counter=$(( retry_counter + 1 ))
     done
   }
   run test
@@ -48,7 +54,7 @@ load ./../helper
     do
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n logging >&2 && return 1 )
       sleep 2 && echo "# waiting..." $retry_counter >&3
-      retry_counter=$[ $retry_counter + 1 ]
+      retry_counter=$(( retry_counter + 1 ))
     done
   }
   run test

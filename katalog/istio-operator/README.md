@@ -1,3 +1,5 @@
+# Istio Operator Package
+
 ## For mTLS with nginx
 
 ### Ingress Controller Nginx
@@ -85,7 +87,7 @@ spec:
               number: 9080
 ```
 
-2. create the destinationrule for your app
+2. create the `destinationRule` for your app
 
 ```yaml
 apiVersion: networking.istio.io/v1beta1
@@ -141,4 +143,4 @@ spec:
 
 In this way this is what is going to happen:
 
-![nginx-istio-flow](../docs/images/flow.png)
+![nginx-istio-flow](../../docs/images/flow.png)

@@ -1,3 +1,7 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 apiVersion: jaegertracing.io/v1
 kind: Jaeger
 metadata:
@@ -17,8 +21,7 @@ spec:
         cpu: 100m
         memory: 128Mi
   query:
-    minReplicas: 2
-    maxReplicas: 5
+    replicas: 2
   ui:
     options:
       dependencies:

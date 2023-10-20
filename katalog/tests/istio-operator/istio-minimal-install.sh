@@ -1,4 +1,9 @@
 #!/usr/bin/env bats
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+# shellcheck disable=SC2086,SC2154,SC2034
 
 load ./../helper
 
@@ -24,7 +29,7 @@ load ./../helper
       echo -n " Istio Operator resource is: $describe_output" >&3
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n istio-system >&2 && return 1 )
       sleep 20 && echo "# waiting..." $retry_counter >&3
-      retry_counter=$[ $retry_counter + 1 ]
+      retry_counter=$(( retry_counter + 1 ))
     done
   }
   run test
