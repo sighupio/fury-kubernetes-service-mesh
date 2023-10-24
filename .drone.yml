@@ -233,7 +233,7 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
+  - e2e-kubernetes-1.24-istio
 
 platform:
   os: linux
