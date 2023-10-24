@@ -16,13 +16,16 @@ resources:
   - service.yml
   - dashboards.yml
   - sm.yml
+  - controlplane-rb.yaml
+  - controlplane-role.yaml
+  - viewer-cr.yaml
 
 configMapGenerator:
   - name: kiali
     files:
       - config/config.yaml
 
-secretGenerator:
-  - name: kiali
-    envs:
-      - secrets/kiali-auth.env
+images:
+  - name: quay.io/kiali/kiali
+    newName: registry.sighup.io/fury/kiali/kiali
+    newTag: v1.44.0

@@ -9,6 +9,8 @@ resources:
   - istio.yml
   - ns.yml
   - sm.yml
+  - dashboards
+  - rules.yml
 
 patchesStrategicMerge:
   - patches/istio-images.yml
