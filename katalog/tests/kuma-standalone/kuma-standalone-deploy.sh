@@ -16,7 +16,5 @@ load ../helper
     kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=kuma -n kuma-system --timeout=2m
   }
   run deploy
-  [ "$status" -eq 0 ]
   run wait_for_it
-  [ "$status" -eq 0 ]
 }

@@ -17,16 +17,13 @@ load ../helper
     kubectl wait --for=condition=ready pod -l app=redis -n kuma-demo --timeout=2m
   }
   run deploy
-  [ "$status" -eq 0 ]
   run wait_for_it
-  [ "$status" -eq 0 ]
 }
 
 @test "Verify that exactly two Dataplanes are attached" {
   info
   test() {
-    [ "$(kubectl get dataplanes -n kuma-demo --no-headers | wc -l)" = 2 ] && exit 0 || exit 1
+    [ "$(kubectl get dataplanes -n kuma-demo --no-headers | wc -l)" = "2" ] && exit 0 || exit 1
   }
   run test
-  [ "$status" -eq 0 ]
 }

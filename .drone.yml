@@ -83,7 +83,7 @@ trigger:
       - refs/heads/master
       - refs/tags/**
       - refs/heads/hotfix-*
-      - refs/heads/develop # TBD
+    #  - refs/heads/develop # TBD
 
 steps:
   - name: init
@@ -233,7 +233,8 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.24-istio
+  #- e2e-kubernetes-1.24-istio
+  - policeman
 
 platform:
   os: linux
