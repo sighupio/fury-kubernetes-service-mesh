@@ -580,7 +580,9 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
+  - e2e-kubernetes-1.24-kuma
+  - e2e-kubernetes-1.25-kuma
+
 
 platform:
   os: linux
@@ -836,7 +838,8 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
+  - e2e-kubernetes-1.24-kuma
+  - e2e-kubernetes-1.25-kuma
 
 platform:
   os: linux
