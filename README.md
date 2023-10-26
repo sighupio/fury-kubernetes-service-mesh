@@ -33,7 +33,7 @@ Read more on [Kuma docs][kuma-docs-site].
 
 ### Kong Mesh
 
-Kong Mesh is an enterprise-grade service mesh built on top of Kuma. 
+Kong Mesh is an enterprise-grade service mesh built on top of Kuma.
 
 Read more on [Kong Mesh docs][kong-mesh-docs-site].
 
@@ -170,7 +170,6 @@ resources:
 ```
 
 > You can point to one of the predefined setups (`standalone`, `multi-cluster/global-control-plane` or `multi-cluster/zone-control-plane`) here.
-
 > For additional details follow the [examples](examples/kuma/multi-cluster/README.md).
 
 ### Kong Mesh deployment
@@ -201,9 +200,7 @@ resources:
 ```
 
 > You can point to one of the predefined setups (`standalone`, `multi-cluster/global-control-plane` or `multi-cluster/zone-control-plane`) here.
-
 > For additional details follow the [examples](examples/kong-mesh/multi-cluster/README.md).
-
 > :warning: You will need a valid license to use Kong Mesh. If you don't have it, please use Kuma instead.
 
 <!-- links -->
@@ -229,7 +226,7 @@ Before contributing, please read first the [Contributing Guidelines](docs/CONTRI
 
 In case you experience any problems with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-service-mesh/issues/new/choose).
 
-### Kong Mesh
+### Kong Mesh docs
 
 Refer to [./docs/kong-mesh/README.md](./docs/kong-mesh/README.md)
 
