@@ -2,6 +2,15 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
+# Pipelines order:
+# 1. license
+# 2. policeman
+# 3. istio-1.24 + istio-1.25
+# 4. istio-1.26 + istio-1.27
+# 5. kuma-1.24 + kuma-1.25
+# 6. kuma-1.26 + kuma-1.27
+# 7. release
+
 name: license
 kind: pipeline
 type: docker
