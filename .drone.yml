@@ -220,7 +220,8 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.24-istio
+  - e2e-kubernetes-1.26-istio
+  - e2e-kubernetes-1.27-istio
 
 platform:
   os: linux
@@ -476,7 +477,8 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.25-istio
+  - e2e-kubernetes-1.26-istio
+  - e2e-kubernetes-1.27-istio
 
 platform:
   os: linux
@@ -580,8 +582,8 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.24-kuma
-  - e2e-kubernetes-1.25-kuma
+  - e2e-kubernetes-1.24-istio
+  - e2e-kubernetes-1.25-istio
 
 
 platform:
@@ -734,7 +736,8 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.26-istio
+  - e2e-kubernetes-1.24-kuma
+  - e2e-kubernetes-1.25-kuma
 
 platform:
   os: linux
@@ -838,8 +841,8 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.24-kuma
-  - e2e-kubernetes-1.25-kuma
+  - e2e-kubernetes-1.24-istio
+  - e2e-kubernetes-1.25-istio
 
 platform:
   os: linux
@@ -991,7 +994,8 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.27-istio
+  - e2e-kubernetes-1.24-kuma
+  - e2e-kubernetes-1.25-kuma
 
 platform:
   os: linux
