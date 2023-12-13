@@ -24,3 +24,9 @@ configMapGenerator:
   - name: istio-control-plane-dashboard
     files:
       - istio-control-plane-dashboard.json
+  - name: istio-extension-dashboard
+    files:
+      - istio-extension-dashboard.json
+  - name: istio-performance-dashboard
+    files:
+      - istio-performance-dashboard.json

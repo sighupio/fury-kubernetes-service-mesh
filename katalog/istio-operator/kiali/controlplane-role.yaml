@@ -12,11 +12,6 @@ metadata:
     app: kiali
 rules:
 - apiGroups: [""]
-  resources:
-  - secrets
-  verbs:
-  - list
-- apiGroups: [""]
   resourceNames:
   - cacerts
   - istio-ca-secret

@@ -3,9 +3,11 @@
 # license that can be found in the LICENSE file.
 
 versions:
-  monitoring: v1.11.1
-  logging: v1.7.1
+  monitoring: v2.0.0
+  logging: v3.1.0
+  ingress: v1.13.0
 
 bases:
   - name: monitoring
   - name: logging
+  - name: ingress

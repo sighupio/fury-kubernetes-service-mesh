@@ -1,0 +1,34 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    name: jaeger-operator
+  name: jaeger-operator-serving-cert
+  namespace: jaeger
+spec:
+  dnsNames:
+  - jaeger-operator-webhook-service.jaeger.svc
+  - jaeger-operator-webhook-service.jaeger.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: jaeger-operator-selfsigned-issuer
+  secretName: jaeger-operator-service-cert
+  subject:
+    organizationalUnits:
+    - jaeger-operator
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  labels:
+    name: jaeger-operator
+  name: jaeger-operator-selfsigned-issuer
+  namespace: jaeger
+spec:
+  selfSigned: {}
+

@@ -8,13 +8,11 @@ namespace: istio-system
 commonLabels:
   app: kiali
 resources:
-  - crd.yml
   - sa.yml
   - cluster-role.yml
   - cluster-role-binding.yml
   - deployment.yml
   - service.yml
-  - dashboards.yml
   - sm.yml
   - controlplane-rb.yaml
   - controlplane-role.yaml
@@ -28,4 +26,4 @@ configMapGenerator:
 images:
   - name: quay.io/kiali/kiali
     newName: registry.sighup.io/fury/kiali/kiali
-    newTag: v1.44.0
+    newTag: v1.63.2
