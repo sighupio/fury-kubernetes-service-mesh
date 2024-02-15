@@ -9,91 +9,84 @@ metadata:
 rules:
   - apiGroups: [""]
     resources:
-      - configmaps
-      - endpoints
-      - pods/log
+    - configmaps
+    - endpoints
+    - pods/log
     verbs:
-      - get
-      - list
-      - watch
+    - get
+    - list
+    - watch
   - apiGroups: [""]
     resources:
-      - namespaces
-      - pods
-      - replicationcontrollers
-      - services
+    - namespaces
+    - pods
+    - replicationcontrollers
+    - services
     verbs:
-      - get
-      - list
-      - watch
-      - patch
+    - get
+    - list
+    - watch
+    - patch
   - apiGroups: [""]
     resources:
-      - pods/portforward
+    - pods/portforward
     verbs:
-      - create
-      - post
+    - create
+    - post
   - apiGroups: ["extensions", "apps"]
     resources:
-      - daemonsets
-      - deployments
-      - replicasets
-      - statefulsets
+    - daemonsets
+    - deployments
+    - replicasets
+    - statefulsets
     verbs:
-      - get
-      - list
-      - watch
-      - patch
+    - get
+    - list
+    - watch
+    - patch
   - apiGroups: ["batch"]
     resources:
-      - cronjobs
-      - jobs
+    - cronjobs
+    - jobs
     verbs:
-      - get
-      - list
-      - watch
-      - patch
+    - get
+    - list
+    - watch
+    - patch
   - apiGroups:
-      - networking.istio.io
-      - security.istio.io
+    - networking.istio.io
+    - security.istio.io
+    - extensions.istio.io
+    - telemetry.istio.io
+    - gateway.networking.k8s.io 
     resources: ["*"]
     verbs:
-      - get
-      - list
-      - watch
-      - create
-      - delete
-      - patch
+    - get
+    - list
+    - watch
+    - create
+    - delete
+    - patch
   - apiGroups: ["apps.openshift.io"]
     resources:
-      - deploymentconfigs
+    - deploymentconfigs
     verbs:
-      - get
-      - list
-      - watch
-      - patch
+    - get
+    - list
+    - watch
+    - patch
   - apiGroups: ["project.openshift.io"]
     resources:
-      - projects
+    - projects
     verbs:
-      - get
+    - get
   - apiGroups: ["route.openshift.io"]
     resources:
-      - routes
+    - routes
     verbs:
-      - get
-  - apiGroups: ["iter8.tools"]
-    resources:
-      - experiments
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - delete
-      - patch
+    - get
   - apiGroups: ["authentication.k8s.io"]
     resources:
-      - tokenreviews
+    - tokenreviews
     verbs:
-      - create
+    - create
