@@ -1,0 +1,90 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../../katalog/kong-mesh/multi-cluster/global-control-plane
+  - resources/mesh-default.yml
+  # /path/to/prometheus/operator
+
+  # Scrape config to collect data about data planes
+  # - resources/kong-mesh-scrape-config.yml
+
+  # Use this only if you want to expose metrics to an existing Prometheus Operator
+  # - resources/service-monitor.yml
+
+patchesStrategicMerge:
+  - patches/kong-mesh-zone.yml
+  - patches/kong-mesh-license-mount.yml
+  - patches/kong-mesh-tls-cert-mount.yml
+  - patches/kong-mesh-public-ingress.yml
+  - patches/kong-mesh-metrics.yml
+
+  # Use together with service monitor and scrape config
+  # - patches/prometheus-kong-mesh-scrape.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    cert-manager.io/allow-direct-injection: "true"
+
+secretGenerator:
+  - name: kong-mesh-license
+    namespace: kong-mesh-system
+    files:
+      - data=secrets/license.json
+
+  # This is equal to tls.crt if you generated the certs with kumactl
+  - name: kds-ca-certs
+    namespace: kong-mesh-system
+    files:
+      - ca.crt=secrets/ca.crt
+
+  # The following certificates can be generated with
+  # kumactl generate tls-certificate --type=server --cp-hostname=kong-mesh-control-plane.kong-mesh-system --cp-hostname=kong-mesh-control-plane.kong-mesh-system.svc --cert-file=secrets/internal.crt --key-file=secrets/internal.key
+  - name: kong-mesh-tls-cert
+    namespace: kong-mesh-system
+    files:
+      - tls.crt=secrets/internal.crt
+      - tls.key=secrets/internal.key
+      - ca.crt=secrets/internal.crt
+
+  # This can be generated from the global control plane with:
+  # kumactl generate control-plane-token --zone=<ZONE_NAME> secrets/token
+  - name: cp-token
+    namespace: kong-mesh-system
+    files:
+      - data=secrets/token
+
+configMapGenerator:
+  - name: kong-mesh-cp-dashboard
+    namespace: kong-mesh-system
+    files:
+      - resources/dashboards/kmesh-controlplane.json
+    options:
+      labels:
+        grafana-sighup-dashboard: kong-mesh
+  - name: kong-mesh-dp-dashboard
+    namespace: kong-mesh-system
+    files:
+      - resources/dashboards/kmesh-dataplane.json
+    options:
+      labels:
+        grafana-sighup-dashboard: kong-mesh
+  - name: kong-mesh-mesh-dashboard
+    namespace: kong-mesh-system
+    files:
+      - resources/dashboards/kmesh-mesh.json
+    options:
+      labels:
+        grafana-sighup-dashboard: kong-mesh
+  - name: kong-mesh-service-dashboard
+    namespace: kong-mesh-system
+    files:
+      - resources/dashboards/kmesh-service-to-service.json
+    options:
+      labels:
+        grafana-sighup-dashboard: kong-mesh

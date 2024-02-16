@@ -1,0 +1,43 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../../katalog/kong-mesh/multi-cluster/global-control-plane
+  - resources/mesh-default.yml
+
+patchesStrategicMerge:
+  - patches/kong-mesh-license-mount.yml
+  - patches/kong-mesh-tls-cert-mount.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    cert-manager.io/allow-direct-injection: "true"
+
+secretGenerator:
+  - name: kong-mesh-license
+    namespace: kong-mesh-system
+    files:
+      - data=secrets/license.json
+
+  # The following certificates can be generated with
+  # kumactl generate tls-certificate --type=server --cp-hostname=kong-mesh-control-plane.kong-mesh-system --cp-hostname=kong-mesh-control-plane.kong-mesh-system.svc --cert-file=secrets/internal.crt --key-file=secrets/internal.key
+  - name: kong-mesh-tls-cert
+    namespace: kong-mesh-system
+    files:
+      - tls.crt=secrets/internal.crt
+      - tls.key=secrets/internal.key
+      - ca.crt=secrets/internal.crt
+
+  # The following certificates can be generated with 
+  # kumactl generate tls-certificate --type=server --cp-hostname=<CROSS_ZONE_KUMA_CP_DNS_NAME> --cert-file=secrets/external.crt --key-file=secrets/external.key
+  - name: kds-server-tls
+    namespace: kong-mesh-system
+    type: kubernetes.io/tls
+    files:
+      - tls.crt=secrets/external.crt
+      - tls.key=secrets/external.key

@@ -2,6 +2,15 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
+# Pipelines order:
+# 1. license
+# 2. policeman
+# 3. istio-1.24 + istio-1.25
+# 4. istio-1.26 + istio-1.27
+# 5. kuma-1.24 + kuma-1.25
+# 6. kuma-1.26 + kuma-1.27
+# 7. release
+
 name: license
 kind: pipeline
 type: docker
@@ -46,12 +55,13 @@ steps:
       - clone
 
   - name: render
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
     pull: always
     depends_on:
       - clone
     commands:
-      - kustomize build katalog/istio-operator/profiles/full > isito-operator-full.yml
+      - kustomize build katalog/istio-operator/profiles/full > istio-operator-full.yml
+      - kustomize build katalog/kuma/standalone > kuma-standalone.yml
 
   - name: check-deprecated-apis
     image: us-docker.pkg.dev/fairwinds-ops/oss/pluto:v5
@@ -59,13 +69,10 @@ steps:
     depends_on:
       - render
     commands:
-      # we use --ignore-deprecations because we don't want the CI to fail when the API has not been removed yet.
-      - /pluto detect isito-operator-full.yml --ignore-deprecations --target-versions=k8s=v1.21.0,istio=v1.12.6
-      # adding preemtive check for Kubernetes 1.24 without blockin the CI to have a list of unspported APIs in use.
-      - /pluto detect isito-operator-full.yml --ignore-deprecations  --ignore-removals --target-versions=k8s=v1.24.0,istio=v1.12.6
-
+    - /pluto detect istio-operator-full.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.27.0
+    - /pluto detect kuma-standalone.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.27.0
 ---
-name: e2e-kubernetes-1.20
+name: e2e-kubernetes-1.24-istio
 kind: pipeline
 type: docker
 
@@ -84,21 +91,22 @@ trigger:
     include:
       - refs/heads/master
       - refs/tags/**
+      - refs/heads/hotfix-*
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.24.0
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [clone]
     settings:
-      action: custom-cluster-120
-      pipeline_id: cluster-120
+      action: custom-cluster-124
+      pipeline_id: cluster-124
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
       instance_size: 2-extra-large
-      cluster_version: "1.20.7"
+      cluster_version: "1.24.0"
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
@@ -120,96 +128,74 @@ steps:
         from_secret: dockerhub_password
 
   - name: e2e-requirements
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [init]
     commands:
-      - export CLUSTER_NAME=120
+      - export CLUSTER_NAME=124
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-120
+      - export KUBECONFIG=/shared/kube/kubeconfig-124
       - cd katalog/tests/istio-operator/requirements
       - furyctl vendor -H
       - cd ../../../../
       - bats -t katalog/tests/istio-operator/istio-requirements.sh
 
   - name: e2e-basic-istio
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-requirements]
     commands:
-      - export CLUSTER_NAME=120
+      - export CLUSTER_NAME=124
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-120
-      - cat /shared/machine/private_key
-      - cat $KUBECONFIG
+      - export KUBECONFIG=/shared/kube/kubeconfig-124
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
   - name: e2e-egress-gateway
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-basic-istio]
     commands:
-      - export CLUSTER_NAME=120
+      - export CLUSTER_NAME=124
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-120
+      - export KUBECONFIG=/shared/kube/kubeconfig-124
       - bats -t katalog/tests/istio-operator/istio-egress-install.sh
       - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
 
   - name: e2e-istio-with-citadel
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-egress-gateway]
     commands:
-      - export CLUSTER_NAME=120
+      - export CLUSTER_NAME=124
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-120
+      - export KUBECONFIG=/shared/kube/kubeconfig-124
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
-
-  - name: wait_for_debug
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
-    pull: always
-    depends_on: [e2e-istio-with-citadel]
-    commands:
-      - sleep 1h
-    when:
-      status:
-        - failure
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.24.0
     pull: always
-    depends_on: [wait_for_debug]
+    depends_on: [e2e-istio-with-citadel]
     settings:
       action: destroy
-      pipeline_id: cluster-120
+      pipeline_id: cluster-124
       aws_default_region:
         from_secret: aws_region
       aws_access_key_id:
@@ -238,7 +224,7 @@ volumes:
     temp: {}
 
 ---
-name: e2e-kubernetes-1.21
+name: e2e-kubernetes-1.25-istio
 kind: pipeline
 type: docker
 
@@ -255,24 +241,24 @@ node:
 trigger:
   ref:
     include:
-      - refs/heads/chore/fix-ci # just for testing. Drop me afterwards
       - refs/heads/master
       - refs/tags/**
+      - refs/heads/hotfix-*
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [clone]
     settings:
-      action: custom-cluster-121
-      pipeline_id: cluster-121
+      action: custom-cluster-125
+      pipeline_id: cluster-125
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
       instance_size: 2-extra-large
-      cluster_version: "1.21.2"
+      cluster_version: "1.25.3"
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
@@ -294,97 +280,74 @@ steps:
         from_secret: dockerhub_password
 
   - name: e2e-requirements
-    #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.25.3_3.5.3_4.21.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [init]
     commands:
-      - export CLUSTER_NAME=121
+      - export CLUSTER_NAME=125
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-121
+      - export KUBECONFIG=/shared/kube/kubeconfig-125
       - cd katalog/tests/istio-operator/requirements
       - furyctl vendor -H
       - cd ../../../../
       - bats -t katalog/tests/istio-operator/istio-requirements.sh
 
   - name: e2e-basic-istio
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.25.3_3.5.3_4.21.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-requirements]
     commands:
-      - export CLUSTER_NAME=121
+      - export CLUSTER_NAME=125
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-121
-      - cat /shared/machine/private_key
-      - cat $KUBECONFIG
+      - export KUBECONFIG=/shared/kube/kubeconfig-125
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
   - name: e2e-egress-gateway
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.25.3_3.5.3_4.21.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-basic-istio]
     commands:
-      - export CLUSTER_NAME=121
+      - export CLUSTER_NAME=125
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-121
+      - export KUBECONFIG=/shared/kube/kubeconfig-125
       - bats -t katalog/tests/istio-operator/istio-egress-install.sh
       - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
 
   - name: e2e-istio-with-citadel
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.25.3_3.5.3_4.21.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-egress-gateway]
     commands:
-      - export CLUSTER_NAME=121
+      - export CLUSTER_NAME=125
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-121
+      - export KUBECONFIG=/shared/kube/kubeconfig-125
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
-
-  - name: wait_for_debug
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
-    pull: always
-    depends_on: [e2e-istio-with-citadel]
-    commands:
-      - sleep 1h
-    when:
-      status:
-        - failure
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
     pull: always
-    depends_on: [wait_for_debug]
+    depends_on: [e2e-istio-with-citadel]
     settings:
       action: destroy
-      pipeline_id: cluster-121
+      pipeline_id: cluster-125
       aws_default_region:
         from_secret: aws_region
       aws_access_key_id:
@@ -413,12 +376,14 @@ volumes:
     temp: {}
 
 ---
-name: e2e-kubernetes-1.22
+name: e2e-kubernetes-1.26-istio
 kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
+  - e2e-kubernetes-1.24-istio
+  - e2e-kubernetes-1.25-istio
+
 
 platform:
   os: linux
@@ -430,24 +395,24 @@ node:
 trigger:
   ref:
     include:
-      - refs/heads/chore/fix-ci # just for testing. Drop me afterwards
       - refs/heads/master
       - refs/tags/**
+      - refs/heads/hotfix-*
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [clone]
     settings:
-      action: custom-cluster-122
-      pipeline_id: cluster-122
+      action: custom-cluster-126
+      pipeline_id: cluster-126
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
       instance_size: 2-extra-large
-      cluster_version: "1.22.0"
+      cluster_version: "1.26.4"
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
@@ -469,101 +434,74 @@ steps:
         from_secret: dockerhub_password
 
   - name: e2e-requirements
-    #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [init]
     commands:
-      - export CLUSTER_NAME=122
+      - export CLUSTER_NAME=126
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-122
+      - export KUBECONFIG=/shared/kube/kubeconfig-126
       - cd katalog/tests/istio-operator/requirements
       - furyctl vendor -H
       - cd ../../../../
       - bats -t katalog/tests/istio-operator/istio-requirements.sh
 
   - name: e2e-basic-istio
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-requirements]
     commands:
-      - export CLUSTER_NAME=122
+      - export CLUSTER_NAME=126
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-122
-      - cat /shared/machine/private_key
-      - cat $KUBECONFIG
+      - export KUBECONFIG=/shared/kube/kubeconfig-126
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
   - name: e2e-egress-gateway
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-basic-istio]
     commands:
-      - export CLUSTER_NAME=122
+      - export CLUSTER_NAME=126
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-122
+      - export KUBECONFIG=/shared/kube/kubeconfig-126
       - bats -t katalog/tests/istio-operator/istio-egress-install.sh
       - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
 
   - name: e2e-istio-with-citadel
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-egress-gateway]
     commands:
-      - export CLUSTER_NAME=122
+      - export CLUSTER_NAME=126
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-122
+      - export KUBECONFIG=/shared/kube/kubeconfig-126
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
-
-  # - name: wait_for_debug
-  #   image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
-  #   pull: always
-  #   depends_on: [e2e-istio-with-citadel]
-  #   commands:
-  #     - sleep 1h
-  #   when:
-  #     status:
-  #       - failure
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
     pull: always
-    # 1.22 always fails because our version of istio is not compatible. Disabling the wait_for_debug step and changing
-    # the dependency on wait_for_debug to the previous step.
-    # Once the compatibility is working you can enable again the wait for debug step and change the following depends_on
-    # depends_on: [wait_for_debug]
     depends_on: [e2e-istio-with-citadel]
     settings:
       action: destroy
-      pipeline_id: cluster-122
+      pipeline_id: cluster-126
       aws_default_region:
         from_secret: aws_region
       aws_access_key_id:
@@ -592,12 +530,13 @@ volumes:
     temp: {}
 
 ---
-name: e2e-kubernetes-1.23
+name: e2e-kubernetes-1.27-istio
 kind: pipeline
 type: docker
 
 depends_on:
-  - policeman
+  - e2e-kubernetes-1.24-istio
+  - e2e-kubernetes-1.25-istio
 
 platform:
   os: linux
@@ -609,24 +548,24 @@ node:
 trigger:
   ref:
     include:
-      - refs/heads/chore/fix-ci # just for testing. Drop me afterwards
       - refs/heads/master
       - refs/tags/**
+      - refs/heads/hotfix-*
 
 steps:
   - name: init
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.27.1
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [clone]
     settings:
-      action: custom-cluster-123
-      pipeline_id: cluster-123
+      action: custom-cluster-127
+      pipeline_id: cluster-127
       local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
       instance_size: 2-extra-large
-      cluster_version: "1.23.0"
+      cluster_version: "1.27.1"
       instance_path: /shared
       aws_default_region:
         from_secret: aws_region
@@ -648,101 +587,494 @@ steps:
         from_secret: dockerhub_password
 
   - name: e2e-requirements
-    #KUBECTL_HELM_YQ_ISTIOCTL_FURYCTL_KUSTOMIZE_BATS
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [init]
     commands:
-      - export CLUSTER_NAME=123
+      - export CLUSTER_NAME=127
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-123
+      - export KUBECONFIG=/shared/kube/kubeconfig-127
       - cd katalog/tests/istio-operator/requirements
       - furyctl vendor -H
       - cd ../../../../
       - bats -t katalog/tests/istio-operator/istio-requirements.sh
 
   - name: e2e-basic-istio
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-requirements]
     commands:
-      - export CLUSTER_NAME=123
+      - export CLUSTER_NAME=127
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-123
-      - cat /shared/machine/private_key
-      - cat $KUBECONFIG
+      - export KUBECONFIG=/shared/kube/kubeconfig-127
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
   - name: e2e-egress-gateway
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-basic-istio]
     commands:
-      - export CLUSTER_NAME=123
+      - export CLUSTER_NAME=127
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-123
+      - export KUBECONFIG=/shared/kube/kubeconfig-127
       - bats -t katalog/tests/istio-operator/istio-egress-install.sh
       - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
 
   - name: e2e-istio-with-citadel
-    image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
     pull: always
     volumes:
       - name: shared
         path: /shared
     depends_on: [e2e-egress-gateway]
     commands:
-      - export CLUSTER_NAME=123
+      - export CLUSTER_NAME=127
       - export INSTANCE_IP=$(cat /shared/machine/ip)
-      - export KUBECONFIG=/shared/kube/kubeconfig-123
+      - export KUBECONFIG=/shared/kube/kubeconfig-127
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
       - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
-    when:
-      ref:
-        include:
-          - refs/heads/hotfix-*
-          - refs/tags/**
-
-  # - name: wait_for_debug
-  #   image: quay.io/sighup/e2e-testing:1.1.0_0.2.2_2.16.1_1.9.4_1.20.7_3.8.7_2.4.1
-  #   pull: always
-  #   depends_on: [e2e-istio-with-citadel]
-  #   commands:
-  #     - sleep 1h
-  #   when:
-  #     status:
-  #       - failure
 
   - name: destroy
-    image: quay.io/sighup/e2e-testing-drone-plugin:v0.13.0
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.27.1
     pull: always
-    # 1.23 always fails because our version of istio is not compatible. Disabling the wait_for_debug step and changing
-    # the dependency on wait_for_debug to the previous step.
-    # Once the compatibility is working you can enable again the wait for debug step and change the following depends_on
-    # depends_on: [wait_for_debug]
     depends_on: [e2e-istio-with-citadel]
     settings:
       action: destroy
-      pipeline_id: cluster-123
+      pipeline_id: cluster-127
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: shared
+    temp: {}
+
+---
+name: e2e-kubernetes-1.24-kuma
+kind: pipeline
+type: docker
+
+depends_on:
+  - e2e-kubernetes-1.26-istio
+  - e2e-kubernetes-1.27-istio
+
+platform:
+  os: linux
+  arch: amd64
+
+node:
+  runner: internal
+
+trigger:
+  ref:
+    include:
+      - refs/heads/master
+      - refs/tags/**
+      - refs/heads/hotfix-*
+
+steps:
+  - name: init
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.24.0
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [clone]
+    settings:
+      action: custom-cluster-124
+      pipeline_id: cluster-124
+      local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
+      instance_size: 2-extra-large
+      cluster_version: "1.24.0"
+      instance_path: /shared
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+
+  - name: e2e-kuma-standalone
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=124
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-124
+      - bats -t katalog/tests/kuma-standalone/kuma-standalone-deploy.sh
+      - bats -t katalog/tests/kuma-standalone/kuma-demo-deploy.sh
+
+  - name: destroy
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.24.0
+    pull: always
+    depends_on: [e2e-kuma-standalone]
+    settings:
+      action: destroy
+      pipeline_id: cluster-124
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: shared
+    temp: {}
+
+---
+name: e2e-kubernetes-1.25-kuma
+kind: pipeline
+type: docker
+
+depends_on:
+  - e2e-kubernetes-1.26-istio
+  - e2e-kubernetes-1.27-istio
+
+platform:
+  os: linux
+  arch: amd64
+
+node:
+  runner: internal
+
+trigger:
+  ref:
+    include:
+      - refs/heads/master
+      - refs/tags/**
+      - refs/heads/hotfix-*
+
+steps:
+  - name: init
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [clone]
+    settings:
+      action: custom-cluster-125
+      pipeline_id: cluster-125
+      local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
+      instance_size: 2-extra-large
+      cluster_version: "1.25.3"
+      instance_path: /shared
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+
+  - name: e2e-kuma-standalone
+    image: quay.io/sighup/e2e-testing:1.1.0_0.9.0_3.1.1_1.9.4_1.25.3_3.5.3_4.21.1
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=125
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-125
+      - bats -t katalog/tests/kuma-standalone/kuma-standalone-deploy.sh
+      - bats -t katalog/tests/kuma-standalone/kuma-demo-deploy.sh
+
+  - name: destroy
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.25.3
+    pull: always
+    depends_on: [e2e-kuma-standalone]
+    settings:
+      action: destroy
+      pipeline_id: cluster-125
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: shared
+    temp: {}
+
+---
+name: e2e-kubernetes-1.26-kuma
+kind: pipeline
+type: docker
+
+depends_on:
+  - e2e-kubernetes-1.24-kuma
+  - e2e-kubernetes-1.25-kuma
+
+platform:
+  os: linux
+  arch: amd64
+
+node:
+  runner: internal
+
+trigger:
+  ref:
+    include:
+      - refs/heads/master
+      - refs/tags/**
+      - refs/heads/hotfix-*
+
+steps:
+  - name: init
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [clone]
+    settings:
+      action: custom-cluster-126
+      pipeline_id: cluster-126
+      local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
+      instance_size: 2-extra-large
+      cluster_version: "1.26.4"
+      instance_path: /shared
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+
+  - name: e2e-kuma-standalone
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.1.1_1.9.4_1.26.3_3.5.3_4.33.3
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=126
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-126
+      - bats -t katalog/tests/kuma-standalone/kuma-standalone-deploy.sh
+      - bats -t katalog/tests/kuma-standalone/kuma-demo-deploy.sh
+
+  - name: destroy
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.26.4
+    pull: always
+    depends_on: [e2e-kuma-standalone]
+    settings:
+      action: destroy
+      pipeline_id: cluster-126
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: shared
+    temp: {}
+
+---
+name: e2e-kubernetes-1.27-kuma
+kind: pipeline
+type: docker
+
+depends_on:
+  - e2e-kubernetes-1.24-kuma
+  - e2e-kubernetes-1.25-kuma
+
+platform:
+  os: linux
+  arch: amd64
+
+node:
+  runner: internal
+
+trigger:
+  ref:
+    include:
+      - refs/heads/master
+      - refs/tags/**
+      - refs/heads/hotfix-*
+
+steps:
+  - name: init
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.27.1
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [clone]
+    settings:
+      action: custom-cluster-127
+      pipeline_id: cluster-127
+      local_kind_config_path: katalog/tests/istio-operator/kind-config.yml
+      instance_size: 2-extra-large
+      cluster_version: "1.27.1"
+      instance_path: /shared
+      aws_default_region:
+        from_secret: aws_region
+      aws_access_key_id:
+        from_secret: aws_access_key_id
+      aws_secret_access_key:
+        from_secret: aws_secret_access_key
+      terraform_tf_states_bucket_name:
+        from_secret: terraform_tf_states_bucket_name
+      vsphere_server:
+        from_secret: vsphere_server
+      vsphere_password:
+        from_secret: vsphere_password
+      vsphere_user:
+        from_secret: vsphere_user
+      dockerhub_username:
+        from_secret: dockerhub_username
+      dockerhub_password:
+        from_secret: dockerhub_password
+
+  - name: e2e-kuma-standalone
+    image: quay.io/sighup/e2e-testing:1.1.0_0.11.0_3.12.0_1.9.4_1.27.1_3.5.3_4.33.3
+    pull: always
+    volumes:
+      - name: shared
+        path: /shared
+    depends_on: [init]
+    commands:
+      - export CLUSTER_NAME=127
+      - export INSTANCE_IP=$(cat /shared/machine/ip)
+      - export KUBECONFIG=/shared/kube/kubeconfig-127
+      - bats -t katalog/tests/kuma-standalone/kuma-standalone-deploy.sh
+      - bats -t katalog/tests/kuma-standalone/kuma-demo-deploy.sh
+
+  - name: destroy
+    image: quay.io/sighup/e2e-testing-drone-plugin:v1.27.1
+    pull: always
+    depends_on: [e2e-kuma-standalone]
+    settings:
+      action: destroy
+      pipeline_id: cluster-127
       aws_default_region:
         from_secret: aws_region
       aws_access_key_id:
@@ -776,12 +1108,14 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.20
-  - e2e-kubernetes-1.21
-  # Disabling the dependency on 1.22 and 1.23 to release because of issue #27:
-  # https://github.com/sighupio/fury-kubernetes-service-mesh/issues/27
-  # - e2e-kubernetes-1.22
-  # - e2e-kubernetes-1.23
+  - e2e-kubernetes-1.24-istio
+  - e2e-kubernetes-1.24-kuma
+  - e2e-kubernetes-1.25-istio
+  - e2e-kubernetes-1.25-kuma
+  - e2e-kubernetes-1.26-istio
+  - e2e-kubernetes-1.26-kuma
+  - e2e-kubernetes-1.27-istio
+  - e2e-kubernetes-1.27-kuma
 
 platform:
   os: linux
@@ -793,16 +1127,6 @@ trigger:
       - refs/tags/**
 
 steps:
-  - name: prepare-canonical-json
-    image: registry.sighup.io/poc/fury-repo-automations:v0.0.3
-    pull: always
-    depends_on: [clone]
-    commands:
-      - spock module-json -m=fury-kubernetes-service-mesh -r=False -v=${DRONE_TAG}
-    when:
-      ref:
-        include:
-          - refs/tags/**
 
   - name: prepare-tar-gz
     image: alpine:latest
@@ -830,7 +1154,6 @@ steps:
     image: plugins/github-release
     pull: always
     depends_on:
-      - prepare-canonical-json
       - prepare-tar-gz
       - prepare-release-notes
     settings:
@@ -839,7 +1162,6 @@ steps:
       file_exists: overwrite
       files:
         - fury-kubernetes-service-mesh-${DRONE_TAG}.tar.gz
-        - fury-kubernetes-service-mesh-canonical-definition-${DRONE_TAG}.json
       prerelease: true
       overwrite: true
       title: "Preview ${DRONE_TAG}"
@@ -856,7 +1178,6 @@ steps:
     image: plugins/github-release
     pull: always
     depends_on:
-      - prepare-canonical-json
       - prepare-tar-gz
       - prepare-release-notes
     settings:
@@ -865,7 +1186,6 @@ steps:
       file_exists: overwrite
       files:
         - fury-kubernetes-service-mesh-${DRONE_TAG}.tar.gz
-        - fury-kubernetes-service-mesh-canonical-definition-${DRONE_TAG}.json
       prerelease: false
       overwrite: true
       title: "Release ${DRONE_TAG}"

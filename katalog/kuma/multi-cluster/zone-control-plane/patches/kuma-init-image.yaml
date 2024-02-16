@@ -1,0 +1,19 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kuma-control-plane
+  namespace: kuma-system
+spec:
+  template:
+    spec:
+      containers:
+        - name: control-plane
+          env:
+            - name: KUMA_INJECTOR_INIT_CONTAINER_IMAGE
+              value: "registry.sighup.io/fury/kumahq/kuma-init:1.4.1"
+            - name: KUMA_RUNTIME_KUBERNETES_INJECTOR_SIDECAR_CONTAINER_IMAGE
+              value: "registry.sighup.io/fury/kumahq/kuma-dp:1.4.1"

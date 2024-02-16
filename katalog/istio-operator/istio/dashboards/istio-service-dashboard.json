@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "datasource",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "6.4.3"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -48,9 +12,9 @@
       }
     ]
   },
-  "description": "Istio Service Dashboard version 1.12.6",
+  "description": "Istio Service Dashboard version 1.19.3",
   "editable": false,
-  "gnetId": 7636,
+  "gnetId": null,
   "graphTooltip": 0,
   "iteration": 1595591291797,
   "links": [],
@@ -2870,9 +2834,9 @@
         "multi": false,
         "name": "service",
         "options": [],
-        "query": "label_values(destination_service)",
+        "query": "query_result(sum(istio_requests_total{}) by (destination_service) or sum(istio_tcp_sent_bytes_total{}) by (destination_service))",
         "refresh": 1,
-        "regex": "",
+        "regex": "/.*destination_service=\"([^\"]*).*/",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
@@ -2895,10 +2859,31 @@
         "label": "Reporter",
         "multi": true,
         "name": "qrep",
-        "options": [],
-        "query": "label_values(reporter)",
+        "query": "source,destination",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "custom",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${datasource}",
+        "definition": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Client Cluster",
+        "multi": true,
+        "name": "srccluster",
+        "options": [],
+        "query": "query_result(sum(istio_requests_total{reporter=~\"$qrep\", destination_service=\"$service\"}) by (source_cluster) or sum(istio_tcp_sent_bytes_total{reporter=~\"$qrep\", destination_service=~\"$service\"}) by (source_cluster))",
+        "refresh": 1,
+        "regex": "/.*cluster=\"([^\"]*).*/",
         "skipUrlSync": false,
         "sort": 2,
         "tagValuesQuery": "",
@@ -2922,7 +2907,7 @@
         "refresh": 1,
         "regex": "/.*namespace=\"([^\"]*).*/",
         "skipUrlSync": false,
-        "sort": 2,
+        "sort": 3,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -2944,7 +2929,29 @@
         "refresh": 1,
         "regex": "/.*workload=\"([^\"]*).*/",
         "skipUrlSync": false,
-        "sort": 3,
+        "sort": 4,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${datasource}",
+        "definition": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Service Workload Cluster",
+        "multi": true,
+        "name": "dstcluster",
+        "options": [],
+        "query": "query_result(sum(istio_requests_total{reporter=\"destination\", destination_service=\"$service\"}) by (destination_cluster) or sum(istio_tcp_sent_bytes_total{reporter=\"destination\", destination_service=~\"$service\"}) by (destination_cluster))",
+        "refresh": 1,
+        "regex": "/.*cluster=\"([^\"]*).*/",
+        "skipUrlSync": false,
+        "sort": 2,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -2966,7 +2973,7 @@
         "refresh": 1,
         "regex": "/.*namespace=\"([^\"]*).*/",
         "skipUrlSync": false,
-        "sort": 2,
+        "sort": 3,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -2984,11 +2991,11 @@
         "multi": true,
         "name": "dstwl",
         "options": [],
-        "query": "query_result( sum(istio_requests_total{reporter=\"destination\", destination_service=~\"$service\", destination_workload_namespace=~\"$dstns\"}) by (destination_workload) or sum(istio_tcp_sent_bytes_total{reporter=\"destination\", destination_service=~\"$service\", destination_workload_namespace=~\"$dstns\"}) by (destination_workload))",
+        "query": "query_result( sum(istio_requests_total{reporter=\"destination\", destination_service=~\"$service\", destination_cluster=~\"$dstcluster\", destination_workload_namespace=~\"$dstns\"}) by (destination_workload) or sum(istio_tcp_sent_bytes_total{reporter=\"destination\", destination_service=~\"$service\", destination_cluster=~\"$dstcluster\", destination_workload_namespace=~\"$dstns\"}) by (destination_workload))",
         "refresh": 1,
         "regex": "/.*workload=\"([^\"]*).*/",
         "skipUrlSync": false,
-        "sort": 3,
+        "sort": 4,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",

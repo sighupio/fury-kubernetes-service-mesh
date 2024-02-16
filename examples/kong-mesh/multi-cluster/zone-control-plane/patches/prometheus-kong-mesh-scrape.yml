@@ -1,0 +1,31 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: k8s
+  namespace: monitoring
+spec:
+  additionalScrapeConfigs:
+    key: additional-scrape-configs.yml
+    name: kuma-scrape-config
+  containers:
+    - name: kuma-prometheus-sd
+      image: registry.sighup.io/fury/kong/kuma-prometheus-sd:1.4.1
+      imagePullPolicy: IfNotPresent
+      args:
+        - run
+        - --name=kuma-prometheus-sd
+        - --cp-address=grpc://kong-mesh-control-plane.kong-mesh-system:5676
+        - --output-file=/etc/prometheus/config_out/kuma.file_sd.json
+      resources:
+        limits:
+          cpu: 100m
+          memory: 25Mi
+      volumeMounts:
+        - mountPath: /etc/prometheus/config_out
+          name: config-out
+  securityContext:
+    runAsNonRoot: false

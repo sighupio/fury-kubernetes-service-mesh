@@ -1,0 +1,75 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../../katalog/kuma/multi-cluster/zone-control-plane
+  # /path/to/prometheus/operator
+
+  # Scrape config to collect data about data planes
+  # - resources/kuma-scrape-config.yml
+
+  # Use this only if you want to expose metrics to an existing Prometheus Operator
+  # - resources/service-monitor.yml
+
+patchesStrategicMerge:
+  - patches/kuma-zone.yml
+  - patches/kuma-tls-cert-mount.yml
+  - patches/kuma-public-ingress.yml
+  - patches/kuma-metrics.yml
+
+  # Use together with service monitor and scrape config
+  # - patches/prometheus-kuma-scrape.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    cert-manager.io/allow-direct-injection: "true"
+
+secretGenerator:
+
+  # This is equal to tls.crt if you generated the certs with kumactl
+  - name: kds-ca-certs
+    namespace: kuma-system
+    files:
+      - ca.crt=secrets/external.crt
+
+  # The following certificates can be generated with
+  # kumactl generate tls-certificate --type=server --cp-hostname=kuma-control-plane.kuma-system --cp-hostname=kuma-control-plane.kuma-system.svc --cert-file=secrets/internal.crt --key-file=secrets/internal.key
+  - name: kuma-tls-cert
+    namespace: kuma-system
+    type: kubernetes.io/tls
+    files:
+      - tls.crt=secrets/internal.crt
+      - tls.key=secrets/internal.key
+      - ca.crt=secrets/internal.crt
+
+# TODO check minimum kustomize version for the "options" field
+#configMapGenerator:
+#  - name: kuma-cp-dashboard
+#    files:
+#      - resources/dashboards/kuma-controlplane.json
+#    options:
+#      labels:
+#        grafana-sighup-dashboard: kuma
+#  - name: kuma-dp-dashboard
+#    files:
+#      - resources/dashboards/kuma-dataplane.json
+#    options:
+#      labels:
+#        grafana-sighup-dashboard: kuma
+#  - name: kuma-mesh-dashboard
+#    files:
+#      - resources/dashboards/kuma-mesh.json
+#    options:
+#      labels:
+#        grafana-sighup-dashboard: kuma
+#  - name: kuma-service-dashboard
+#    files:
+#      - resources/dashboards/kuma-service-to-service.json
+#    options:
+#      labels:
+#        grafana-sighup-dashboard: kuma

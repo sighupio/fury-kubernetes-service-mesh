@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "datasource",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "6.4.3"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -48,9 +12,9 @@
       }
     ]
   },
-  "description": "Istio Workload Dashboard version 1.12.6",
+  "description": "Istio Workload Dashboard version 1.19.3",
   "editable": false,
-  "gnetId": 7630,
+  "gnetId": null,
   "graphTooltip": 0,
   "iteration": 1531345461465,
   "links": [],
@@ -2599,8 +2563,7 @@
         "label": "Reporter",
         "multi": true,
         "name": "qrep",
-        "options": [],
-        "query": "label_values(reporter)",
+        "query": "source,destination",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2608,7 +2571,7 @@
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
-        "type": "query",
+        "type": "custom",
         "useTags": false
       },
       {
