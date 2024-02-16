@@ -76,7 +76,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 ```yaml
 bases:
     - name: service-mesh/istio-operator
-      version: v2.0.0
+      version: v2.0.2
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
@@ -149,7 +149,7 @@ The following set of alerts is included:
 ```yaml
 bases:
     - name: service-mesh/kuma
-      version: v2.0.0
+      version: v2.0.2
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
@@ -179,7 +179,7 @@ resources:
 ```yaml
 bases:
     - name: service-mesh/kong-mesh
-      version: v2.0.0
+      version: v2.0.2
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
