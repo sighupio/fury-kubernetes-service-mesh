@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "datasource",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "6.4.3"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -48,9 +12,9 @@
       }
     ]
   },
-  "description": "Istio Control Plane Dashboard version 1.12.6",
+  "description": "Istio Control Plane Dashboard version 1.19.3",
   "editable": false,
-  "gnetId": 7645,
+  "gnetId": null,
   "graphTooltip": 1,
   "links": [],
   "panels": [
@@ -1039,30 +1003,14 @@
           "legendFormat": "Inbound Listeners",
           "refId": "B"
         },
-        {
-          "expr": "pilot_conflict_outbound_listener_http_over_current_tcp{app=\"istiod\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "legendFormat": "Outbound Listeners (http over current tcp)",
-          "refId": "A"
-        },
-        {
+                {
           "expr": "pilot_conflict_outbound_listener_tcp_over_current_tcp{app=\"istiod\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
           "legendFormat": "Outbound Listeners (tcp over current tcp)",
           "refId": "C"
-        },
-        {
-          "expr": "pilot_conflict_outbound_listener_tcp_over_current_http{app=\"istiod\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "legendFormat": "Outbound Listeners (tcp over current http)",
-          "refId": "D"
-        }
+                }
       ],
       "thresholds": [],
       "timeFrom": null,
@@ -1535,7 +1483,13 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1631,7 +1585,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fill": 1,
       "fillGradient": 0,
