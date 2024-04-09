@@ -6,7 +6,7 @@
 
 # You can change this variable to download a different version
 
-VERSION='2.4.3'
+VERSION='2.6.4'
 
 # Run the following script to automatically detect the operating system and download Kuma:
 

@@ -44,8 +44,8 @@ Kubernetes Fury Service Mesh provides the following packages:
 | Package                                  | Version   | Description                                                                                                                                                               |
 | ---------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Istio Operator](katalog/istio-operator) | `v1.19.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
-| [Kong Mesh](katalog/kong-mesh) | `v2.4.3` | Kong Mesh package. Includes `standalone` and `multi-cluster` setup. |
-| [Kuma](katalog/kuma) | `v2.4.3` | Kuma package. Includes `standalone` and `multi-cluster` setup. |
+| [Kong Mesh](katalog/kong-mesh) | `v2.6.4` | Kong Mesh package. Includes `standalone` and `multi-cluster` setup. |
+| [Kuma](katalog/kuma) | `v2.6.4` | Kuma package. Includes `standalone` and `multi-cluster` setup. |
 
 ## Compatibility
 
