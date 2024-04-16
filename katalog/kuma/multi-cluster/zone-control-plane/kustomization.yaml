@@ -8,10 +8,10 @@ kind: Kustomization
 images:
   - name: docker.io/kumahq/kuma-cp
     newName: registry.sighup.io/fury/kumahq/kuma-cp
-    newTag: 2.6.4
+    newTag: 2.6.5
   - name: docker.io/kumahq/kuma-dp
     newName: registry.sighup.io/fury/kumahq/kuma-dp
-    newTag: 2.6.4
+    newTag: 2.6.5
 
 patchesStrategicMerge:
   - patches/kuma-init-image.yaml
