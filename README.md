@@ -5,37 +5,25 @@
 </h1>
 <!-- markdownlint-enable MD033 -->
 
-![Release](https://img.shields.io/badge/Latest%20Release-v1.2.0-blue)
+![Release](https://img.shields.io/badge/Latest%20Release-v3.0.0-blue)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-service-mesh?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
 <!-- <KFD-DOCS> -->
 
-**Kubernetes Fury Service Mesh** add-on module for the [Kubernetes Fury Distribution (KFD)][kfd-repo] allows to transparently add capabilities like observability, traffic management, and security to applications, without modifying their source code.
+**Kubernetes Fury Istio** add-on module for the [Kubernetes Fury Distribution (KFD)][kfd-repo] allows to transparently add Istio Mesh capabilities to your KFD cluster.
 
 If you are new to KFD please refer to the [official documentation][kfd-docs] on how to get started with KFD.
 
 ## Overview
 
-**Kubernetes Fury Service Mesh** add-on module deploys a service mesh into a Kubernetes cluster. A service mesh, such as Istio, allows to transparently add capabilities like observability, traffic management, and security to applications, without modifying their source code. These capabilities are of great value when running microservices at scale or under strict security requirements.
+**Kubernetes Fury Istio** add-on module deploys Istio service mesh into a Kubernetes cluster. A service mesh, such as Istio, allows to transparently add capabilities like observability, traffic management, and security to applications, without modifying their source code. These capabilities are of great value when running microservices at scale or under strict security requirements.
 
 ### Istio
 
 This module features the Istio Project. Istio provides behavioral insights and operational control over the service mesh as a whole, offering a complete solution to satisfy the diverse requirements of microservice applications.
 
 Read more on [Istio's documentation site][istio-docs-site].
-
-### Kuma
-
-This module features Kuma Service Mesh. It's a modern control plane for microservices and service mesh for Kubernetes and VMs, with support for multiple meshes in one cluster.
-
-Read more on [Kuma docs][kuma-docs-site].
-
-### Kong Mesh
-
-Kong Mesh is an enterprise-grade service mesh built on top of Kuma.
-
-Read more on [Kong Mesh docs][kong-mesh-docs-site].
 
 ## Packages
 
@@ -44,8 +32,6 @@ Kubernetes Fury Service Mesh provides the following packages:
 | Package                                  | Version   | Description                                                                                                                                                               |
 | ---------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Istio Operator](katalog/istio-operator) | `v1.19.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
-| [Kong Mesh](katalog/kong-mesh) | `v2.4.3` | Kong Mesh package. Includes `standalone` and `multi-cluster` setup. |
-| [Kuma](katalog/kuma) | `v2.4.3` | Kuma package. Includes `standalone` and `multi-cluster` setup. |
 
 ## Compatibility
 
@@ -75,8 +61,8 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 
 ```yaml
 bases:
-    - name: service-mesh/istio-operator
-      version: v2.0.2
+    - name: istio/istio-operator
+      version: v3.0.0
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
@@ -87,13 +73,13 @@ bases:
 furyctl vendor -H
 ```
 
-3. Inspect the downloaded packages under `./vendor/katalog/service-mesh` to get familiar with the content.
+3. Inspect the downloaded packages under `./vendor/katalog/istio` to get familiar with the content.
 
-4. Define a `kustomization.yaml` with that includes the `./vendor/katalog/service-mesh` directory as a resource:
+4. Define a `kustomization.yaml` with that includes the `./vendor/katalog/istio` directory as a resource:
 
 ```yaml
 resources:
-    - ./vendor/katalog/service-mesh/istio-operator/profiles/minimal
+    - ./vendor/katalog/istio/istio-operator/profiles/minimal
 ```
 
 > You can point to one of the predefined profiles (`minimal`, `tracing` or `full`) here.
@@ -142,72 +128,9 @@ The following set of alerts is included:
 | IstiodUnavailableReplica           | Istiod unavailable pod                                                                                                                              | Istiod unavailable replica > 0                                                                  |
 | Ingress200RateLow                  | ingress gateway 200 rate drops                                                                                                                      | The expected rate is 100 per ns, the limit is set based on 15ns                                 |
 
-### Kuma deployment
-
-1. To start using Kubernetes Fury Service Mesh, add to your `Furyfile.yml` the module as a base, you can also specify the single package:
-
-```yaml
-bases:
-    - name: service-mesh/kuma
-      version: v2.0.2
-```
-
-> See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
-
-2. Execute the following command to download the packages to your machine:
-
-```bash
-furyctl vendor -H
-```
-
-3. Inspect the downloaded packages under `./vendor/katalog/service-mesh` to get familiar with the content.
-
-4. Define a `kustomization.yaml` with that includes the `./vendor/katalog/service-mesh` directory as a resource:
-
-```yaml
-resources:
-    - ./vendor/katalog/service-mesh/kuma/standalone
-```
-
-> You can point to one of the predefined setups (`standalone`, `multi-cluster/global-control-plane` or `multi-cluster/zone-control-plane`) here.
-> For additional details follow the [examples](examples/kuma/multi-cluster/README.md).
-
-### Kong Mesh deployment
-
-1. To start using Kubernetes Fury Service Mesh, add to your `Furyfile.yml` the module as a base, you can also specify the single package:
-
-```yaml
-bases:
-    - name: service-mesh/kong-mesh
-      version: v2.0.2
-```
-
-> See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
-
-2. Execute the following command to download the packages to your machine:
-
-```bash
-furyctl vendor -H
-```
-
-3. Inspect the downloaded packages under `./vendor/katalog/service-mesh` to get familiar with the content.
-
-4. Define a `kustomization.yaml` with that includes the `./vendor/katalog/service-mesh` directory as a resource:
-
-```yaml
-resources:
-    - ./vendor/katalog/service-mesh/kuma/standalone
-```
-
-> You can point to one of the predefined setups (`standalone`, `multi-cluster/global-control-plane` or `multi-cluster/zone-control-plane`) here.
-> For additional details follow the [examples](examples/kong-mesh/multi-cluster/README.md).
-> :warning: You will need a valid license to use Kong Mesh. If you don't have it, please use Kuma instead.
-
 <!-- links -->
 [kfd-repo]: https://github.com/sighupio/fury-distribution
 [istio-docs-site]: https://istio.io/latest/about/service-mesh/
-[kuma-docs-site]: https://kuma.io/docs
-[kong-mesh-docs-site]: https://docs.konghq.com/mesh/latest/
 [furyctl-repo]: https://github.com/sighupio/furyctl
 [kustomize-repo]: https://github.com/kubernetes-sigs/kustomize
 [kfd-docs]: https://docs.kubernetesfury.com/docs/distribution/
@@ -225,10 +148,6 @@ Before contributing, please read first the [Contributing Guidelines](docs/CONTRI
 ### Reporting Issues
 
 In case you experience any problems with the module, please [open a new issue](https://github.com/sighupio/fury-kubernetes-service-mesh/issues/new/choose).
-
-### Kong Mesh docs
-
-Refer to [./docs/kong-mesh/README.md](./docs/kong-mesh/README.md)
 
 ## License
 
