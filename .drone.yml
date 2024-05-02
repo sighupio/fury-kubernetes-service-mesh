@@ -185,7 +185,7 @@ volumes:
     host:
       path: /var/run/docker.sock
 
----
+#---
 # name: e2e-kubernetes-1.25-istio
 # kind: pipeline
 # type: docker
