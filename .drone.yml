@@ -191,6 +191,7 @@ type: docker
 
 depends_on:
   - policeman
+  - e2e-kubernetes-1.24-istio
 
 platform:
   os: linux
@@ -307,7 +308,6 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.24-istio
   - e2e-kubernetes-1.25-istio
 
 
@@ -426,8 +426,7 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.24-istio
-  - e2e-kubernetes-1.25-istio
+  - e2e-kubernetes-1.26-istio
 
 platform:
   os: linux
