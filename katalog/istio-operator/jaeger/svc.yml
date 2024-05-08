@@ -9,6 +9,7 @@ metadata:
   labels:
     app: jaeger-collector
   name: collector-monitoring
+  namespace: observability
 spec:
   ports:
     - name: admin-http
@@ -25,6 +26,7 @@ metadata:
   labels:
     app: jaeger-query
   name: query-monitoring
+  namespace: observability
 spec:
   ports:
     - name: admin-http

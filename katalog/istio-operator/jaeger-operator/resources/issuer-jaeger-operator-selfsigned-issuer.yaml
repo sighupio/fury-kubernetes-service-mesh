@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  labels:
+    name: jaeger-operator
+  name: jaeger-operator-selfsigned-issuer
+  namespace: observability
+spec:
+  selfSigned: {}
+
