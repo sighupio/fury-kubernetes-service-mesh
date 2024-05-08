@@ -8,6 +8,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: jaeger-collector
+  namespace: observability
 spec:
   endpoints:
     - interval: 30s
@@ -21,6 +22,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: jaeger-query
+  namespace: observability
 spec:
   endpoints:
     - interval: 30s

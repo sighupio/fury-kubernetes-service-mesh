@@ -1,0 +1,30 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: observability/jaeger-operator-serving-cert
+  labels:
+    name: jaeger-operator
+  name: jaeger-operator-validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: jaeger-operator-webhook-service
+      namespace: observability
+      path: /validate-jaegertracing-io-v1-jaeger
+  failurePolicy: Fail
+  name: vjaeger.kb.io
+  rules:
+  - apiGroups:
+    - jaegertracing.io
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - jaegers
+  sideEffects: None
+
