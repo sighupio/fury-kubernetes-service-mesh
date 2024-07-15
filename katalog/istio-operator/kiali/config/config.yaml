@@ -21,8 +21,10 @@ kiali_feature_flags:
 login_token:
   signing_key: "eto6tUSMft"
 server:
-  metrics_enabled: true
-  metrics_port: 9090
+  observability:
+    metrics:
+      enabled: true
+      port: 9090
   port: 20001
   web_root: /kiali
 external_services:

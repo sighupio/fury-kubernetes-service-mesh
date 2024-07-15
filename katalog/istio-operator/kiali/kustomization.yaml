@@ -28,4 +28,4 @@ configMapGenerator:
 images:
   - name: quay.io/kiali/kiali
     newName: registry.sighup.io/fury/kiali/kiali
-    newTag: v1.75.0
+    newTag: v1.86.0
