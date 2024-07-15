@@ -39,6 +39,8 @@ The Grafana dashboards found in `katalog/istio-operator/istio/dashboards` have b
 - [Istio Control Plane Dashboard](https://grafana.com/grafana/dashboards/7645-istio-control-plane-dashboard/)
 - [Istio Service Dashboard](https://grafana.com/grafana/dashboards/7636-istio-service-dashboard)
 - [Istio Workload Dashboard](https://grafana.com/grafana/dashboards/7630-istio-workload-dashboard)
+- [Istio Performance Dashboard](https://grafana.com/grafana/dashboards/11829-istio-performance-dashboard/)
+- [Istio Wasm Extension Dashboard](https://grafana.com/grafana/dashboards/13277-istio-wasm-extension-dashboard/)
 
 Compared to the official dashboards, the following changes have been made:
 
