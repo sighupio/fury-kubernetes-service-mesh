@@ -5,7 +5,7 @@
 </h1>
 <!-- markdownlint-enable MD033 -->
 
-![Release](https://img.shields.io/badge/Latest%20Release-v3.0.0-blue)
+![Release](https://img.shields.io/badge/Latest%20Release-v3.1.0-blue)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-service-mesh?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
@@ -31,16 +31,16 @@ Kubernetes Fury Service Mesh provides the following packages:
 
 | Package                                  | Version   | Description                                                                                                                                                               |
 | ---------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Istio Operator](katalog/istio-operator) | `v1.19.6` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
+| [Istio Operator](katalog/istio-operator) | `v1.22.2` | Istio Service Mesh Operator package. Including the Istio Operator itself, the Jeager Operator, and Kiali. Includes 3 different profiles: `minimal`, `tracing` and `full`. |
 
 ## Compatibility
 
 | Kubernetes Version |   Compatibility    | Notes           |
 | ------------------ | :----------------: | --------------- |
-| `1.24.x`           | :white_check_mark: | No known issues |
-| `1.25.x`           | :white_check_mark: | No known issues |
 | `1.26.x`           | :white_check_mark: | No known issues |
 | `1.27.x`           | :white_check_mark: | No known issues |
+| `1.28.x`           | :white_check_mark: | No known issues |
+| `1.29.x`           | :white_check_mark: | No known issues |
 
 Check the [compatibility matrix][compatibility-matrix] for additional information about previous releases of the modules.
 
@@ -62,7 +62,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 ```yaml
 bases:
     - name: istio/istio-operator
-      version: v3.0.0
+      version: v3.1.0
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.
