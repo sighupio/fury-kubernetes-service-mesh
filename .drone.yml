@@ -5,9 +5,10 @@
 # Pipelines order:
 # 1. license
 # 2. policeman
-# 3. istio-1.24 + istio-1.25
-# 4. istio-1.26 + istio-1.27
-# 5. release
+# 3. istio-1.27
+# 4. istio-1.28
+# 5. istio-1.29
+# 6. release
 
 name: license
 kind: pipeline
@@ -66,359 +67,9 @@ steps:
     depends_on:
       - render
     commands:
-    - /pluto detect istio-operator-full.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.27.0
----
-name: e2e-kubernetes-1.24-istio
-kind: pipeline
-type: docker
-
-depends_on:
-  - policeman
-
-platform:
-  os: linux
-  arch: amd64
-
-trigger:
-  ref:
-    include:
-      - refs/heads/master
-      - refs/tags/**
-      - refs/heads/hotfix-*
-
-steps:
-  - name: create-kind-cluster
-    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
-    pull: always
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
-    depends_on: [clone]
-    environment:
-      CLUSTER_VERSION: v1.24.15
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-124
-      # /drone/src is the default workdir for the pipeline
-      # using this folder we don't need to mount another
-      # shared volume between the steps
-      KUBECONFIG: /drone/src/kubeconfig-124
-    commands:
-      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
-      # does not work when disabling the default CNI. It will always go in timeout.
-      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config katalog/tests/istio-operator/kind-config.yml
-      # save the kubeconfig so we can use it from other steps.
-      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
-
-  - name: e2e-requirements
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-124
-      KUBECONFIG: /drone/src/kubeconfig-124
-    depends_on: [create-kind-cluster]
-    commands:
-      - cd katalog/tests/istio-operator/requirements
-      - furyctl vendor -H
-      - cd ../../../../
-      - bats -t katalog/tests/istio-operator/istio-requirements.sh
-
-  - name: e2e-basic-istio
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-124
-      KUBECONFIG: /drone/src/kubeconfig-124
-    depends_on: [e2e-requirements]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
-      - bats -t katalog/tests/istio-operator/istio-minimal.sh
-
-  - name: e2e-egress-gateway
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-124
-      KUBECONFIG: /drone/src/kubeconfig-124
-    depends_on: [e2e-basic-istio]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-egress-install.sh
-      - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
-
-  - name: e2e-istio-with-citadel
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-124
-      KUBECONFIG: /drone/src/kubeconfig-124
-    depends_on: [e2e-egress-gateway]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
-
-  - name: delete-kind-cluster
-    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
-    pull: always
-    depends_on: [e2e-istio-with-citadel]
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-124
-    commands:
-      # does not matter if the command fails
-      - kind delete cluster --name $${CLUSTER_NAME} || true
-    when:
-      status:
-        - success
-        - failure
-
-volumes:
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
-
----
-name: e2e-kubernetes-1.25-istio
-kind: pipeline
-type: docker
-
-depends_on:
-  - policeman
-  - e2e-kubernetes-1.24-istio
-
-platform:
-  os: linux
-  arch: amd64
-
-trigger:
-  ref:
-    include:
-      - refs/heads/master
-      - refs/tags/**
-      - refs/heads/hotfix-*
-
-steps:
-  - name: create-kind-cluster
-    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
-    pull: always
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
-    depends_on: [clone]
-    environment:
-      CLUSTER_VERSION: v1.25.11
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-125
-      # /drone/src is the default workdir for the pipeline
-      # using this folder we don't need to mount another
-      # shared volume between the steps
-      KUBECONFIG: /drone/src/kubeconfig-125
-    commands:
-      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
-      # does not work when disabling the default CNI. It will always go in timeout.
-      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config katalog/tests/istio-operator/kind-config.yml
-      # save the kubeconfig so we can use it from other steps.
-      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
-
-  - name: e2e-requirements
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-125
-      KUBECONFIG: /drone/src/kubeconfig-125
-    depends_on: [create-kind-cluster]
-    commands:
-      - cd katalog/tests/istio-operator/requirements
-      - furyctl vendor -H
-      - cd ../../../../
-      - bats -t katalog/tests/istio-operator/istio-requirements.sh
-
-  - name: e2e-basic-istio
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-125
-      KUBECONFIG: /drone/src/kubeconfig-125
-    depends_on: [e2e-requirements]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
-      - bats -t katalog/tests/istio-operator/istio-minimal.sh
-
-  - name: e2e-egress-gateway
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-125
-      KUBECONFIG: /drone/src/kubeconfig-125
-    depends_on: [e2e-basic-istio]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-egress-install.sh
-      - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
-
-  - name: e2e-istio-with-citadel
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-125
-      KUBECONFIG: /drone/src/kubeconfig-125
-    depends_on: [e2e-egress-gateway]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
-
-  - name: delete-kind-cluster
-    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
-    pull: always
-    depends_on: [e2e-istio-with-citadel]
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-125
-    commands:
-      # does not matter if the command fails
-      - kind delete cluster --name $${CLUSTER_NAME} || true
-    when:
-      status:
-        - success
-        - failure
-
-volumes:
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
-
----
-name: e2e-kubernetes-1.26-istio
-kind: pipeline
-type: docker
-
-depends_on:
-  - e2e-kubernetes-1.25-istio
-
-
-platform:
-  os: linux
-  arch: amd64
-
-trigger:
-  ref:
-    include:
-      - refs/heads/master
-      - refs/tags/**
-      - refs/heads/hotfix-*
-
-steps:
-  - name: create-kind-cluster
-    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
-    pull: always
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
-    depends_on: [clone]
-    environment:
-      CLUSTER_VERSION: v1.26.6
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-126
-      # /drone/src is the default workdir for the pipeline
-      # using this folder we don't need to mount another
-      # shared volume between the steps
-      KUBECONFIG: /drone/src/kubeconfig-126
-    commands:
-      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
-      # does not work when disabling the default CNI. It will always go in timeout.
-      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config katalog/tests/istio-operator/kind-config.yml
-      # save the kubeconfig so we can use it from other steps.
-      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
-
-  - name: e2e-requirements
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-126
-      KUBECONFIG: /drone/src/kubeconfig-126
-    depends_on: [create-kind-cluster]
-    commands:
-      - cd katalog/tests/istio-operator/requirements
-      - furyctl vendor -H
-      - cd ../../../../
-      - bats -t katalog/tests/istio-operator/istio-requirements.sh
-
-  - name: e2e-basic-istio
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-126
-      KUBECONFIG: /drone/src/kubeconfig-126
-    depends_on: [e2e-requirements]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
-      - bats -t katalog/tests/istio-operator/istio-minimal.sh
-
-  - name: e2e-egress-gateway
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-126
-      KUBECONFIG: /drone/src/kubeconfig-126
-    depends_on: [e2e-basic-istio]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-egress-install.sh
-      - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
-
-  - name: e2e-istio-with-citadel
-    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
-    pull: always
-    network_mode: host
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-126
-      KUBECONFIG: /drone/src/kubeconfig-126
-    depends_on: [e2e-egress-gateway]
-    commands:
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
-      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
-
-  - name: delete-kind-cluster
-    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
-    pull: always
-    depends_on: [e2e-istio-with-citadel]
-    environment:
-      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-126
-    commands:
-      # does not matter if the command fails
-      - kind delete cluster --name $${CLUSTER_NAME} || true
-    when:
-      status:
-        - success
-        - failure
-
-volumes:
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
+      - /pluto detect istio-operator-full.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.27.0
+      - /pluto detect istio-operator-full.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.28.0
+      - /pluto detect istio-operator-full.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.29.0
 
 ---
 name: e2e-kubernetes-1.27-istio
@@ -426,7 +77,7 @@ kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.26-istio
+  - policeman
 
 platform:
   os: linux
@@ -538,16 +189,248 @@ volumes:
       path: /var/run/docker.sock
 
 ---
+name: e2e-kubernetes-1.28-istio
+kind: pipeline
+type: docker
+
+depends_on:
+  - e2e-kubernetes-1.27-istio
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/heads/master
+      - refs/tags/**
+      - refs/heads/hotfix-*
+
+steps:
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    pull: always
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    depends_on: [clone]
+    environment:
+      CLUSTER_VERSION: v1.28.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-128
+      # /drone/src is the default workdir for the pipeline
+      # using this folder we don't need to mount another
+      # shared volume between the steps
+      KUBECONFIG: /drone/src/kubeconfig-128
+    commands:
+      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
+      # does not work when disabling the default CNI. It will always go in timeout.
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config katalog/tests/istio-operator/kind-config.yml
+      # save the kubeconfig so we can use it from other steps.
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-requirements
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-128
+      KUBECONFIG: /drone/src/kubeconfig-128
+    depends_on: [create-kind-cluster]
+    commands:
+      - cd katalog/tests/istio-operator/requirements
+      - furyctl vendor -H
+      - cd ../../../../
+      - bats -t katalog/tests/istio-operator/istio-requirements.sh
+
+  - name: e2e-basic-istio
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-128
+      KUBECONFIG: /drone/src/kubeconfig-128
+    depends_on: [e2e-requirements]
+    commands:
+      - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
+      - bats -t katalog/tests/istio-operator/istio-minimal.sh
+
+  - name: e2e-egress-gateway
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-128
+      KUBECONFIG: /drone/src/kubeconfig-128
+    depends_on: [e2e-basic-istio]
+    commands:
+      - bats -t katalog/tests/istio-operator/istio-egress-install.sh
+      - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
+
+  - name: e2e-istio-with-citadel
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-128
+      KUBECONFIG: /drone/src/kubeconfig-128
+    depends_on: [e2e-egress-gateway]
+    commands:
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    pull: always
+    depends_on: [e2e-istio-with-citadel]
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-128
+    commands:
+      # does not matter if the command fails
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+
+---
+name: e2e-kubernetes-1.29-istio
+kind: pipeline
+type: docker
+
+depends_on:
+  - e2e-kubernetes-1.28-istio
+
+platform:
+  os: linux
+  arch: amd64
+
+trigger:
+  ref:
+    include:
+      - refs/heads/master
+      - refs/tags/**
+      - refs/heads/hotfix-*
+
+steps:
+  - name: create-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    pull: always
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    depends_on: [clone]
+    environment:
+      CLUSTER_VERSION: v1.29.0
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-129
+      # /drone/src is the default workdir for the pipeline
+      # using this folder we don't need to mount another
+      # shared volume between the steps
+      KUBECONFIG: /drone/src/kubeconfig-129
+    commands:
+      # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
+      # does not work when disabling the default CNI. It will always go in timeout.
+      - kind create cluster --name $${CLUSTER_NAME} --image registry.sighup.io/fury/kindest/node:$${CLUSTER_VERSION} --config katalog/tests/istio-operator/kind-config.yml
+      # save the kubeconfig so we can use it from other steps.
+      - kind get kubeconfig --name $${CLUSTER_NAME} > $${KUBECONFIG}
+
+  - name: e2e-requirements
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-129
+      KUBECONFIG: /drone/src/kubeconfig-129
+    depends_on: [create-kind-cluster]
+    commands:
+      - cd katalog/tests/istio-operator/requirements
+      - furyctl vendor -H
+      - cd ../../../../
+      - bats -t katalog/tests/istio-operator/istio-requirements.sh
+
+  - name: e2e-basic-istio
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-129
+      KUBECONFIG: /drone/src/kubeconfig-129
+    depends_on: [e2e-requirements]
+    commands:
+      - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
+      - bats -t katalog/tests/istio-operator/istio-minimal.sh
+
+  - name: e2e-egress-gateway
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-129
+      KUBECONFIG: /drone/src/kubeconfig-129
+    depends_on: [e2e-basic-istio]
+    commands:
+      - bats -t katalog/tests/istio-operator/istio-egress-install.sh
+      - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
+
+  - name: e2e-istio-with-citadel
+    image: quay.io/sighup/e2e-testing:1.1.0_0.7.0_3.1.1_1.9.4_1.24.1_3.8.7_4.21.1
+    pull: always
+    network_mode: host
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-129
+      KUBECONFIG: /drone/src/kubeconfig-129
+    depends_on: [e2e-egress-gateway]
+    commands:
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-install.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-1.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-2.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-3.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-authn-cleanup.sh
+      - bats -t katalog/tests/istio-operator/istio-citadel-rollback.sh
+
+  - name: delete-kind-cluster
+    image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.29.1_3.10.0
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    pull: always
+    depends_on: [e2e-istio-with-citadel]
+    environment:
+      CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-129
+    commands:
+      # does not matter if the command fails
+      - kind delete cluster --name $${CLUSTER_NAME} || true
+    when:
+      status:
+        - success
+        - failure
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+
+---
 name: release
 kind: pipeline
 type: docker
 
 depends_on:
-  - e2e-kubernetes-1.24-istio
-  - e2e-kubernetes-1.25-istio
-  - e2e-kubernetes-1.26-istio
   - e2e-kubernetes-1.27-istio
-
+  - e2e-kubernetes-1.28-istio
+  - e2e-kubernetes-1.29-istio
 
 platform:
   os: linux
