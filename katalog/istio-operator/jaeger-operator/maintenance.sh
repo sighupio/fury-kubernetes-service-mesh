@@ -1,4 +1,9 @@
 #!/bin/bash
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+# shellcheck disable=SC2086,SC2154,SC2034
 
 # Initial setup: Specify the version of Jaeger Operator you wish to download
 JAEGER_VERSION="v1.56.0"  # Update this according to the version you need
