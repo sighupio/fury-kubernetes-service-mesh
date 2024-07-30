@@ -1,9 +1,10 @@
+<!-- markdownlint-disable MD013 -->
 # Comprehensive Upgrade Guide for the Jaeger Operator from v1.22 to the Latest Release 🦮
 
 ## Introduction
-<!-- markdownlint-disable MD033 -->
+
 This guide provides detailed instructions for upgrading the Jaeger Operator component in a Service Mesh from version 1.22 to the latest release at the moment (1.56). The previous version is substantially outdated, and a direct upgrade path is unavailable. As a result, it is necessary to completely remove the old version before installing the new one. This document explains the reasons for this approach and outlines the steps to successfully transition to the latest version, which can be explored in detail [here](https://www.jaegertracing.io/docs/1.56/operator/).
-<!-- markdownlint-enable MD033 -->
+
 ### Breaking Changes Notification 💔
 
 - **Version Obsolescence:** The Jaeger Operator version 1.22 is no longer supported, and direct updates to the new version are not possible.
@@ -27,9 +28,9 @@ This guide provides detailed instructions for upgrading the Jaeger Operator comp
 - **Backup Critical Data and Configurations:** Before proceeding with the update, make sure to backup all important configurations and data related to Jaeger. This precaution helps to safeguard your data in the event of an issue during the upgrade process.
 
 #### Comprehensive Resource Removal
-<!-- markdownlint-disable MD033 -->
+
 - **Remove All Previous Resources:** To guarantee a successful update, it is essential to delete all resources associated with the previous version of the Jaeger Operator. This includes deployments, service accounts, roles, role bindings, and any custom resources defined by Jaeger. Removing these resources prevents any potential conflicts or leftover configurations that could interfere with the new version's operations.
-<!-- markdownlint-enable MD033 -->
+
 ### Breaking Changes 💔
 
 #### Key Points
