@@ -31,7 +31,7 @@ This guide provides detailed instructions for upgrading the Jaeger Operator comp
 
 #### Installing the New Version
 
-Following the cleanup of the old resources, proceed with the new version installation. Refer to the latest Jaeger Operator documentation provided [here](https://www.jaegertracing.io/docs/1.57/operator/) for detailed installation instructions. Ensure that you follow these guidelines closely to integrate the new version correctly into your environment.
+Following the cleanup of the old resources, proceed with the new version installation. Refer to the latest Jaeger Operator documentation provided [here](https://www.jaegertracing.io/docs/1.56/operator/) for detailed installation instructions. Ensure that you follow these guidelines closely to integrate the new version correctly into your environment.
 
 ### Conclusion
 
