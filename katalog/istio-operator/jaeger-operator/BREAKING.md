@@ -1,7 +1,7 @@
 ## Comprehensive Upgrade Guide for the Jaeger Operator from v1.22 to the Latest Release 🦮
 
 ### Introduction
-This guide provides detailed instructions for upgrading the Jaeger Operator component in a Service Mesh from version 1.22 to the latest release. The previous version is substantially outdated, and a direct upgrade path is unavailable. As a result, it is necessary to completely remove the old version before installing the new one. This document explains the reasons for this approach and outlines the steps to successfully transition to the latest version, which can be explored in detail [here](https://www.jaegertracing.io/docs/1.57/operator/).
+This guide provides detailed instructions for upgrading the Jaeger Operator component in a Service Mesh from version 1.22 to the latest release at the moment (1.56). The previous version is substantially outdated, and a direct upgrade path is unavailable. As a result, it is necessary to completely remove the old version before installing the new one. This document explains the reasons for this approach and outlines the steps to successfully transition to the latest version, which can be explored in detail [here](https://www.jaegertracing.io/docs/1.56/operator/).
 
 ### Breaking Changes Notification 💔
 
