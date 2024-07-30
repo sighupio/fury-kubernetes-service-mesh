@@ -47,6 +47,7 @@ esac
 # Download and setup kapp
 echo "Downloading kapp from ${URL}..."
 wget -q ${URL} -O local-bin/kapp
+# shellcheck disable=SC2181
 if [ $? -eq 0 ]; then
     chmod +x local-bin/kapp
     echo "kapp has been successfully installed to local-bin/kapp."

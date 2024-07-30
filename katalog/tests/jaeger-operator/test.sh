@@ -14,6 +14,7 @@ setup() {
 
         # Call the script to install kapp
         ./scripts/install_kapp.sh
+        # shellcheck disable=SC2181
         if [ $? -ne 0 ]; then
             echo "kapp installation failed."
             return 1
