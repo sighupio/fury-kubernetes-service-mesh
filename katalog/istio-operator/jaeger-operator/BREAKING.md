@@ -18,6 +18,7 @@ This guide provides detailed instructions for upgrading the Jaeger Operator comp
 #### Preparing for the Upgrade
 
 #### Current Configuration Snapshot
+
 - **Perform a kustomize build:** Run `kustomize build .` on the current Jaeger Operator deployment and save the output. This step is crucial for identifying all the resources currently deployed under the old version. This information will be used to ensure a complete cleanup before installing the new version.
 
 #### Comprehensive Resource Removal
