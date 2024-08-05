@@ -2,8 +2,13 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
----
-apiVersion: v1
-kind: Namespace
+apiVersion: cert-manager.io/v1
+kind: Issuer
 metadata:
-  name: jaeger
+  labels:
+    name: jaeger-operator
+  name: jaeger-operator-selfsigned-issuer
+  namespace: observability
+spec:
+  selfSigned: {}
+
