@@ -1,0 +1,19 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: jaeger-operator
+  name: jaeger-operator-webhook-service
+  namespace: observability
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 9443
+  selector:
+    name: jaeger-operator
+
