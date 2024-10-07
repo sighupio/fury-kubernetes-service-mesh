@@ -26,3 +26,9 @@ resources:
   - resources/clusterrolebinding-jaeger-operator-proxy-rolebinding.yaml
   - resources/certificate-jaeger-operator-serving-cert.yaml
   - resources/namespace-observability.yaml
+
+
+images:
+  - name: quay.io/jaegertracing/jaeger-operator
+    newName: registry.sighup.io/fury/jaegertracing/jaeger-operator
+    newTag: 1.61.0

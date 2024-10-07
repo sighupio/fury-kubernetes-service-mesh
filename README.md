@@ -5,7 +5,7 @@
 </h1>
 <!-- markdownlint-enable MD033 -->
 
-![Release](https://img.shields.io/badge/Latest%20Release-v3.1.0-blue)
+![Release](https://img.shields.io/badge/Latest%20Release-v3.1.1-blue)
 ![License](https://img.shields.io/github/license/sighupio/fury-kubernetes-service-mesh?label=License)
 ![Slack](https://img.shields.io/badge/slack-@kubernetes/fury-yellow.svg?logo=slack&label=Slack)
 
@@ -61,7 +61,7 @@ Check the [compatibility matrix][compatibility-matrix] for additional informatio
 ```yaml
 bases:
     - name: istio/istio-operator
-      version: v3.1.0
+      version: v3.1.1
 ```
 
 > See `furyctl` [documentation][furyctl-repo] for additional details about `Furyfile.yml` format.

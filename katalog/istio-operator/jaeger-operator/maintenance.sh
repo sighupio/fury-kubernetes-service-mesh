@@ -6,7 +6,7 @@
 # shellcheck disable=SC2086,SC2154,SC2034
 
 # Initial setup: Specify the version of Jaeger Operator you wish to download
-JAEGER_VERSION="v1.56.0"  # Update this according to the version you need
+JAEGER_VERSION="v1.61.0"  # Update this according to the version you need
 
 # Create the main directory for Jaeger Operator
 mkdir -p jaeger-operator/resources
