@@ -46,7 +46,7 @@ setup() {
     assert_success
 }
 @test "Deploy jaeger Operated using kapp" {
-    run kapp deploy -y -a jaeger -f <(cat ../../istio-operator/jaeger/jaeger.yml ../../istio-operator/jaeger/svc.yml)
+    run kapp deploy -y -a jaeger -f <(cat ../../istio-operator/jaeger-operated/jaeger.yml ../../istio-operator/jaeger/svc.yml)
     assert_success
 }
 @test "Verify cert-manager is installed" {
