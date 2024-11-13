@@ -41,4 +41,3 @@ rules:
   verbs:
   - create
   - patch
-

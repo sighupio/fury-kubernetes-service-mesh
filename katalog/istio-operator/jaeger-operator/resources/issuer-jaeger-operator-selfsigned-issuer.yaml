@@ -11,4 +11,3 @@ metadata:
   namespace: observability
 spec:
   selfSigned: {}
-
