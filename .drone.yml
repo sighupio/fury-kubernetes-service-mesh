@@ -340,7 +340,7 @@ steps:
       # /drone/src is the default workdir for the pipeline
       # using this folder we don't need to mount another
       # shared volume between the steps
-      KUBECONFIG: /drone/src/kubeconfig-129
+      KUBECONFIG: /drone/src/kubeconfig-130
     commands:
       # NOTE: kind's `--wait` flag that waits for the control-plane ot be ready
       # does not work when disabling the default CNI. It will always go in timeout.
