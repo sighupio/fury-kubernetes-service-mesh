@@ -333,7 +333,7 @@ steps:
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
-    depends_on: [clone]
+    # depends_on: [clone]
     environment:
       CLUSTER_VERSION: v1.30.4
       CLUSTER_NAME: ${DRONE_REPO_NAME}-${DRONE_BUILD_NUMBER}-129
