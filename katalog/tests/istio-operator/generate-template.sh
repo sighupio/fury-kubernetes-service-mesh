@@ -79,7 +79,7 @@ nodes:
     extraPortMappings:
       - containerPort: 31380 # nginx ingress controller external http
         hostPort: ${UNIQUE_PORT1}
-        hostPort: 31060
+        # hostPort: 31060
         listenAddress: 127.0.0.1
         # This is the external port
       - containerPort: 31390 # nginx ingress controller internal http
