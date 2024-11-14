@@ -16,8 +16,8 @@
 
 # Assign command line arguments to variables or read from environment
 KUBE_VERSION=${1:-$KUBE_VERSION}
-DEFAULT_PORT1=${2:-${PORT1:-1080}}  # Use command line argument, then environment variable, then 1080 as default
-DEFAULT_PORT2=${3:-${PORT2:-2080}}  # Use command line argument, then environment variable, then 2080 as default
+DEFAULT_PORT1=${2:-${PORT1:-3080}}  # Use command line argument, then environment variable, then 1080 as default
+DEFAULT_PORT2=${3:-${PORT2:-4080}}  # Use command line argument, then environment variable, then 2080 as default
 
 # Validate that the Kubernetes version argument has been provided
 if [ -z "$KUBE_VERSION" ]; then
@@ -78,13 +78,13 @@ nodes:
     image: registry.sighup.io/fury/kindest/node:$KUBE_VERSION # Specified Kubernetes version
     extraPortMappings:
       - containerPort: 31380 # nginx ingress controller external http
-        # hostPort: ${UNIQUE_PORT1}
-        hostPort: 31370
+        hostPort: ${UNIQUE_PORT1}
+        # hostPort: 31370
         listenAddress: 127.0.0.1
         # This is the external port
       - containerPort: 31390 # nginx ingress controller internal http
-        # hostPort: ${UNIQUE_PORT2}
-        hostPort: 31390
+        hostPort: ${UNIQUE_PORT2}
+        # hostPort: 31390
         listenAddress: 127.0.0.1
         # This is the internal port
 EOF
