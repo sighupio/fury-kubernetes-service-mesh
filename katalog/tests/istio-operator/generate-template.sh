@@ -80,12 +80,12 @@ nodes:
       - containerPort: 31380 # nginx ingress controller external http
         hostPort: ${UNIQUE_PORT1}
         # hostPort: 31060
-        listenAddress: 127.0.0.1
+        # listenAddress: 127.0.0.1
         # This is the external port
       - containerPort: 31390 # nginx ingress controller internal http
         hostPort: ${UNIQUE_PORT2}
         # hostPort: 32070
-        listenAddress: 127.0.0.1
+        # listenAddress: 127.0.0.1
         # This is the internal port
 EOF
 
