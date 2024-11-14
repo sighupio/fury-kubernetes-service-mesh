@@ -332,7 +332,7 @@ steps:
     image: alpine:latest
     pull: always
     commands:
-      - sh .katalog/tests/istio-operator/generate-template.sh 1.30.4
+      - sh ./katalog/tests/istio-operator/generate-template.sh 1.30.4
 
   - name: create-kind-cluster
     image: quay.io/sighup/dind-kind-kubectl-kustomize:0.20.0_1.30.5_3.10.0
