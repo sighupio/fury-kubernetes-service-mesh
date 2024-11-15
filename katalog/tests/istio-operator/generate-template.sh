@@ -107,5 +107,4 @@ echo "Kubernetes version used: $KUBE_VERSION"
 echo "Environment file saved in: $DRONE_ENV_REF"
 echo "Kind configuration file saved in: $CONFIG_FILE"
 
-echo "External port configured:\n"
-cat $CONFIG_FILE
+cat "$CONFIG_FILE"
