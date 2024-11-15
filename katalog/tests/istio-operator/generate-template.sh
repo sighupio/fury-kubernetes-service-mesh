@@ -95,14 +95,14 @@ EOF
 
 DRONE_ENV_REF="${DEFAULT_OUTPUT}env-${CLUSTER_NAME}.env"
 cat > "$DRONE_ENV_REF" <<EOF
-export INTERNAL_PORT=$UNIQUE_PORT2
-export EXTERNAL_PORT=$UNIQUE_PORT1
+export HTTPS_PORT=$UNIQUE_PORT2
+export HTTP_PORT=$UNIQUE_PORT1
 export KIND_CONFIG=$CONFIG_FILE
 export KUBE_VERSION=$KUBE_VERSION
 EOF
 
-echo "External port configured: $UNIQUE_PORT1"
-echo "Internal port configured: $UNIQUE_PORT2"
+echo "http port configured: $UNIQUE_PORT1"
+echo "https port configured: $UNIQUE_PORT2"
 echo "Kubernetes version used: $KUBE_VERSION"
 echo "Environment file saved in: $DRONE_ENV_REF"
 echo "Kind configuration file saved in: $CONFIG_FILE"
