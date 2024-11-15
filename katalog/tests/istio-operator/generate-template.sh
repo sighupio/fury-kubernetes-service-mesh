@@ -99,8 +99,8 @@ export KIND_CONFIG=$CONFIG_FILE
 export KUBE_VERSION=$KUBE_VERSION
 EOF
 
-echo "External port configured: $UNIQUE_PORT1"
-echo "Internal port configured: $UNIQUE_PORT2"
+echo "External port configured: $INTERNAL_PORT"
+echo "Internal port configured: $EXTERNAL_PORT"
 echo "Kubernetes version used: $KUBE_VERSION"
 echo "Environment file saved in: $DRONE_ENV_REF"
 echo "Kind configuration file saved in: $CONFIG_FILE"
