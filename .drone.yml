@@ -408,6 +408,7 @@ steps:
       KUBECONFIG: /drone/src/kubeconfig-1.30.4
     depends_on: [e2e-basic-istio]
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/istio-operator/istio-egress-install.sh
       - bats -t katalog/tests/istio-operator/istio-egress-external-services.sh
 
