@@ -89,6 +89,8 @@ nodes:
         # This is the internal port
 EOF
 
+
+
 # Save details for Drone CI
 
 DRONE_ENV_REF="${DEFAULT_OUTPUT}env-${CLUSTER_NAME}.env"
@@ -104,3 +106,6 @@ echo "Internal port configured: $UNIQUE_PORT2"
 echo "Kubernetes version used: $KUBE_VERSION"
 echo "Environment file saved in: $DRONE_ENV_REF"
 echo "Kind configuration file saved in: $CONFIG_FILE"
+
+echo "External port configured:\n"
+cat $CONFIG_FILE
