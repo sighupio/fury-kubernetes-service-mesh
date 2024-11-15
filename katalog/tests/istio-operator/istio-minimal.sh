@@ -7,12 +7,6 @@
 
 load ./../helper
 
-@test "proof" {
-  info
-  deploy(){
-    echo "# PORTA INTERNAL_PORT --> $INTERNAL_PORT"
-  }
-
 @test "deploy bookinfo demo application" {
   info
   deploy(){
