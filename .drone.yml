@@ -382,6 +382,7 @@ steps:
       KUBECONFIG: /drone/src/kubeconfig-1.30.4
     depends_on: [create-kind-cluster]
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - cd katalog/tests/istio-operator/requirements
       - furyctl vendor -H
       - cd ../../../../
@@ -396,6 +397,7 @@ steps:
       KUBECONFIG: /drone/src/kubeconfig-1.30.4
     depends_on: [e2e-requirements]
     commands:
+      - . ./env-$${CLUSTER_NAME}.env
       - bats -t katalog/tests/istio-operator/istio-minimal-install.sh
       - bats -t katalog/tests/istio-operator/istio-minimal.sh
 
