@@ -2,4 +2,4 @@
 
 ## Jaeger setup
 
-For any further documentation, please look [here](https://www.jaegertracing.io/docs/1.56/)
+For any further documentation, please look [here](https://www.jaegertracing.io/docs/1.61/)
