@@ -74,7 +74,7 @@ steps:
       - /pluto detect istio-operator-full.yml --ignore-deprecations --ignore-removals --target-versions=k8s=v1.30.0
 
 ---
-name: e2e-kubernetes-1.278-istio
+name: e2e-kubernetes-1.27-istio
 kind: pipeline
 type: docker
 
