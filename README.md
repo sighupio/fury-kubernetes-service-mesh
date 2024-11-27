@@ -37,6 +37,7 @@ Kubernetes Fury Service Mesh provides the following packages:
 
 | Kubernetes Version |   Compatibility    | Notes           |
 | ------------------ | :----------------: | --------------- |
+| `1.27,x`           | :white_check_mark: | No known issues |
 | `1.28.x`           | :white_check_mark: | No known issues |
 | `1.29.x`           | :white_check_mark: | No known issues |
 | `1.30.x`           | :white_check_mark: | No known issues |
