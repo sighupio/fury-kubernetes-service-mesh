@@ -9,10 +9,26 @@ resources:
   - ../../full
   - ../../../jaeger-operator
   - ../../../jaeger-operated
+  - telemetry.yaml
   - svc.yml
   - sm.yml
 
 patches:
+  - target:
+      kind: IstioOperator
+      name: istio
+    patch: |-
+      - op: add
+        path: /spec/meshConfig
+        value:
+          enableTracing: true
+          defaultConfig:
+            tracing: {} # Disabilita le opzioni legacy di MeshConfig
+          extensionProviders:
+          - name: jaeger
+            opentelemetry:
+              port: 9411
+              service: jaeger-collector.observability.svc.cluster.local
   - target:
       kind: Jaeger
       name: jaeger
