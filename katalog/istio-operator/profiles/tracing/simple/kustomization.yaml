@@ -23,7 +23,7 @@ patches:
         value:
           enableTracing: true
           defaultConfig:
-            tracing: {} # Disabilita le opzioni legacy di MeshConfig
+            tracing: {} 
           extensionProviders:
           - name: jaeger
             opentelemetry:
