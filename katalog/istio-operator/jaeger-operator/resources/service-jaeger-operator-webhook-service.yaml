@@ -16,4 +16,3 @@ spec:
     targetPort: 9443
   selector:
     name: jaeger-operator
-

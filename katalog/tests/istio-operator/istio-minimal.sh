@@ -41,7 +41,7 @@ load ./../helper
     # Wait for productpage review endpoint
     retry_counter=0
     max_retry=10
-    while curl -s localhost:31380/productpage |grep "Error fetching product reviews!"  >&2
+    while curl -s localhost:${HTTP_PORT}/productpage |grep "Error fetching product reviews!"  >&2
     do
       [ $retry_counter -lt $max_retry ] || ( kubectl describe all -n demo >&2 && return 1 )
       sleep 2 && echo "# waiting..." $retry_counter >&3
@@ -57,12 +57,12 @@ load ./../helper
 @test "test v1 bookinfo demo application" {
   info
   test_back_stars(){
-    curl -s localhost:31380/productpage |grep -q 'color="black"'
+    curl -s localhost:${HTTP_PORT}/productpage |grep -q 'color="black"'
   }
   run test_back_stars
   back_stars_result=$status
   test_red_stars(){
-    curl -s localhost:31380/productpage |grep -q 'color="red"'
+    curl -s localhost:${HTTP_PORT}/productpage |grep -q 'color="red"'
   }
   run test_red_stars
   red_stars_result=$status
@@ -86,12 +86,12 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        echo -n ">>>>>>>>>>>>>> INSTANCE_IP is: localhost" >&3
-        if [ $retry_counter -ge $max_retry ]; then echo -n "Timeout waiting a condition" >&3; curl -s localhost:31380/productpage >&2; return 1; fi
+        echo -n ">>>>>>>>>>>>>> INSTANCE_IP is: localhost:${HTTP_PORT}" >&3
+        if [ $retry_counter -ge $max_retry ]; then echo -n "Timeout waiting a condition" >&3; curl -s localhost:${HTTP_PORT}/productpage >&2; return 1; fi
         rm -rf ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt
-        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://localhost:31380/login
-        output=$(curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt localhost:31380/productpage )
-        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt localhost:31380/productpage |grep -q 'color="black"'
+        curl -s -L -c ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt -d "username=jason" -d "passwd=jason" http://localhost:${HTTP_PORT}/login
+        output=$(curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt localhost:${HTTP_PORT}/productpage )
+        curl -s -b ${BATS_TMPDIR}/test-cookie-${CLUSTER_NAME}.txt localhost:${HTTP_PORT}/productpage |grep -q 'color="black"'
         ko=$?
         sleep 3 && echo -n "# waiting..." $retry_counter >&3
         kubectl_output=$(kubectl get po -A; kubectl get svc -A; kubectl get gateway -A; kubectl describe po -l app=istio-ingressgateway -n istio-system)
@@ -112,8 +112,8 @@ load ./../helper
     ko=1
     while [[ ko -eq 1 ]]
     do
-        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s localhost:31380/productpage >&2; return 1; fi
-        curl -s localhost:31380/productpage |grep -q 'color="red"'
+        if [ $retry_counter -ge $max_retry ]; then echo "Timeout waiting a condition"; curl -s localhost:${HTTP_PORT}/productpage >&2; return 1; fi
+        curl -s localhost:${HTTP_PORT}/productpage |grep -q 'color="red"'
         ko=$?
         sleep 3 && echo "# waiting..." $retry_counter >&3
         retry_counter=$((retry_counter + 1))

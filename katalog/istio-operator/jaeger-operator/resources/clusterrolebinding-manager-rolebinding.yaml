@@ -16,4 +16,3 @@ subjects:
 - kind: ServiceAccount
   name: jaeger-operator
   namespace: observability
-

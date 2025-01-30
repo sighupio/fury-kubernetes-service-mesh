@@ -20,4 +20,3 @@ spec:
   subject:
     organizationalUnits:
     - jaeger-operator
-

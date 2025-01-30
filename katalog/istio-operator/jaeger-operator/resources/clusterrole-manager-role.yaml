@@ -266,4 +266,3 @@ rules:
   - routes/custom-host
   verbs:
   - create
-
