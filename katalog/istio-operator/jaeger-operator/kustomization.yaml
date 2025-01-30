@@ -31,4 +31,4 @@ resources:
 images:
   - name: quay.io/jaegertracing/jaeger-operator
     newName: registry.sighup.io/fury/jaegertracing/jaeger-operator
-    newTag: 1.61.0
+    newTag: 1.62.0

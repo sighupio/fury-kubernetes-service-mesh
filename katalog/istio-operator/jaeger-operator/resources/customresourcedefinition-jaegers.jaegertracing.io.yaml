@@ -7,7 +7,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: observability/jaeger-operator-serving-cert
-    controller-gen.kubebuilder.io/version: v0.14.0
   labels:
     name: jaeger-operator
   name: jaegers.jaegertracing.io
@@ -7284,6 +7283,8 @@ spec:
                         type: string
                       skipLogout:
                         type: boolean
+                      timeout:
+                        type: string
                     type: object
                   options:
                     type: object
@@ -15706,4 +15707,3 @@ spec:
     storage: true
     subresources:
       status: {}
-

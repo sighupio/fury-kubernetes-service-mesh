@@ -1,0 +1,50 @@
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jaeger-all-in-one
+  name: collector-monitoring
+  namespace: observability
+spec:
+  ports:
+    - name: grpc
+      port: 14250
+      protocol: TCP
+      targetPort: 14250
+    - name: http
+      port: 14268
+      protocol: TCP
+      targetPort: 14268
+    - name: admin-http
+      port: 14269
+      protocol: TCP
+      targetPort: 14269
+  selector:
+    app.kubernetes.io/name: jaeger
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jaeger-all-in-one
+  name: query-monitoring
+  namespace: observability
+spec:
+  ports:
+    - name: ui
+      port: 16686
+      protocol: TCP
+      targetPort: 16686
+    - name: admin-http
+      port: 16687
+      protocol: TCP
+      targetPort: 16687
+  selector:
+    app.kubernetes.io/name: jaeger
+  type: ClusterIP

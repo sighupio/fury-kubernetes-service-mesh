@@ -31,4 +31,3 @@ webhooks:
     resources:
     - jaegers
   sideEffects: None
-

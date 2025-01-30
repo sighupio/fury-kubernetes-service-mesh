@@ -2,12 +2,13 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-apiVersion: cert-manager.io/v1
-kind: Issuer
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
 metadata:
-  labels:
-    name: jaeger-operator
-  name: jaeger-operator-selfsigned-issuer
-  namespace: observability
+  name: mesh-default
+  namespace: istio-system
 spec:
-  selfSigned: {}
+  tracing:
+  - providers:
+    - name: jaeger
+    # randomSamplingPercentage: 100

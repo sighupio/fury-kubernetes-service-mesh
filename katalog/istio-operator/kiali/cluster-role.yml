@@ -97,3 +97,10 @@ rules:
     - kiali-istio-system
     verbs:
     - get
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources:
+    - mutatingwebhookconfigurations
+    verbs:
+    - get
+    - list
+    - watch
